@@ -36,22 +36,13 @@ const query = `
 db.exec(query)
 
 app.get(apiPath+'users',(req,res) => {
-    //SESSION KEY CODE, USE THIS SOMEWHERE ELSE LATER
-    const session = JSON.parse(req.headers.session.toString())
-    console.log(session)
-    console.log(verify_session_key(session.session,session.username))
-    if(verify_token(req.headers.authorization))
-    {
-        const users = db.prepare('SELECT * FROM users').all();
+    const users = db.prepare('SELECT * FROM users').all();
 
-        console.log(users);
+    console.log(users);
 
-        remove_passwords(users)
+    res.json({users: users})
+})
 
-        res.json({users: users})
-    }
-    else
-    {
-        res.send("nuh uh tell me the secret password!!!")
-    }
+app.listen(port,() => {
+    console.log(`Listening on port ${port}`)
 })
