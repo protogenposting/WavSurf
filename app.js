@@ -80,7 +80,7 @@ app.get(apiPath+'tagQue',(req,res) => {
     res.json(users)
 })
 
-//get tags from the que
+//add a new tag to the que
 app.post(apiPath+'tagQue',(req,res) => {
     const request = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
 
@@ -91,7 +91,7 @@ app.post(apiPath+'tagQue',(req,res) => {
     res.json(result)
 })
 
-//accept a tag
+//accept a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
     const tag = db.prepare('SELECT * FROM tagQue WHERE id=?').run(req.params.id);
 
@@ -104,7 +104,7 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
     //add the tag
 })
 
-//deny a tag
+//deny a tag and remove it from the que permentantly
 app.post(apiPath+'denyTag/:id',(req,res) => {
     const insertData = db.prepare("DELETE FROM tagQue WHERE id=?");
         
