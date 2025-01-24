@@ -69,11 +69,20 @@ app.get(apiPath+'users',(req,res) => {
     res.json(users)
 })
 
-//add a tag to the que
-app.post(apiPath+'tag',(req,res) => {
-    const insertData = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
+//get tags from the que
+app.get(apiPath+'tagQue',(req,res) => {
+    const users = db.prepare('SELECT * FROM tagQue ORDER BY id DESC').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
+//accept a tag
+app.post(apiPath+'acceptTag/:id',(req,res) => {
+    const insertData = db.prepare("DELETE FROM tagQue WHERE id=?");
         
-    var result = insertData.run(req.body)
+    var result = insertData.run(req.params.id)
 })
 
 
