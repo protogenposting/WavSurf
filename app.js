@@ -50,6 +50,15 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+//get all the users
+app.get(apiPath+'users',(req,res) => {
+    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
 //listens on the designated port
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
