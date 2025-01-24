@@ -59,7 +59,31 @@ app.get(apiPath+'users',(req,res) => {
     res.json(users)
 })
 
-//listens on the designated port
+//add a tag to the que
+app.post(apiPath+'newUser',(req,res) => {
+    if(verify_token(req.headers.authorization))
+    {
+        console.log(req.body)
+
+        if(req.body.name == "" || req.body.password == "")
+        {
+            req.send("UNIQUE")
+            return 0
+        }
+        
+        const insertData = db.prepare("INSERT INTO users (name, username, password, pp) VALUES (?, ?, ?, ?)");
+        
+        var result = insertData.run(req.body.name,req.body.username,req.body.password,0)
+        
+        res.send(result)
+    }
+    else
+    {
+        res.send("nuh uh tell me the secret password!!!")
+    }
+})
+
+
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
