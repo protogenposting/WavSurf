@@ -98,6 +98,8 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
     var result = insertData.run(req.params.id)
 
     console.log(tag)
+
+    //add the tag
 })
 
 //deny a tag
