@@ -69,6 +69,8 @@ app.get(apiPath+'users',(req,res) => {
     res.json(users)
 })
 
+//#region tag que api calls
+
 //get tags from the que
 app.get(apiPath+'tagQue',(req,res) => {
     const users = db.prepare('SELECT * FROM tagQue').all();
@@ -108,6 +110,8 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
         
     var result = insertData.run(req.params.id)
 })
+
+//#endregion
 
 
 app.listen(port,() => {
