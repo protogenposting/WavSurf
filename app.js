@@ -34,6 +34,10 @@ const query = `
         tagName STRING NOT NULL,
         tagChildren INTEGER [] NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS tagQue (
+        id INTEGER PRIMARY KEY UNIQUE,
+        tagData STRING NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
@@ -60,27 +64,10 @@ app.get(apiPath+'users',(req,res) => {
 })
 
 //add a tag to the que
-app.post(apiPath+'newUser',(req,res) => {
-    if(verify_token(req.headers.authorization))
-    {
-        console.log(req.body)
-
-        if(req.body.name == "" || req.body.password == "")
-        {
-            req.send("UNIQUE")
-            return 0
-        }
+app.post(apiPath+'tag',(req,res) => {
+    const insertData = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
         
-        const insertData = db.prepare("INSERT INTO users (name, username, password, pp) VALUES (?, ?, ?, ?)");
-        
-        var result = insertData.run(req.body.name,req.body.username,req.body.password,0)
-        
-        res.send(result)
-    }
-    else
-    {
-        res.send("nuh uh tell me the secret password!!!")
-    }
+    var result = insertData.run(req.body)
 })
 
 
