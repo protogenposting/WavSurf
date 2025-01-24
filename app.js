@@ -29,27 +29,28 @@ const query = `
         username STRING NOT NULL UNIQUE,
         password STRING NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS levels (
+    CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
-        name STRING NOT NULL
+        tagName STRING NOT NULL,
+        tagChildren INTEGER [] NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY UNIQUE,
+        songName STRING NOT NULL,
+        tags INTEGER [] NOT NULL,
+        link STRING NOT NULL
     );
 `;
 
 db.exec(query)
 
+//defines a get request
 app.get('/search',(req,res) => {
+    //this is sent after /search is called
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
-//get all the users
-app.get(apiPath+'users',(req,res) => {
-    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
-
-    console.log(users);
-
-    res.json(users)
-})
-
+//listens on the designated port
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
