@@ -34,7 +34,7 @@ const query = `
         tagName STRING NOT NULL,
         tagChildren INTEGER [] NOT NULL
     );
-    CREATE TABLE IF NOT EXISTS tagQue (
+    CREATE TABLE IF NOT EXISTS tagQueue (
         id INTEGER PRIMARY KEY UNIQUE,
         tagData STRING NOT NULL
     );
@@ -69,20 +69,20 @@ app.get(apiPath+'users',(req,res) => {
     res.json(users)
 })
 
-//#region tag que api calls
+//#region tag queue api calls
 
-//get tags from the que
-app.get(apiPath+'tagQue',(req,res) => {
-    const users = db.prepare('SELECT * FROM tagQue').all();
+//get tags from the queue
+app.get(apiPath+'tagQueue',(req,res) => {
+    const users = db.prepare('SELECT * FROM tagQueue').all();
 
     console.log(users);
 
     res.json(users)
 })
 
-//add a new tag to the que
-app.post(apiPath+'tagQue',(req,res) => {
-    const request = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
+//add a new tag to the queue
+app.post(apiPath+'tagQueue',(req,res) => {
+    const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
     let result = request.run(req.body.data)
 
@@ -93,9 +93,9 @@ app.post(apiPath+'tagQue',(req,res) => {
 
 //accept a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
-    const tag = db.prepare('SELECT * FROM tagQue WHERE id=?').run(req.params.id);
+    const tag = db.prepare('SELECT * FROM tagQueue WHERE id=?').run(req.params.id);
 
-    const deleteData = db.prepare("DELETE FROM tagQue WHERE id=?");
+    const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
 
     var result = insertData.run(req.params.id)
 
@@ -104,9 +104,9 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
     //add the tag
 })
 
-//deny a tag and remove it from the que permentantly
+//deny a tag and remove it from the queue permentantly
 app.post(apiPath+'denyTag/:id',(req,res) => {
-    const insertData = db.prepare("DELETE FROM tagQue WHERE id=?");
+    const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
         
     var result = insertData.run(req.params.id)
 })
