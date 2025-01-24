@@ -1,0 +1,29 @@
+- tag structure
+
+ID primary key
+
+tag name
+
+tag children
+
+- post structure
+
+ID primary key
+
+song name
+
+tags (artist, instruments, genre, etc.)
+
+link
+
+- user structure
+
+ID primary key
+
+display name
+
+username
+
+password
+
+is moderator

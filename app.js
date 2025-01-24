@@ -12,6 +12,9 @@ const express = require('express');
 //copying thing load
 const fs = require('fs');
 
+//pathhhhh yayyyy
+const path = require('path');
+
 //activate express
 const app = express();
 app.use(express.json());
@@ -24,8 +27,7 @@ const query = `
         id INTEGER PRIMARY KEY UNIQUE,
         name STRING NOT NULL,
         username STRING NOT NULL UNIQUE,
-        password STRING NOT NULL,
-        pp INTEGER NOT NULL
+        password STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS levels (
         id INTEGER PRIMARY KEY UNIQUE,
@@ -35,12 +37,8 @@ const query = `
 
 db.exec(query)
 
-app.get(apiPath+'users',(req,res) => {
-    const users = db.prepare('SELECT * FROM users').all();
-
-    console.log(users);
-
-    res.json({users: users})
+app.get('/search',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
 app.listen(port,() => {

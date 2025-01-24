@@ -1,0 +1,19 @@
+(requests with a # next to them require a session key)
+
+- tags
+
+get(id): gets data of the tag
+
+post(id)#: allows the user to submit a tag to the queue
+
+- posts
+
+get(id): gets data of the post
+
+post(id)#: allows the user to submit a post to the queue
+
+- users
+
+get(id): get data of a user (removes password)
+
+post(id)#: allows the user to create an account with valid details
