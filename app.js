@@ -84,7 +84,7 @@ app.get(apiPath+'tagQue',(req,res) => {
 app.post(apiPath+'tagQue',(req,res) => {
     const request = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
 
-    request.run(req.body.data)
+    let result = request.run(req.body.data)
 
     console.log(result);
 
