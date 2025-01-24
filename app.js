@@ -54,6 +54,12 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+//defines a get request
+app.get('/tagCreate',(req,res) => {
+    //this is sent after /search is called
+    res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
+})
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
@@ -63,12 +69,49 @@ app.get(apiPath+'users',(req,res) => {
     res.json(users)
 })
 
-//add a tag to the que
-app.post(apiPath+'tag',(req,res) => {
-    const insertData = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
-        
-    var result = insertData.run(req.body)
+//#region tag que api calls
+
+//get tags from the que
+app.get(apiPath+'tagQue',(req,res) => {
+    const users = db.prepare('SELECT * FROM tagQue').all();
+
+    console.log(users);
+
+    res.json(users)
 })
+
+//add a new tag to the que
+app.post(apiPath+'tagQue',(req,res) => {
+    const request = db.prepare("INSERT INTO tagQue (tagData) VALUES (?)");
+
+    let result = request.run(req.body.data)
+
+    console.log(result);
+
+    res.json(result)
+})
+
+//accept a tag and add it to the main table
+app.post(apiPath+'acceptTag/:id',(req,res) => {
+    const tag = db.prepare('SELECT * FROM tagQue WHERE id=?').run(req.params.id);
+
+    const deleteData = db.prepare("DELETE FROM tagQue WHERE id=?");
+
+    var result = insertData.run(req.params.id)
+
+    console.log(tag)
+
+    //add the tag
+})
+
+//deny a tag and remove it from the que permentantly
+app.post(apiPath+'denyTag/:id',(req,res) => {
+    const insertData = db.prepare("DELETE FROM tagQue WHERE id=?");
+        
+    var result = insertData.run(req.params.id)
+})
+
+//#endregion
 
 
 app.listen(port,() => {
