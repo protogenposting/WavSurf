@@ -54,6 +54,12 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+//defines a get request
+app.get('/tagCreate',(req,res) => {
+    //this is sent after /search is called
+    res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
+})
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
