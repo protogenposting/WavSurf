@@ -1,2 +1,20 @@
-<label for="data">Tag json data: (CHANGE TO AN ACTUAL FORM LATER!)</label>
-<input type="text" id="data" name="data"> 
+<script>
+    function submit()
+    {
+        fetch("http://localhost:3000/api/tagQue", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                data: document.getElementById("data").value
+            })
+        });
+
+    }
+</script>
+
+<label for="data">Tag json data: (CHANGE TO AN ACTUAL FORM LATER!)</label><br>
+<input type="text" id="data" name="data"><br>
+
+<button type="button" onclick="submit()">Click Me!</button>
