@@ -60,6 +60,10 @@ app.get('/tagCreate',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
 })
 
+app.get('/postCreate',(req,res) => {
+    res.sendFile(path.join(__dirname, 'index/postCreate.html'))
+})
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
@@ -113,7 +117,7 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 
 //#endregion
 
-
+//displays the port you are listening on
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
