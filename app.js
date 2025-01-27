@@ -64,6 +64,11 @@ app.get('/postCreate',(req,res) => {
     res.sendFile(path.join(__dirname, 'index/postCreate.html'))
 })
 
+//defines a get request
+app.get('/tagQueueInterface',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
+})
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
