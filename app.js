@@ -194,6 +194,15 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 //#region user api calls
 
 //get a user by name
+//get all the users
+app.get(apiPath+'users',(req,res) => {
+    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
 app.get(apiPath+'user/:name',(req,res) => {
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ?

@@ -15,9 +15,10 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-            }
+            },
         })
-        .then(e => {getInfo()});
+        .then(getInfo())
+        
     }
 </script>
 <body onload = "getInfo()"></body>
