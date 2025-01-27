@@ -88,7 +88,9 @@ app.get(apiPath+'tagQueue',(req,res) => {
 app.post(apiPath+'tagQueue',(req,res) => {
     const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
-    let result = request.run(req.body.data)
+    console.log(req.body.data)
+
+    let result = request.run(JSON.stringify(req.body.data))
 
     console.log(result);
 
