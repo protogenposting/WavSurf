@@ -108,9 +108,9 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
 
     const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
 
-    var result = insertData.run(req.params.id)
+    var result = deleteData.run(req.params.id);
 
-    console.log(tag)
+    console.log(req.params.id);
 
     //add the tag
 })
