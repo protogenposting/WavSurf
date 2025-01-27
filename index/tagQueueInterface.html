@@ -1,0 +1,26 @@
+<script>
+    var queue = []
+    function getInfo() {
+        fetch("http://localhost:3000/api/tagQueue")
+        .then(response => response.json())
+        .then(json => {
+            queue = json;
+            document.getElementById('p1').innerHTML = JSON.stringify(json[0]);
+            console.log(json);
+        });
+    }
+
+    function accept() {
+        fetch("http://localhost:3000/api/acceptTag/" + queue[0].id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(e => {getInfo()});
+    }
+</script>
+<body onload = "getInfo()"></body>
+<button type = "button" onclick="accept()">Accept</button><br>
+<button type = "button">Deny</button><br>
+<p id = "p1">placeholder</p>

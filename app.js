@@ -125,6 +125,11 @@ app.get('/postCreate',(req,res) => {
     res.sendFile(path.join(__dirname, 'index/postCreate.html'))
 })
 
+//defines a get request
+app.get('/tagQueueInterface',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
+})
+
 //#region tag queue api calls
 
 //get tags from the queue
@@ -155,9 +160,9 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
 
     const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
 
-    var result = insertData.run(req.params.id)
+    var result = deleteData.run(req.params.id);
 
-    console.log(tag)
+    console.log(req.params.id);
 
     //add the tag adding thing
 
@@ -180,6 +185,15 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 //#region user api calls
 
 //get a user by name
+//get all the users
+app.get(apiPath+'users',(req,res) => {
+    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
 app.get(apiPath+'user/:name',(req,res) => {
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ?
