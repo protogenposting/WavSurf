@@ -107,7 +107,13 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
 
     console.log(tag)
 
-    //add the tag
+    //add the tag adding thing
+
+    //const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
+
+    //console.log(req.body.data)
+
+    //let result = request.run(JSON.stringify(req.body.data))
 })
 
 //deny a tag and remove it from the queue permentantly
