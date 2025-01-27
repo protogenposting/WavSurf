@@ -117,7 +117,24 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 
 //#endregion
 
-//displays the port you are listening on
+//add a new user
+app.post(apiPath+'newUser',(req,res) => {
+	console.log(req.body)
+
+	if(req.body.name == "" || req.body.password == "")
+	{
+		req.send("UNIQUE")
+		return 0
+	}
+	
+	const insertData = db.prepare("INSERT INTO users (name, username, password) VALUES (?, ?, ?)");
+	
+	var result = insertData.run(req.body.name,req.body.username,req.body.password)
+	
+	res.send(result)
+})
+
+
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
