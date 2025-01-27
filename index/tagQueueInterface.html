@@ -20,8 +20,19 @@
         .then(getInfo())
         
     }
+
+    function deny() {
+        fetch("http://localhost:3000/api/denyTag/" + queue[0].id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(getInfo())
+        
+    }
 </script>
 <body onload = "getInfo()"></body>
 <button type = "button" onclick="accept()">Accept</button><br>
-<button type = "button">Deny</button><br>
+<button type = "button" onclick="deny()">Deny</button><br>
 <p id = "p1">placeholder</p>
