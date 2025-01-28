@@ -99,6 +99,10 @@ const query = `
         id INTEGER PRIMARY KEY UNIQUE,
         tagData STRING NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS postQueue (
+        id INTEGER PRIMARY KEY UNIQUE,
+        postData STRING NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
