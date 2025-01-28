@@ -1,33 +1,67 @@
-<html>
-
+<!DOCTYPE html>
+<html lang = "en">
 
 <script>
 
     function submit() {
 
+        //check for valid link
+
+        //check if necessary info is filled (song name and youtube link)
+        //if there's no youtube link, use title of the youtube video (?)
         
+        let song_name = document.getElementById("song_name").value
+        let youtube_url = document.getElementById("youtube_url").value
 
+        let length = youtube_url.length
+
+        if (length < 11) {
+            warning.textContent = "Youtube ID is too short! Not 11 digits long!"
+            return
+        }
+        else {
+            youtube_url = youtube_url.substr(length - 11, length)
+            warning.textContent = "Post added to queue! (Not yet though atm)"
+        }
+
+        let postData = [song_name, youtube_url]
+        
     }
-
 
 </script>
 
 
 <body>
-    <label style = "font-size: 20;">This spot will allow users to create posts.</label><br>
+    <label style = "font-size: 20px;">This spot will allow users to create posts.</label><br>
 
-    <label style = "font-size: 20;">Song name:</label>
-    <input type = "text" id = "data" name = "data" style = "font-size: 20;"><br>
+    <!--User inputs the song's name here.-->
+    <label style = "font-size: 20px;">Song name:</label>
+    <input
+        type = "text"
+        id = "song_name"
+        name = "data"
+        style = "font-size: 20px;">
+    </input><br>
 
-    <label style = "font-size: 20;">Youtube Link:</label>
-    <input type = "text" id = "data" name = "data" style = "font-size: 20;"><br>
+    <!--User inputs the Youtube URL here.-->
+    <label style = "font-size: 20px;">Video Link:</label>
+    <input
+        type = "text"
+        id = "youtube_url"
+        name = "data"
+        style = "font-size: 20px;">
+    </input><br>
 
+    <!--Attempts to create a post when clicked. Calls submit().-->
     <button
         type = "button";
-        style = "height: 75; width: 150; font-size: 20;"
+        style = "height: 75px; width: 150px; font-size: 20px;"
         onclick = "submit()">
         Create Post
-    </button>
+    </button><br>
+
+    <label id = "warning" style = "font-size: 20px;"> </label>
+
 </body>
 
 </html>
