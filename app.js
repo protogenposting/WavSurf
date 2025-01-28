@@ -138,6 +138,15 @@ app.get('/tagQueueInterface',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
 })
 
+//get all the users
+app.get(apiPath+'users',(req,res) => {
+    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
 //#region tag queue api calls
 
 //get tags from the queue
