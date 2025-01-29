@@ -165,13 +165,19 @@ app.post(apiPath+'tagQueue',(req,res) => {
 
 //accept a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
-    const tag = db.prepare('SELECT * FROM tagQueue WHERE id=?').run(req.params.id);
+    const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
+
+    const tag = tagQuery.get(req.params.id);
 
     const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+    const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
 
-    var result = deleteData.run(req.params.id);
-
-    console.log(req.params.id);
+    deleteData.run(req.params.id);
+    
+    console.log(tag.tagData);
+    const tagData = JSON.parse(tag.tagData);
+    
+    addData.run(tagData.name, tagData.children);
 
     //add the tag adding thing
 
@@ -265,6 +271,16 @@ app.post(apiPath+'login',(req,res) => {
     }
 })
 
+//#endregion
+
+//#region tag api calls
+app.get(apiPath+'tags',(req,res) => {
+    const tags = db.prepare('SELECT * FROM tags').all();
+
+    console.log(tags);
+
+    res.json(tags)
+})
 //#endregion
 
 app.listen(port,() => {
