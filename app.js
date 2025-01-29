@@ -99,6 +99,10 @@ const query = `
         id INTEGER PRIMARY KEY UNIQUE,
         tagData STRING NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS postQueue (
+        id INTEGER PRIMARY KEY UNIQUE,
+        postData STRING [] NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
@@ -123,6 +127,10 @@ app.get('/tagCreate',(req,res) => {
 
 app.get('/postCreate',(req,res) => {
     res.sendFile(path.join(__dirname, 'index/postCreate.html'))
+})
+
+app.get('/songView',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/songView.html'))
 })
 
 //defines a get request
@@ -196,6 +204,56 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 })
 
 //#endregion
+
+//#region post queue api calls
+
+//get posts from the queue
+app.get(apiPath+'postQueue',(req,res) => {
+    const users = db.prepare('SELECT * FROM postQueue').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
+//add a new post to the queue
+app.post(apiPath+'postQueue',(req,res) => {
+    const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+
+    console.log(req.body.data)
+
+    let result = request.run(JSON.stringify(req.body.data))
+
+    console.log(result);
+
+    res.json(result)
+})
+
+//accept a post and add it to the main table
+app.post(apiPath+'acceptPost/:id',(req,res) => {
+    const tag = db.prepare('SELECT * FROM postQueue WHERE id=?').run(req.params.id);
+
+    const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+
+    var result = deleteData.run(req.params.id);
+
+    console.log(req.params.id);
+
+    //add the post adding thing
+
+    //const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+
+    //console.log(req.body.data)
+
+    //let result = request.run(JSON.stringify(req.body.data))
+})
+
+//deny a tag and remove it from the queue permentantly
+app.post(apiPath+'denyPost/:id',(req,res) => {
+    const insertData = db.prepare("DELETE FROM postQueue WHERE id=?");
+        
+    var result = insertData.run(req.params.id)
+})
 
 //#region user api calls
 
