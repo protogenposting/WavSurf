@@ -1,3 +1,138 @@
-<label>This spot will allow users to create posts</label><br>
-<input type = "text" id = "data" name = "data"><br>
-<button type = "button"> Click Me!</button>
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+    <title> Create Post</title>
+
+    <script defer>
+
+        let otherLinksCount = 0
+    
+        function submit() {
+    
+            //if there's no song name, use title of the youtube video (?)
+            
+            let song_name = document.getElementById("song_name").value
+            let youtube_url = document.getElementById("youtube_url").value
+            let youtube_id
+    
+            //check if there is a valid Youtube ID before sending to queue.
+            if (youtube_url.length == 0) {
+                popup.textContent = "Youtube ID or URL is required!"
+                return
+            }
+
+            else if (youtube_url.length < 11) {
+                popup.textContent = "Youtube ID is too short! Not 11 digits long!"
+                return
+            }
+
+            else {
+                //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
+                youtube_id = youtube_url.substr(length - 11)
+                popup.textContent = "Post added to queue! (Not actually yet though atm)"
+            }
+
+            let all_links = []
+            all_links.push(youtube_id)
+    
+            for (let i = 1; i <= otherLinksCount; i++) {
+                let link = document.getElementById("A" + i.toString).value
+    
+                all_links.push(link)
+            }
+    
+            fetch("http://localhost:3000/api/postQueue", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    data: {
+                        songName: song_name,
+                        //tags: all_tags, ADD BACK WHEN TAGS EXIST
+                        links: all_links
+                    }
+                })
+            })
+        }
+    </script>
+</head>
+
+<body id = "body1" style = "top: 100px; left: 150px;">
+    
+    <label style = "font-size: 20px;">This spot will allow users to create posts.</label><br>
+
+    <!--User inputs the song's name here.-->
+    <label style = "font-size: 20px;">Song name:</label>
+    <input
+        type = "text"
+        id = "song_name"
+        name = "data"
+        style = "font-size: 20px;">
+    </input><br>
+
+    <!--User inputs the Youtube URL here.-->
+    <label style = "font-size: 20px;">Youtube Link / ID:</label>
+    <input
+        type = "text"
+        id = "youtube_url"
+        name = "data"
+        style = "font-size: 20px;">
+    </input><br>
+
+    <script>
+        /**
+         * Adds another input HTML element that allows the user to add another link for the song.
+        **/
+        function addAnotherInput(){
+            otherLinksCount += 1
+    
+            let lineBreak = document.createElement("br")
+            let newLabel = document.createElement("label")
+    
+            newLabel.setAttribute("style", "font-size: 20px;")
+
+            const text = document.createTextNode("Other Link:")
+            newLabel.appendChild(text)
+    
+            let newInput = document.createElement("input")
+            const inputID = "A" + otherLinksCount.toString
+    
+            newInput.setAttribute("type", "text")
+            newInput.setAttribute("id", (inputID))
+            newInput.setAttribute("name", "data")
+            newInput.setAttribute("style", "font-size: 20px;")
+    
+            let body = document.getElementById("div1")
+            let firstButton = document.getElementById("firstButton")
+    
+            body.insertBefore(newLabel, firstButton)
+            body.insertBefore(newInput, firstButton)
+            body.insertBefore(lineBreak, firstButton)
+        }
+    </script>
+</body>
+
+<div id = "div1">
+    <!--Includes another option for another link when clicked. Calls addAnotherInput().-->
+    <button
+        id = "firstButton"
+        type = "button";
+        style = "height: 75px; width: 200px; font-size: 20px;"
+        onclick = "addAnotherInput()">
+        Add Other Option
+    </button>
+
+    <!--Attempts to create a post when clicked. Calls submit().-->
+    <button
+        type = "button";
+        style = "height: 75px; width: 150px; font-size: 20px;"
+        onclick = "submit()">
+        Create Post
+    </button><br>
+
+    <label id = "popup" style = "font-size: 20px;"> </label>
+</div>
+
+</html>

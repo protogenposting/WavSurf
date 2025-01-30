@@ -82,6 +82,10 @@ const query = `
         id INTEGER PRIMARY KEY UNIQUE,
         tagData STRING NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS postQueue (
+        id INTEGER PRIMARY KEY UNIQUE,
+        postData STRING [] NOT NULL
+    );
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
@@ -146,13 +150,19 @@ app.post(apiPath+'tagQueue',(req,res) => {
 
 //accept a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
-    const tag = db.prepare('SELECT * FROM tagQueue WHERE id=?').run(req.params.id);
+    const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
+
+    const tag = tagQuery.get(req.params.id);
 
     const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+    const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
 
-    var result = deleteData.run(req.params.id);
-
-    console.log(req.params.id);
+    deleteData.run(req.params.id);
+    
+    console.log(tag.tagData);
+    const tagData = JSON.parse(tag.tagData);
+    
+    addData.run(tagData.name, tagData.children);
 
     //add the tag adding thing
 
@@ -171,6 +181,56 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 })
 
 //#endregion
+
+//#region post queue api calls
+
+//get posts from the queue
+app.get(apiPath+'postQueue',(req,res) => {
+    const users = db.prepare('SELECT * FROM postQueue').all();
+
+    console.log(users);
+
+    res.json(users)
+})
+
+//add a new post to the queue
+app.post(apiPath+'postQueue',(req,res) => {
+    const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+
+    console.log(req.body.data)
+
+    let result = request.run(JSON.stringify(req.body.data))
+
+    console.log(result);
+
+    res.json(result)
+})
+
+//accept a post and add it to the main table
+app.post(apiPath+'acceptPost/:id',(req,res) => {
+    const tag = db.prepare('SELECT * FROM postQueue WHERE id=?').run(req.params.id);
+
+    const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+
+    var result = deleteData.run(req.params.id);
+
+    console.log(req.params.id);
+
+    //add the post adding thing
+
+    //const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+
+    //console.log(req.body.data)
+
+    //let result = request.run(JSON.stringify(req.body.data))
+})
+
+//deny a tag and remove it from the queue permentantly
+app.post(apiPath+'denyPost/:id',(req,res) => {
+    const insertData = db.prepare("DELETE FROM postQueue WHERE id=?");
+        
+    var result = insertData.run(req.params.id)
+})
 
 //#region user api calls
 
@@ -241,6 +301,16 @@ app.post(apiPath+'login',(req,res) => {
     }
 })
 
+//#endregion
+
+//#region tag api calls
+app.get(apiPath+'tags',(req,res) => {
+    const tags = db.prepare('SELECT * FROM tags').all();
+
+    console.log(tags);
+
+    res.json(tags)
+})
 //#endregion
 
 app.listen(port,() => {

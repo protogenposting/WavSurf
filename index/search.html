@@ -1,1 +1,14 @@
-<p>no</p>
+<script>
+    var tags = []
+
+    fetch("http://localhost:3000/api/tags")
+    .then(response => response.json())
+    .then(json => {
+        tags = json;
+        document.getElementById('tags').innerHTML = JSON.stringify(json);
+        console.log(json);
+    });
+
+</script>
+
+<p id = "tags"></p>
