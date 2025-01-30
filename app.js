@@ -239,6 +239,10 @@ app.post(apiPath+'denyPost/:id',(req,res) => {
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
 
+    users.forEach(element => {
+        delete element.password
+    });
+
     console.log(users);
 
     res.json(users)
@@ -265,40 +269,12 @@ app.delete(apiPath+'user/:name',(req,res) => {
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
-    console.log(req.body)
-
-    if(req.body.name == "" || req.body.password == "")
-    {
-        req.send("UNIQUE")
-        return 0
-    }
     
-    const insertData = db.prepare("INSERT INTO users (name, username, password, pp) VALUES (?, ?, ?, ?)");
-    
-    var result = insertData.run(req.body.name,req.body.username,req.body.password,0)
-    
-    res.send(result)
 })
 
 //create a login session
 app.post(apiPath+'login',(req,res) => {
-    console.log(req.body)
     
-    const user = db.prepare(`
-        SELECT * FROM users WHERE username = ? AND password = ?
-        `).get(req.body.name,req.body.password);
-    
-    
-    if(user == null)
-    {
-        var sessionID = "0"
-        res.send({sessionID: sessionID})
-    }
-    else
-    {
-        currentSessions.push(new Session(req.body.name,req.body.ip));
-        res.send({sessionID: req.body.ip})
-    }
 })
 
 //#endregion
