@@ -41,23 +41,6 @@ function remove_passwords(_users)
     });
 }
 
-/**
- * generates a random string based on length
- * @param {*} length how long the session key should be
- * @returns the session key
- */
-function generate_session_key(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-}
-
 const databaseName='app.db'
 
 //load in the database
@@ -133,18 +116,12 @@ app.get('/songView',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/songView.html'))
 })
 
-//defines a get request
 app.get('/tagQueueInterface',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
 })
 
-//get all the users
-app.get(apiPath+'users',(req,res) => {
-    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
-
-    console.log(users);
-
-    res.json(users)
+app.get('/login',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/login.html'))
 })
 
 //#region tag queue api calls
@@ -319,13 +296,8 @@ app.post(apiPath+'login',(req,res) => {
     }
     else
     {
-        var sessionID = generate_session_key(120)
-        while(currentSessions.indexOf(sessionID)>-1)
-        {
-            sessionID = generate_session_key(120)
-        }
-        currentSessions.push(new Session(req.body.name,sessionID));
-        res.send({sessionID: sessionID})
+        currentSessions.push(new Session(req.body.name,req.body.ip));
+        res.send({sessionID: req.body.ip})
     }
 })
 

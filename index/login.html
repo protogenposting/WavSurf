@@ -1,0 +1,25 @@
+<script>
+    function submit()
+    {
+        fetch("http://localhost:3000/api/tagQueue", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                data: {
+                    name: document.getElementById("name").value,
+                    children: document.getElementById("children").value
+                }
+            })
+        });
+
+    }
+</script>
+
+<label for="name">Tag name:</label><br>
+<input type="text" id="name" name="name"><br>
+<label for="children">Tag children (JSON Array with the ids of each tag, change this to something else later)</label><br>
+<input type="text" id="children" name="children"><br>
+
+<button type="button" onclick="submit()">Submit</button>
