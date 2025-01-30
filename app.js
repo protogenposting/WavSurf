@@ -232,9 +232,11 @@ app.post(apiPath+'denyPost/:id',(req,res) => {
     var result = insertData.run(req.params.id)
 })
 
+//#endregion
+
 //#region user api calls
 
-//get a user by name
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
@@ -248,6 +250,7 @@ app.get(apiPath+'users',(req,res) => {
     res.json(users)
 })
 
+//get a user by name
 app.get(apiPath+'user/:name',(req,res) => {
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ?
@@ -262,7 +265,7 @@ app.get(apiPath+'user/:name',(req,res) => {
 
 //delete a user
 app.delete(apiPath+'user/:name',(req,res) => {
-    db.prepare(`DELETE * FROM users WHERE username = ?`).run();
+    //db.prepare(`DELETE * FROM users WHERE username = ?`).run();
 
     res.send("Ok did that");
 })
