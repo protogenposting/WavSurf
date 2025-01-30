@@ -4,6 +4,7 @@
 <head>
     <title> Create Post</title>
 
+    <!--Only available after the page is done loading and has interpreted it.-->
     <script defer>
 
         let otherLinksCount = 0
@@ -50,7 +51,7 @@
                 body: JSON.stringify({
                     data: {
                         songName: song_name,
-                        //tags: all_tags, ADD BACK WHEN TAGS EXIST
+                        tags: all_tags,
                         links: all_links
                     }
                 })
@@ -135,6 +136,7 @@
         Create Post
     </button><br>
 
+    <!--Warns the user or tells them post has been created.-->
     <label id = "popup" style = "font-size: 20px;"> </label>
 </div>
 
