@@ -56,10 +56,44 @@
                 })
             })
         }
+
+        /**
+         * Adds another input HTML element below the submit button that allows the user to add another link for the song.
+        **/
+        function addAnotherInput(){
+            otherLinksCount += 1
+    
+            //Line break needed so the input buttons stay in a column
+            //Label created so user understands purpose of input
+            let lineBreak = document.createElement("br")
+            let newLabel = document.createElement("label")
+    
+            newLabel.setAttribute("style", "font-size: 20px;")
+
+            const text = document.createTextNode("Other Link:")
+            newLabel.appendChild(text)
+    
+            //Create the actual input and set its elements
+            let newInput = document.createElement("input")
+            const inputID = "A" + otherLinksCount.toString
+    
+            newInput.setAttribute("type", "text")
+            newInput.setAttribute("id", (inputID))
+            newInput.setAttribute("name", "data")
+            newInput.setAttribute("style", "font-size: 20px;")
+    
+            let div = document.getElementById("div1")
+            let firstButton = document.getElementById("firstButton")
+    
+            //Adds all three new elements before the Submit and "Add Other Option" button
+            div.insertBefore(newLabel, firstButton)
+            div.insertBefore(newInput, firstButton)
+            div.insertBefore(lineBreak, firstButton)
+        }
     </script>
 </head>
 
-<body id = "body1" style = "top: 100px; left: 150px;">
+<body id = "body1">
     
     <label style = "font-size: 20px;">This spot will allow users to create posts.</label><br>
 
@@ -81,37 +115,6 @@
         style = "font-size: 20px;">
     </input><br>
 
-    <script>
-        /**
-         * Adds another input HTML element that allows the user to add another link for the song.
-        **/
-        function addAnotherInput(){
-            otherLinksCount += 1
-    
-            let lineBreak = document.createElement("br")
-            let newLabel = document.createElement("label")
-    
-            newLabel.setAttribute("style", "font-size: 20px;")
-
-            const text = document.createTextNode("Other Link:")
-            newLabel.appendChild(text)
-    
-            let newInput = document.createElement("input")
-            const inputID = "A" + otherLinksCount.toString
-    
-            newInput.setAttribute("type", "text")
-            newInput.setAttribute("id", (inputID))
-            newInput.setAttribute("name", "data")
-            newInput.setAttribute("style", "font-size: 20px;")
-    
-            let body = document.getElementById("div1")
-            let firstButton = document.getElementById("firstButton")
-    
-            body.insertBefore(newLabel, firstButton)
-            body.insertBefore(newInput, firstButton)
-            body.insertBefore(lineBreak, firstButton)
-        }
-    </script>
 </body>
 
 <div id = "div1">
