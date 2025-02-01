@@ -13,34 +13,34 @@
     
             //if there's no song name, use title of the youtube video (?)
             
-            let song_name = document.getElementById("song_name").value
-            let youtube_url = document.getElementById("youtube_url").value
-            let youtube_id
+            let songName = document.getElementById("songName").value
+            let youtubeUrl = document.getElementById("youtubeUrl").value
+            let youtubeID
     
             //check if there is a valid Youtube ID before sending to queue.
-            if (youtube_url.length == 0) {
+            if (youtubeUrl.length == 0) {
                 popup.textContent = "Youtube ID or URL is required!"
                 return
             }
 
-            else if (youtube_url.length < 11) {
+            else if (youtubeUrl.length < 11) {
                 popup.textContent = "Youtube ID is too short! Not 11 digits long!"
                 return
             }
 
             else {
                 //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
-                youtube_id = youtube_url.substr(length - 11)
+                youtubeID = youtubeUrl.substr(length - 11)
                 popup.textContent = "Post added to queue! (Not actually yet though atm)"
             }
 
-            let all_links = []
-            all_links.push(youtube_id)
+            let allLinks = []
+            allLinks.push(youtubeID)
     
             for (let i = 1; i <= otherLinksCount; i++) {
                 let link = document.getElementById("A" + i.toString).value
     
-                all_links.push(link)
+                allLinks.push(link)
             }
     
             fetch("http://localhost:3000/api/postQueue", {
@@ -50,9 +50,9 @@
                 },
                 body: JSON.stringify({
                     data: {
-                        songName: song_name,
-                        tags: all_tags,
-                        links: all_links
+                        songName: songName,
+                        tags: allTags,
+                        links: allLinks
                     }
                 })
             })
@@ -102,7 +102,7 @@
     <label style = "font-size: 20px;">Song name:</label>
     <input
         type = "text"
-        id = "song_name"
+        id = "songName"
         name = "data"
         style = "font-size: 20px;">
     </input><br>
@@ -111,7 +111,7 @@
     <label style = "font-size: 20px;">Youtube Link / ID:</label>
     <input
         type = "text"
-        id = "youtube_url"
+        id = "youtubeUrl"
         name = "data"
         style = "font-size: 20px;">
     </input><br>
