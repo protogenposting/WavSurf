@@ -38,7 +38,20 @@
                         password: password
                     }
                 })
-            })
+            }).then(response => response.json())
+            .then(json => {
+                console.log(json)
+                if(json.sessionID == "0")
+                {
+                    popup.textContent = "Your username or password is incorrect, please try again"
+                }
+                else
+                {
+                    popup.textContent = "Logged in!"
+
+                    localStorage.setItem("sessionID", json.sessionID);
+                }
+            });
     }
 </script>
 

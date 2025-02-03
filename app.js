@@ -230,9 +230,8 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
 
     deleteData.run(req.params.id);
 
-    console.log(post.postData);
     const postData = JSON.parse(post.postData);
-    console.log(postData);
+
     addData.run(postData.songName, postData.tags, postData.links);
 
     //add the post adding thing
