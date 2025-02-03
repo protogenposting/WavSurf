@@ -1,29 +1,77 @@
 <!DOCTYPE html>
 <html lang = "en">
 
-<script>
-    function submit()
-    {
-        fetch("http://localhost:3000/api/tagQueue", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                data: {
-                    name: document.getElementById("name").value,
-                    children: document.getElementById("children").value
-                }
+<script defer>
+    /**
+     * Attempts to login if possible with given information.
+    **/
+    function tryLogin() {
+
+        let username = document.getElementById("username").value
+        let password = document.getElementById("password").value
+
+        let popup = document.getElementById("popup")
+        
+        //If username or password are null, warn user and prevent from entering.
+        if (username.length === 0 || username === null && password.length === 0 || password === null) {
+            popup.textContent = "Please enter a username and a password!"
+            return
+        }
+        else if (username.length === 0 || username === null) {
+            popup.textContent = "Please enter a username!"
+            return
+        }
+        else if (password.length === 0 || password === null) {
+            popup.textContent = "Please enter a password!"
+            return
+        }
+
+        //Sends information over to app.js, "Create a login session"
+        fetch("http://localhost:3000/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    data: {
+                        username: username,
+                        password: password
+                    }
+                })
             })
-        });
     }
 </script>
 
-<label for="name">Tag name:</label><br>
-<input type="text" id="name" name="name"><br>
-<label for="children">Tag children (JSON Array with the ids of each tag, change this to something else later)</label><br>
-<input type="text" id="children" name="children"><br>
+<!--Adjust position accordingly later.-->
+<body style = "position:relative; top: 50px; left: 50px">
 
-<button type="button" onclick="submit()">Submit</button>
+    <label style = "font-size: 20px;">Username: </label>
+
+    <!--User inputs username here.-->
+    <input
+        id = "username"
+        style = "font-size: 20px;"
+        type = "text">
+    <br>
+
+    <label style = "font-size: 20px;">Password: </label>
+
+    <!--User inputs password here. Text inputted is hidden in browser.-->
+    <input 
+        id = "password"
+        style = "font-size: 20px;"
+        type = "password">
+    <br>
+
+    <!--Attempts to login when clicked. Calls tryLogin().-->
+    <button
+        style = "height: 50px; width: 100px; font-size: 20px;"
+        type = "button"
+        onclick = "tryLogin()">Login</button>
+    <br>
+
+    <!--For warning the user.-->
+    <label id = "popup" style = "font-size: 20px; position:relative; top: 10px;"> </label>
+</body>
 
 </html>
