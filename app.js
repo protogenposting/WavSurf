@@ -129,6 +129,10 @@ app.get('/tagQueueInterface',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
 })
 
+app.get('/signIn',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/signIn.html'))
+})
+
 app.get('/login',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/login.html'))
 })
@@ -290,7 +294,15 @@ app.delete(apiPath+'user/:name',(req,res) => {
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
+    const addData = db.prepare("INSERT INTO users (name, username, password) VALUES (?,?,?)")
     
+    console.log(req.body)
+
+    let result;
+
+    result = addData.run(req.body.name,req.body.username,req.body.password)
+
+    res.json({result: result})
 })
 
 //create a login session
@@ -301,7 +313,7 @@ app.post(apiPath+'login',(req,res) => {
 
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ? AND password = ?
-        `).get(req.body.name,req.body.password);
+        `).get(req.body.username,req.body.password);
     
     
     if(user == null)
