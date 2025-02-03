@@ -89,13 +89,13 @@ const query = `
     );
     CREATE TABLE IF NOT EXISTS postQueue (
         id INTEGER PRIMARY KEY UNIQUE,
-        postData STRING [] NOT NULL
+        postData STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
-        tags INTEGER [] NOT NULL,
-        link STRING NOT NULL
+        tags INTEGER [],
+        links STRING [] NOT NULL
     );
 `;
 
@@ -226,14 +226,14 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
     const post = postQuery.get(req.params.id);
 
     const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-    const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)")
+    const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
 
     deleteData.run(req.params.id);
 
     console.log(post.postData);
     const postData = JSON.parse(post.postData);
-
-    addData.run(postData.name, postData.tags, postData.link);
+    console.log(postData);
+    addData.run(postData.songName, postData.tags, postData.links);
 
     //add the post adding thing
 
@@ -334,6 +334,7 @@ app.get(apiPath+'tags',(req,res) => {
 })
 //#endregion
 
+//#region post api calls
 app.get(apiPath+'posts',(req,res) => {
     const posts = db.prepare('SELECT * FROM posts').all();
 
@@ -341,6 +342,7 @@ app.get(apiPath+'posts',(req,res) => {
 
     res.json(posts);
 })
+//#endregion
 
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
