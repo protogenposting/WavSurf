@@ -1,0 +1,47 @@
+<script>
+    var queue = [];
+
+    function getInfo() {
+        fetch("http://localhost:3000/api/postQueue")
+        .then(response => response.json())
+        .then(json => {
+            queue = json;
+            document.getElementById('p1').innerHTML = JSON.stringify(json[0]);
+            console.log(json);
+        });
+    }
+
+    function accept() {
+        fetch("http://localhost:3000/api/acceptPost/" + queue[0].id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(getInfo())
+        
+    }
+
+    function deny() {
+        fetch("http://localhost:3000/api/denyPost/" + queue[0].id, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+        .then(getInfo())
+        
+    }
+</script>
+
+<!--Runs the getInfo() function when the page is loaded-->
+<body onload = "getInfo()"></body>
+
+<!--When clicked runs the accept() function-->
+<button type = "button" onclick="accept()">Accept</button><br>
+
+<!--When clicked runs the deny() function-->
+<button type = "button" onclick="deny()">Deny</button><br>
+
+<!--Displayes the first bit of postQueue data on the page-->
+<p id = "p1">placeholder</p>

@@ -102,6 +102,10 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+app.get('/postSearch',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/postSearch.html'))
+})
+
 //defines a get request
 app.get('/tagCreate',(req,res) => {
     //this is sent after /search is called
@@ -122,6 +126,10 @@ app.get('/tagQueueInterface',(req,res) => {
 
 app.get('/login',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/login.html'))
+})
+//defines a get request
+app.get('/postQueueInterface',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
 })
 
 //#region tag queue api calls
@@ -208,13 +216,19 @@ app.post(apiPath+'postQueue',(req,res) => {
 
 //accept a post and add it to the main table
 app.post(apiPath+'acceptPost/:id',(req,res) => {
-    const tag = db.prepare('SELECT * FROM postQueue WHERE id=?').run(req.params.id);
+    const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
+
+    const post = postQuery.get(req.params.id);
 
     const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+    const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)")
 
-    var result = deleteData.run(req.params.id);
+    deleteData.run(req.params.id);
 
-    console.log(req.params.id);
+    console.log(post.postData);
+    const postData = JSON.parse(post.postData);
+
+    addData.run(postData.name, postData.tags, postData.link);
 
     //add the post adding thing
 
@@ -232,18 +246,25 @@ app.post(apiPath+'denyPost/:id',(req,res) => {
     var result = insertData.run(req.params.id)
 })
 
+//#endregion
+
 //#region user api calls
 
-//get a user by name
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
+
+    users.forEach(element => {
+        delete element.password
+    });
 
     console.log(users);
 
     res.json(users)
 })
 
+//get a user by name
 app.get(apiPath+'user/:name',(req,res) => {
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ?
@@ -258,47 +279,19 @@ app.get(apiPath+'user/:name',(req,res) => {
 
 //delete a user
 app.delete(apiPath+'user/:name',(req,res) => {
-    db.prepare(`DELETE * FROM users WHERE username = ?`).run();
+    //db.prepare(`DELETE * FROM users WHERE username = ?`).run();
 
     res.send("Ok did that");
 })
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
-    console.log(req.body)
-
-    if(req.body.name == "" || req.body.password == "")
-    {
-        req.send("UNIQUE")
-        return 0
-    }
     
-    const insertData = db.prepare("INSERT INTO users (name, username, password, pp) VALUES (?, ?, ?, ?)");
-    
-    var result = insertData.run(req.body.name,req.body.username,req.body.password,0)
-    
-    res.send(result)
 })
 
 //create a login session
 app.post(apiPath+'login',(req,res) => {
-    console.log(req.body)
     
-    const user = db.prepare(`
-        SELECT * FROM users WHERE username = ? AND password = ?
-        `).get(req.body.name,req.body.password);
-    
-    
-    if(user == null)
-    {
-        var sessionID = "0"
-        res.send({sessionID: sessionID})
-    }
-    else
-    {
-        currentSessions.push(new Session(req.body.name,req.body.ip));
-        res.send({sessionID: req.body.ip})
-    }
 })
 
 //#endregion
@@ -312,6 +305,14 @@ app.get(apiPath+'tags',(req,res) => {
     res.json(tags)
 })
 //#endregion
+
+app.get(apiPath+'posts',(req,res) => {
+    const posts = db.prepare('SELECT * FROM posts').all();
+
+    console.log(posts);
+
+    res.json(posts);
+})
 
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
