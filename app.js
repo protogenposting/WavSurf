@@ -3,10 +3,10 @@
 
 class Session
 { 
-    constructor(_username,_key)
+    constructor(_key)
     {
-        this.username = _username
         this.key = _key
+        this.minutesLeft = 10 //this value ticks down and is reset every time the user does something, if it hits zero remove it from the sessions
     }
 }
 
@@ -16,13 +16,12 @@ class Session
  * @param {*} _username 
  * @returns boolean of whether the session key is accurate or not
  */
-function verify_session_key(_key,_username)
+function verifySessionKey(_key)
 {
     console.log(_key)
-    console.log(_username)
     let returnsTrue = false;
     currentSessions.forEach(element => {
-        if(_key.match(element.key) && _username.match(element.username))
+        if(_key.match(element.key))
         {
             returnsTrue = true
         }
@@ -31,14 +30,20 @@ function verify_session_key(_key,_username)
 }
 
 /**
- * Removes the password from all users returned in a list. Used so that you can't just get the passwords of every player.
- * @param {*} _users 
+ * generates a random string based on length
+ * @param {*} length how long the session key should be
+ * @returns the session key
  */
-function remove_passwords(_users)
-{
-    _users.forEach(element => {
-        delete element.password
-    });
+function generateSessionKey(length) {
+    let result = '';
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const charactersLength = characters.length;
+    let counter = 0;
+    while (counter < length) {
+      result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      counter += 1;
+    }
+    return result;
 }
 
 const databaseName='app.db'
@@ -55,7 +60,7 @@ const fs = require('fs');
 //pathhhhh yayyyy
 const path = require('path');
 
-const sessions = [
+const currentSessions = [
 
 ]
 
@@ -84,13 +89,13 @@ const query = `
     );
     CREATE TABLE IF NOT EXISTS postQueue (
         id INTEGER PRIMARY KEY UNIQUE,
-        postData STRING [] NOT NULL
+        postData STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
-        tags INTEGER [] NOT NULL,
-        link STRING NOT NULL
+        tags INTEGER [],
+        links STRING [] NOT NULL
     );
 `;
 
@@ -221,14 +226,14 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
     const post = postQuery.get(req.params.id);
 
     const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-    const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)")
+    const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
 
     deleteData.run(req.params.id);
 
     console.log(post.postData);
     const postData = JSON.parse(post.postData);
-
-    addData.run(postData.name, postData.tags, postData.link);
+    console.log(postData);
+    addData.run(postData.songName, postData.tags, postData.links);
 
     //add the post adding thing
 
@@ -291,7 +296,30 @@ app.post(apiPath+'newUser',(req,res) => {
 
 //create a login session
 app.post(apiPath+'login',(req,res) => {
+    console.log(req.body)
     
+    //verifySessionKey(req.headers.authorization)
+
+    const user = db.prepare(`
+        SELECT * FROM users WHERE username = ? AND password = ?
+        `).get(req.body.name,req.body.password);
+    
+    
+    if(user == null)
+    {
+        var sessionID = "0"
+        res.send({sessionID: sessionID})
+    }
+    else
+    {
+        var sessionID = generateSessionKey(120)
+        while(currentSessions.indexOf(sessionID)>-1)
+        {
+            sessionID = generateSessionKey(120)
+        }
+        currentSessions.push(new Session(sessionID));
+        res.send({sessionID: sessionID})
+    }
 })
 
 //#endregion
@@ -306,6 +334,7 @@ app.get(apiPath+'tags',(req,res) => {
 })
 //#endregion
 
+//#region post api calls
 app.get(apiPath+'posts',(req,res) => {
     const posts = db.prepare('SELECT * FROM posts').all();
 
@@ -313,6 +342,7 @@ app.get(apiPath+'posts',(req,res) => {
 
     res.json(posts);
 })
+//#endregion
 
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
