@@ -41,23 +41,6 @@ function remove_passwords(_users)
     });
 }
 
-/**
- * generates a random string based on length
- * @param {*} length how long the session key should be
- * @returns the session key
- */
-function generate_session_key(length) {
-    let result = '';
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    const charactersLength = characters.length;
-    let counter = 0;
-    while (counter < length) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-      counter += 1;
-    }
-    return result;
-}
-
 const databaseName='app.db'
 
 //load in the database
@@ -137,23 +120,16 @@ app.get('/songView',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/songView.html'))
 })
 
-//defines a get request
 app.get('/tagQueueInterface',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
 })
 
+app.get('/login',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/login.html'))
+})
 //defines a get request
 app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
-})
-
-//get all the users
-app.get(apiPath+'users',(req,res) => {
-    const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
-
-    console.log(users);
-
-    res.json(users)
 })
 
 //#region tag queue api calls
@@ -270,18 +246,25 @@ app.post(apiPath+'denyPost/:id',(req,res) => {
     var result = insertData.run(req.params.id)
 })
 
+//#endregion
+
 //#region user api calls
 
-//get a user by name
+
 //get all the users
 app.get(apiPath+'users',(req,res) => {
     const users = db.prepare('SELECT * FROM users ORDER BY id DESC').all();
+
+    users.forEach(element => {
+        delete element.password
+    });
 
     console.log(users);
 
     res.json(users)
 })
 
+//get a user by name
 app.get(apiPath+'user/:name',(req,res) => {
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ?
@@ -296,52 +279,19 @@ app.get(apiPath+'user/:name',(req,res) => {
 
 //delete a user
 app.delete(apiPath+'user/:name',(req,res) => {
-    db.prepare(`DELETE * FROM users WHERE username = ?`).run();
+    //db.prepare(`DELETE * FROM users WHERE username = ?`).run();
 
     res.send("Ok did that");
 })
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
-    console.log(req.body)
-
-    if(req.body.name == "" || req.body.password == "")
-    {
-        req.send("UNIQUE")
-        return 0
-    }
     
-    const insertData = db.prepare("INSERT INTO users (name, username, password, pp) VALUES (?, ?, ?, ?)");
-    
-    var result = insertData.run(req.body.name,req.body.username,req.body.password,0)
-    
-    res.send(result)
 })
 
 //create a login session
 app.post(apiPath+'login',(req,res) => {
-    console.log(req.body)
     
-    const user = db.prepare(`
-        SELECT * FROM users WHERE username = ? AND password = ?
-        `).get(req.body.name,req.body.password);
-    
-    
-    if(user == null)
-    {
-        var sessionID = "0"
-        res.send({sessionID: sessionID})
-    }
-    else
-    {
-        var sessionID = generate_session_key(120)
-        while(currentSessions.indexOf(sessionID)>-1)
-        {
-            sessionID = generate_session_key(120)
-        }
-        currentSessions.push(new Session(req.body.name,sessionID));
-        res.send({sessionID: sessionID})
-    }
 })
 
 //#endregion
