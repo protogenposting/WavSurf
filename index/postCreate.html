@@ -30,7 +30,7 @@
             else {
                 //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
                 youtube_id = youtube_url.substr(length - 11)
-                popup.textContent = "Post added to queue! (Not actually yet though atm)"
+                popup.textContent = "Post added to queue!"
             }
 
             let all_links = []
@@ -50,7 +50,7 @@
                 body: JSON.stringify({
                     data: {
                         songName: song_name,
-                        //tags: all_tags, ADD BACK WHEN TAGS EXIST
+                        tags: [],
                         links: all_links
                     }
                 })
@@ -60,8 +60,6 @@
 </head>
 
 <body id = "body1" style = "top: 100px; left: 150px;">
-    
-    <label style = "font-size: 20px;">This spot will allow users to create posts.</label><br>
 
     <!--User inputs the song's name here.-->
     <label style = "font-size: 20px;">Song name:</label>

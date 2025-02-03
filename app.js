@@ -102,6 +102,10 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+app.get('/postSearch',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/postSearch.html'))
+})
+
 //defines a get request
 app.get('/tagCreate',(req,res) => {
     //this is sent after /search is called
@@ -122,6 +126,10 @@ app.get('/tagQueueInterface',(req,res) => {
 
 app.get('/login',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/login.html'))
+})
+//defines a get request
+app.get('/postQueueInterface',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
 })
 
 //#region tag queue api calls
@@ -208,13 +216,19 @@ app.post(apiPath+'postQueue',(req,res) => {
 
 //accept a post and add it to the main table
 app.post(apiPath+'acceptPost/:id',(req,res) => {
-    const tag = db.prepare('SELECT * FROM postQueue WHERE id=?').run(req.params.id);
+    const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
+
+    const post = postQuery.get(req.params.id);
 
     const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+    const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)")
 
-    var result = deleteData.run(req.params.id);
+    deleteData.run(req.params.id);
 
-    console.log(req.params.id);
+    console.log(post.postData);
+    const postData = JSON.parse(post.postData);
+
+    addData.run(postData.name, postData.tags, postData.link);
 
     //add the post adding thing
 
@@ -291,6 +305,14 @@ app.get(apiPath+'tags',(req,res) => {
     res.json(tags)
 })
 //#endregion
+
+app.get(apiPath+'posts',(req,res) => {
+    const posts = db.prepare('SELECT * FROM posts').all();
+
+    console.log(posts);
+
+    res.json(posts);
+})
 
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
