@@ -129,8 +129,8 @@ app.get('/tagQueueInterface',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
 })
 
-app.get('/signIn',(req,res) => {
-    res.sendFile(path.join(__dirname, '/index/signIn.html'))
+app.get('/signUp',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/signUp.html'))
 })
 
 app.get('/login',(req,res) => {

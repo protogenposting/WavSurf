@@ -3,9 +3,9 @@
 
 <script defer>
     /**
-     * Attempts to sign in if possible with given information.
+     * Attempts to sign up if possible with given information.
     **/
-    function trySignIn() {
+    function trySignUp() {
 
         let username = document.getElementById("username").value
         let password = document.getElementById("password").value
@@ -75,11 +75,11 @@
         type = "text">
     <br>
 
-    <!--Attempts to sign in when clicked. Calls trySignIn().-->
+    <!--Attempts to sign in when clicked. Calls trySignUp().-->
     <button
         style = "height: 50px; width: 100px; font-size: 20px;"
         type = "button"
-        onclick = "trySignIn()">Sign Up</button>
+        onclick = "trySignUp()">Sign Up</button>
     <br>
 
     <!--For warning the user.-->
