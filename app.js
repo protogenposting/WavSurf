@@ -114,7 +114,14 @@ app.get('/postSearch',(req,res) => {
 //defines a get request
 app.get('/tagCreate',(req,res) => {
     //this is sent after /search is called
-    res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
+    if(verifySessionKey(req.headers.authorization))
+    {
+        res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
+    }
+    else
+    {
+        res.sendFile(path.join(__dirname, '/index/noAccess.html'))
+    }
 })
 
 app.get('/postCreate',(req,res) => {
