@@ -125,6 +125,10 @@ app.get('/songView',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/songView.html'))
 })
 
+app.get('/tagBrowse',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/tagBrowse.html'))
+})
+
 app.get('/tagQueueInterface',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagQueueInterface.html'))
 })
