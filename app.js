@@ -113,15 +113,7 @@ app.get('/postSearch',(req,res) => {
 
 //defines a get request
 app.get('/tagCreate',(req,res) => {
-    //this is sent after /search is called
-    if(verifySessionKey(req.headers.authorization))
-    {
-        res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
-    }
-    else
-    {
-        res.sendFile(path.join(__dirname, '/index/noAccess.html'))
-    }
+    res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
 })
 
 app.get('/postCreate',(req,res) => {
@@ -161,15 +153,18 @@ app.get(apiPath+'tagQueue',(req,res) => {
 
 //add a new tag to the queue
 app.post(apiPath+'tagQueue',(req,res) => {
-    const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
+    if(verifySessionKey(req.headers.authorization))
+    {
+        const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
-    console.log(req.body.data)
+        console.log(req.body.data)
 
-    let result = request.run(JSON.stringify(req.body.data))
+        let result = request.run(JSON.stringify(req.body.data))
 
-    console.log(result);
+        console.log(result);
 
-    res.json(result)
+        res.json(result)
+    }
 })
 
 //accept a tag and add it to the main table
