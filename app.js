@@ -107,6 +107,10 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+app.get('/style.css',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/style.css'))
+})
+
 app.get('/postSearch',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/postSearch.html'))
 })
