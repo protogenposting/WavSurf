@@ -14,26 +14,25 @@
 
     let tags = []
 
-     /**
+    /**
      * Gets all tags from the database and displays it on the page.
      * Stores the information in the tags array.
      * @param none
      * @returns nothing
     **/
     function getInfo() {
-        fetch("http://localhost:3000/api/tags")
+        fetch("http://localhost:3000/api/tags/1")
         .then(response => response.json())
         .then(json => {
             tags = json;
             console.log(json);
-        });
+            console.log(tags)
 
-        console.log(tags);
-
-        for(let i = 0; i < tags.length; i++){
+            for(let i = 0; i < tags.length; i++){
             
-            addTagToPage(tags[i].tagName)
-        }
+                addTagToPage(tags[i].tagName)
+            }
+        });        
     }
 
     /**
@@ -44,8 +43,6 @@
         let url 
         //change into a PARAMETER later so this works better
         // url should be a newly created page that
-
-        otherLinksCount += 1
 
         //Line break needed so the input buttons stay in a column
         //Button needed so that the user can go to its page
@@ -67,6 +64,7 @@
 
 <body id = "body" onload = "getInfo()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
     <label style = "font-size: 20px;">Tags</label>
+    <br>
 
 
 </body>
