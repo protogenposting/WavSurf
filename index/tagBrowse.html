@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+    <meta charset = "UTF-8">
+    <meta
+        name = "viewport"
+        content = "width = device-width, initial-scale = 1"
+    >
+    <title>WavSurf Tag Browsing Page</title>
+</head>
+
+<script defer>
+
+    let tags = []
+
+    /**
+     * Gets all tags from the database and displays it on the page.
+     * Stores the information in the tags array.
+     * @param none
+     * @returns nothing
+    **/
+    function getInfo() {
+        fetch("http://localhost:3000/api/tags/1")
+        .then(response => response.json())
+        .then(json => {
+            tags = json;
+            console.log(json);
+            console.log(tags)
+
+            for(let i = 0; i < tags.length; i++){
+            
+                addTagToPage(tags[i].tagName)
+            }
+        });        
+    }
+
+    /**
+     * Adds another input HTML element below the submit button that allows the user to add another link for the song.
+    **/
+    function addTagToPage(tagName){
+
+        let url 
+        //change into a PARAMETER later so this works better
+        // url should be a newly created page that
+
+        //Line break needed so the input buttons stay in a column
+        //Button needed so that the user can go to its page
+        let lineBreak = document.createElement("br")
+        let newButton = document.createElement("button")
+
+        const text = document.createTextNode(tagName)
+        newButton.appendChild(text)
+
+        //newButton.setAttribute("onclick", goToTagPage)
+        newButton.setAttribute("style", "font-size: 20px;")
+
+        let body = document.getElementById("body")
+        body.appendChild(newButton)
+        body.appendChild(lineBreak)
+    }        
+
+</script>
+
+<body id = "body" onload = "getInfo()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
+    <label style = "font-size: 20px;">Tags</label>
+    <br>
+
+
+</body>
+
+</html>

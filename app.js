@@ -81,7 +81,7 @@ const query = `
     CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
         tagName STRING NOT NULL,
-        tagChildren INTEGER [] NOT NULL
+        tagChildren STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tagQueue (
         id INTEGER PRIMARY KEY UNIQUE,
@@ -130,6 +130,10 @@ app.get('/postCreate',(req,res) => {
 
 app.get('/songView',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/songView.html'))
+})
+
+app.get('/tagBrowse',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/tagBrowse.html'))
 })
 
 app.get('/tagQueueInterface',(req,res) => {
@@ -184,9 +188,10 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
     deleteData.run(req.params.id);
     
     console.log(tag.tagData);
+
     const tagData = JSON.parse(tag.tagData);
     
-    addData.run(tagData.name, tagData.children);
+    addData.run(tagData.name, JSON.stringify(tagData.children));
 
     //add the tag adding thing
 
@@ -345,6 +350,14 @@ app.post(apiPath+'login',(req,res) => {
 //#region tag api calls
 app.get(apiPath+'tags',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags').all();
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
+app.get(apiPath+'tags/:id',(req,res) => {
+    const tags = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.id);
 
     console.log(tags);
 

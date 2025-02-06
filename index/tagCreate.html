@@ -12,7 +12,7 @@
             body: JSON.stringify({
                 data: {
                     name: document.getElementById("name").value,
-                    children: document.getElementById("children").value
+                    children: JSON.parse(document.getElementById("children").value)
                 }
             })
         });
