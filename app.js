@@ -3,8 +3,9 @@
 
 class Session
 { 
-    constructor(_key)
+    constructor(_username,_key)
     {
+        this.username = _username
         this.key = _key
         this.minutesLeft = 10 //this value ticks down and is reset every time the user does something, if it hits zero remove it from the sessions
     }
@@ -76,7 +77,8 @@ const query = `
         id INTEGER PRIMARY KEY UNIQUE,
         name STRING NOT NULL,
         username STRING NOT NULL UNIQUE,
-        password STRING NOT NULL
+        password STRING NOT NULL,
+        rank INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
@@ -330,7 +332,7 @@ app.post(apiPath+'login',(req,res) => {
         {
             sessionID = generateSessionKey(120)
         }
-        currentSessions.push(new Session(sessionID));
+        currentSessions.push(new Session(req.body.username,sessionID));
         res.send({sessionID: sessionID})
     }
 })
