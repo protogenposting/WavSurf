@@ -94,8 +94,6 @@
     }
 </script>
 <body id = "body1">
-    
-    <label style = "font-size: 20px;">This spot will allow users to create posts.</label><br>
 
     <!--User inputs the song's name here.-->
     <label style = "font-size: 20px;">Song name:</label>
@@ -107,12 +105,12 @@
     </input><br>
 
     <!--User inputs the Youtube URL here.-->
-    <label style = "font-size: 20px;">Youtube Link / ID:</label>
+    <label style = "font-size: 20px; left: -61.5px; top: 30px;">Youtube Link / ID:</label>
     <input
         type = "text"
         id = "youtubeUrl"
         name = "data"
-        style = "font-size: 20px;">
+        style = "font-size: 20px; top: 30px;">
     </input><br>
 
 </body>
@@ -122,7 +120,7 @@
     <button
         id = "firstButton"
         type = "button";
-        style = "height: 75px; width: 200px; font-size: 20px;"
+        style = "height: 75px; width: 200px; font-size: 20px; left: -100px;"
         onclick = "addAnotherInput()">
         Add Other Option
     </button>
@@ -130,7 +128,7 @@
     <!--Attempts to create a post when clicked. Calls submit().-->
     <button
         type = "button";
-        style = "height: 75px; width: 150px; font-size: 20px;"
+        style = "height: 75px; width: 150px; font-size: 20px; left: 100px"
         onclick = "submit()">
         Create Post
     </button><br>
