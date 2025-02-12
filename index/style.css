@@ -21,7 +21,9 @@ label {
     color:#000000;
 }
 
-/**/
+/*Sets the properties for the "popup" type content.
+Makes their positioning go off of the body.
+Sets the font and color*/
 popup {
     position:absolute;
     transform: translate(-50%);
@@ -29,6 +31,9 @@ popup {
     color: rgb(185, 3, 3);
 }
 
+/*Sets the properties for the "button" type content.
+Makes their positioning go off of the body.
+Sets the font and color*/
 button {
     position: absolute;
     transform: translate(-50%);
@@ -37,6 +42,8 @@ button {
     background-color:rgb(96, 180, 230)
 }
 
+/*Sets the properties for the "button" type content.
+Makes their positioning go off of the body.*/
 input {
     position: absolute;
     transform: translate(-50%);
