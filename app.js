@@ -3,8 +3,9 @@
 
 class Session
 { 
-    constructor(_key)
+    constructor(_username,_key)
     {
+        this.username = _username
         this.key = _key
         this.minutesLeft = 10 //this value ticks down and is reset every time the user does something, if it hits zero remove it from the sessions
     }
@@ -24,6 +25,32 @@ function verifySessionKey(_key)
         if(_key.match(element.key))
         {
             returnsTrue = true
+        }
+    });
+    return returnsTrue
+}
+
+/**
+ * verify if the session token and username match any of the other sessions, wip currently
+ * @param {*} _token 
+ * @param {*} _username 
+ * @returns boolean of whether the session key is accurate or not
+ */
+function verifyRank(_key,_rank)
+{
+    console.log(_key)
+    let returnsTrue = false;
+    currentSessions.forEach(element => {
+        if(_key.match(element.key))
+        {
+            let user = db.prepare(`
+                SELECT * FROM users WHERE username = ?
+                `).get(element.username);
+            
+            if(user.rank > _rank)
+            {
+                returnsTrue = true
+            }
         }
     });
     return returnsTrue
@@ -76,7 +103,8 @@ const query = `
         id INTEGER PRIMARY KEY UNIQUE,
         name STRING NOT NULL,
         username STRING NOT NULL UNIQUE,
-        password STRING NOT NULL
+        password STRING NOT NULL,
+        rank INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
@@ -113,15 +141,7 @@ app.get('/postSearch',(req,res) => {
 
 //defines a get request
 app.get('/tagCreate',(req,res) => {
-    //this is sent after /search is called
-    if(verifySessionKey(req.headers.authorization))
-    {
-        res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
-    }
-    else
-    {
-        res.sendFile(path.join(__dirname, '/index/noAccess.html'))
-    }
+    res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
 })
 
 app.get('/postCreate',(req,res) => {
@@ -165,15 +185,18 @@ app.get(apiPath+'tagQueue',(req,res) => {
 
 //add a new tag to the queue
 app.post(apiPath+'tagQueue',(req,res) => {
-    const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
+    if(verifySessionKey(req.headers.authorization))
+    {
+        const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
-    console.log(req.body.data)
+        console.log(req.body.data)
 
-    let result = request.run(JSON.stringify(req.body.data))
+        let result = request.run(JSON.stringify(req.body.data))
 
-    console.log(result);
+        console.log(result);
 
-    res.json(result)
+        res.json(result)
+    }
 })
 
 //accept a tag and add it to the main table
@@ -340,7 +363,7 @@ app.post(apiPath+'login',(req,res) => {
         {
             sessionID = generateSessionKey(120)
         }
-        currentSessions.push(new Session(sessionID));
+        currentSessions.push(new Session(req.body.username,sessionID));
         res.send({sessionID: sessionID})
     }
 })
