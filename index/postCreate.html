@@ -3,100 +3,110 @@
 
 <head>
     <title> Create Post</title>
-
-    <!--Only available after the page is done loading and has interpreted it.-->
-    <script defer>
-
-        let otherLinksCount = 0
-    
-        function submit() {
-    
-            //if there's no song name, use title of the youtube video (?)
-            
-            let songName = document.getElementById("songName").value
-            let youtubeUrl = document.getElementById("youtubeUrl").value
-            let youtubeID
-    
-            //check if there is a valid Youtube ID before sending to queue.
-            if (youtubeUrl.length == 0) {
-                popup.textContent = "Youtube ID or URL is required!"
-                return
-            }
-
-            else if (youtubeUrl.length < 11) {
-                popup.textContent = "Youtube ID is too short! Not 11 digits long!"
-                return
-            }
-
-            else {
-                //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
-                youtubeID = youtubeUrl.substr(length - 11)
-                popup.textContent = "Post added to queue!"
-            }
-
-            let allLinks = []
-            allLinks.push(youtubeID)
-    
-            for (let i = 1; i <= otherLinksCount; i++) {
-                let link = document.getElementById("A" + i.toString).value
-    
-                allLinks.push(link)
-            }
-    
-            fetch("http://localhost:3000/api/postQueue", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    data: {
-                        songName: songName,
-                        tags: [0],
-                        links: allLinks
-                    }
-                })
-            })
-        }
-
-        /**
-         * Adds another input HTML element below the submit button that allows the user to add another link for the song.
-        **/
-        function addAnotherInput(){
-            otherLinksCount += 1
-    
-            //Line break needed so the input buttons stay in a column
-            //Label created so user understands purpose of input
-            let lineBreak = document.createElement("br")
-            let newLabel = document.createElement("label")
-    
-            newLabel.setAttribute("style", "font-size: 20px;")
-
-            const text = document.createTextNode("Other Link:")
-            newLabel.appendChild(text)
-    
-            //Create the actual input and set its elements
-            let newInput = document.createElement("input")
-            const inputID = "A" + otherLinksCount.toString
-    
-            newInput.setAttribute("type", "text")
-            newInput.setAttribute("id", (inputID))
-            newInput.setAttribute("name", "data")
-            newInput.setAttribute("style", "font-size: 20px;")
-    
-            let div = document.getElementById("div1")
-            let firstButton = document.getElementById("firstButton")
-    
-            //Adds all three new elements before the Submit and "Add Other Option" button
-            div.insertBefore(newLabel, firstButton)
-            div.insertBefore(newInput, firstButton)
-            div.insertBefore(lineBreak, firstButton)
-        }
-    </script>
+    <link rel="stylesheet" href="style.css">
 </head>
+<!--Only available after the page is done loading and has interpreted it.-->
+<script defer>
 
+    let otherLinksCount = 0;
+    var spacing = 30;
+    var buttonSpacing = 65;
+
+    function submit() {
+
+        //if there's no song name, use title of the youtube video (?)
+        
+        let songName = document.getElementById("songName").value
+        let youtubeUrl = document.getElementById("youtubeUrl").value
+        let youtubeID
+
+        //check if there is a valid Youtube ID before sending to queue.
+        if (youtubeUrl.length == 0) {
+            popup.textContent = "Youtube ID or URL is required!"
+            popup.style.top = "30px";
+            popup.style.left = "410px";
+            return
+        }
+
+        else if (youtubeUrl.length < 11) {
+            popup.textContent = "Youtube ID is too short! Not 11 digits long!"
+            popup.style.top = "30px";
+            popup.style.left = "410px";
+            return
+        }
+
+        else {
+            //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
+            youtubeID = youtubeUrl.substr(length - 11)
+            popup.textContent = "Post added to queue!"
+            popup.style.top = "30px";
+            popup.style.left = "410px";
+        }
+
+        let allLinks = []
+        allLinks.push(youtubeID)
+
+        for (let i = 1; i <= otherLinksCount; i++) {
+            let link = document.getElementById("A" + i.toString).value
+
+            allLinks.push(link)
+        }
+
+        fetch("http://localhost:3000/api/postQueue", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                data: {
+                    songName: songName,
+                    tags: [0],
+                    links: allLinks
+                }
+            })
+        })
+    }
+
+    /**
+     * Adds another input HTML element below the submit button that allows the user to add another link for the song.
+    **/
+    function addAnotherInput(){
+        otherLinksCount += 1
+        spacing += 30;
+        buttonSpacing += 30;
+
+        //Line break needed so the input buttons stay in a column
+        //Label created so user understands purpose of input
+        let lineBreak = document.createElement("br")
+        let newLabel = document.createElement("label")
+
+        newLabel.setAttribute("style", "font-size: 20px; top : "+spacing+"px")
+
+        const text = document.createTextNode("Other Link:")
+        newLabel.appendChild(text)
+
+        //Create the actual input and set its elements
+        let newInput = document.createElement("input")
+        const inputID = "A" + otherLinksCount.toString
+
+        newInput.setAttribute("type", "text")
+        newInput.setAttribute("id", (inputID))
+        newInput.setAttribute("name", "data")
+        newInput.setAttribute("style", "font-size: 20px; top :"+spacing+"px")
+
+        let div = document.getElementById("div1")
+        let firstButton = document.getElementById("firstButton")
+        let secondButton = document.getElementById("secondButton");
+
+        //Adds all three new elements before the Submit and "Add Other Option" button
+        div.insertBefore(newLabel, firstButton)
+        div.insertBefore(newInput, firstButton)
+        firstButton.style.top = buttonSpacing+"px";
+        secondButton.style.top = buttonSpacing+"px";
+        
+    }
+</script>
 <body id = "body1">
-    
-    <label style = "font-size: 20px;">This spot will allow users to create posts.</label><br>
 
     <!--User inputs the song's name here.-->
     <label style = "font-size: 20px;">Song name:</label>
@@ -108,12 +118,12 @@
     </input><br>
 
     <!--User inputs the Youtube URL here.-->
-    <label style = "font-size: 20px;">Youtube Link / ID:</label>
+    <label style = "font-size: 20px; left: -61.5px; top: 30px;">Youtube Link / ID:</label>
     <input
         type = "text"
         id = "youtubeUrl"
         name = "data"
-        style = "font-size: 20px;">
+        style = "font-size: 20px; top: 30px;">
     </input><br>
 
 </body>
@@ -123,15 +133,16 @@
     <button
         id = "firstButton"
         type = "button";
-        style = "height: 75px; width: 200px; font-size: 20px;"
+        style = "height: 75px; width: 200px; font-size: 20px; left: -100px; top : 65px;"
         onclick = "addAnotherInput()">
         Add Other Option
     </button>
 
     <!--Attempts to create a post when clicked. Calls submit().-->
     <button
+        id = 'secondButton';
         type = "button";
-        style = "height: 75px; width: 150px; font-size: 20px;"
+        style = "height: 75px; width: 150px; font-size: 20px; left: 100px; top : 65px;"
         onclick = "submit()">
         Create Post
     </button><br>

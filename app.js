@@ -102,6 +102,11 @@ const query = `
 db.exec(query)
 
 //defines a get request
+app.get('/style.css',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/style.css'))
+})
+
+//defines a get request
 app.get('/search',(req,res) => {
     //this is sent after /search is called
     res.sendFile(path.join(__dirname, '/index/search.html'))
