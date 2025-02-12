@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang = "en">
 
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
 <script defer>
     /**
      * Attempts to login if possible with given information.
@@ -61,8 +65,7 @@
     }
 </script>
 
-<!--Adjust position accordingly later.-->
-<body style = "position:relative; top: 50px; left: 50px">
+<body>
 
     <label style = "font-size: 20px;">Username: </label>
 
@@ -73,12 +76,12 @@
         type = "text">
     <br>
 
-    <label style = "font-size: 20px;">Password: </label>
+    <label style = "font-size: 20px; top : 30px">Password: </label>
 
     <!--User inputs password here. Text inputted is hidden in browser.-->
     <input 
         id = "password"
-        style = "font-size: 20px;"
+        style = "font-size: 20px; top: 30px;"
         type = "password">
     <br>
 
@@ -97,7 +100,7 @@
     <br>
 
     <!--For warning the user.-->
-    <label id = "popup" style = "font-size: 20px; position:relative; top: 10px;"> </label>
+    <popup id = "popup" style = "font-size: 20px;"> </popup>
 </body>
 
 </html>

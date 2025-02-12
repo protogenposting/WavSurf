@@ -1,0 +1,42 @@
+/*Sets the background color and positioning 
+for other pieces of content to go off of.*/
+body {
+    position: relative;
+    left: 50%;
+    top: 50px;
+    max-width: 100%;
+    min-width: -100%;
+    align-items: center;
+    justify-content: center;
+    background-color: #979797;
+}
+
+/*Sets the properties for the "label" type content.
+Makes their positioning go off of the body.
+Sets the font and color*/
+label {
+    position: absolute;
+    transform: translate(-275px);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color:#000000;
+}
+
+popup {
+    position:absolute;
+    transform: translate(-50%);
+    top: 225%;
+    color: rgb(185, 3, 3);
+}
+
+button {
+    position: absolute;
+    transform: translate(-50%);
+    top: 120%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    background-color:rgb(96, 180, 230)
+}
+
+input {
+    position: absolute;
+    transform: translate(-50%);
+}
