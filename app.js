@@ -31,6 +31,32 @@ function verifySessionKey(_key)
 }
 
 /**
+ * verify if the session token and username match any of the other sessions, wip currently
+ * @param {*} _token 
+ * @param {*} _username 
+ * @returns boolean of whether the session key is accurate or not
+ */
+function verifyRank(_key,_rank)
+{
+    console.log(_key)
+    let returnsTrue = false;
+    currentSessions.forEach(element => {
+        if(_key.match(element.key))
+        {
+            let user = db.prepare(`
+                SELECT * FROM users WHERE username = ?
+                `).get(element.username);
+            
+            if(user.rank > _rank)
+            {
+                returnsTrue = true
+            }
+        }
+    });
+    return returnsTrue
+}
+
+/**
  * generates a random string based on length
  * @param {*} length how long the session key should be
  * @returns the session key
