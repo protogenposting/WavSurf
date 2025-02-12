@@ -252,15 +252,18 @@ app.get(apiPath+'postQueue',(req,res) => {
 
 //add a new post to the queue
 app.post(apiPath+'postQueue',(req,res) => {
-    const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+    if(verifySessionKey(req.headers.authorization))
+    {
+        const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
 
-    console.log(req.body.data)
+        console.log(req.body.data)
 
-    let result = request.run(JSON.stringify(req.body.data))
+        let result = request.run(JSON.stringify(req.body.data))
 
-    console.log(result);
+        console.log(result);
 
-    res.json(result)
+        res.json(result)
+    }
 })
 
 //accept a post and add it to the main table
