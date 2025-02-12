@@ -53,8 +53,15 @@
                     popup.textContent = "Logged in!"
 
                     localStorage.setItem("sessionID", json.sessionID);
+
+                    localStorage.setItem("username", username);
                 }
             });
+    }
+    function logout() {
+        localStorage.removeItem("sessionID");
+
+        localStorage.removeItem("username");
     }
 </script>
 
@@ -83,6 +90,13 @@
         style = "height: 50px; width: 100px; font-size: 20px;"
         type = "button"
         onclick = "tryLogin()">Login</button>
+    <br>
+
+    <!--Attempts to login when clicked. Calls tryLogin().-->
+    <button
+        style = "height: 50px; width: 100px; font-size: 20px;"
+        type = "button"
+        onclick = "logout()">Log Out</button>
     <br>
 
     <!--For warning the user.-->

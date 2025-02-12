@@ -8,6 +8,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "authorization": localStorage.getItem("sessionID")
             },
             body: JSON.stringify({
                 data: {
