@@ -4,8 +4,8 @@ body {
     position: relative;
     left: 50%;
     top: 50px;
-    max-width: 45%;
-    min-width: -45%;
+    max-width: 100%;
+    min-width: -100%;
     align-items: center;
     justify-content: center;
     background-color: #979797;
