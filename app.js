@@ -47,7 +47,7 @@ function verifyRank(_key,_rank)
                 SELECT * FROM users WHERE username = ?
                 `).get(element.username);
             
-            if(user.rank > _rank)
+            if(user.rank >= _rank)
             {
                 returnsTrue = true
             }
@@ -268,18 +268,21 @@ app.post(apiPath+'postQueue',(req,res) => {
 
 //accept a post and add it to the main table
 app.post(apiPath+'acceptPost/:id',(req,res) => {
-    const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
 
-    const post = postQuery.get(req.params.id);
+        const post = postQuery.get(req.params.id);
 
-    const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-    const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
+        const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
 
-    deleteData.run(req.params.id);
+        deleteData.run(req.params.id);
 
-    const postData = JSON.parse(post.postData);
+        const postData = JSON.parse(post.postData);
 
-    addData.run(postData.songName, postData.tags, postData.links);
+        addData.run(postData.songName, postData.tags, postData.links);
+    }
 
     //add the post adding thing
 
@@ -292,9 +295,12 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
 
 //deny a tag and remove it from the queue permentantly
 app.post(apiPath+'denyPost/:id',(req,res) => {
-    const insertData = db.prepare("DELETE FROM postQueue WHERE id=?");
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const insertData = db.prepare("DELETE FROM postQueue WHERE id=?");
         
-    var result = insertData.run(req.params.id)
+        var result = insertData.run(req.params.id)
+    }
 })
 
 //#endregion
@@ -330,9 +336,12 @@ app.get(apiPath+'user/:name',(req,res) => {
 
 //delete a user
 app.delete(apiPath+'user/:name',(req,res) => {
-    //db.prepare(`DELETE * FROM users WHERE username = ?`).run();
+    if(verifyRank(req.headers.authorization,2))
+    {
+        db.prepare(`DELETE * FROM users WHERE username = ?`).run();
 
-    res.send("Ok did that");
+        res.send("Ok did that");
+    }
 })
 
 //create a user :3
