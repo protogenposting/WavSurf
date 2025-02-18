@@ -3,6 +3,7 @@ for other pieces of content to go off of.*/
 body {
     position: relative;
     margin: auto;
+    top : 30px;
     align-items: center;
     justify-content: center;
     background-color: #979797;

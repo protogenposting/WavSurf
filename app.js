@@ -16,8 +16,7 @@ class Session
  * @param {*} _username 
  * @returns boolean of whether the session key is accurate or not
  */
-function verifySessionKey(_key)
-{
+function verifySessionKey(_key) {
     console.log(_key)
     let returnsTrue = false;
     currentSessions.forEach(element => {
