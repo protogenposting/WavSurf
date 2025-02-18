@@ -11,26 +11,27 @@
 </head>
 
 <script defer>
-
-    let tags = []
-
     /**
      * Gets all tags from the database and displays it on the page.
      * Stores the information in the tags array.
      * @param none
      * @returns nothing
     **/
-    function getInfo() {
-        fetch("http://localhost:3000/api/tags/1")
+    function getInfo(currentTag) {
+        fetch("http://localhost:3000/api/tags/"+currentTag)
         .then(response => response.json())
         .then(json => {
             tags = json;
             console.log(json);
             console.log(tags)
 
-            for(let i = 0; i < tags.length; i++){
-            
-                addTagToPage(tags[i].tagName)
+            for(let i = 0; i < tags.length; i++)
+            {
+                addTagToPage(tags[i].tagName,currentTag)
+                for(let child = 0; child < tags.children.length; child++)
+                {
+                    getInfo(tags[i].children[child])
+                }
             }
         });        
     }
@@ -38,7 +39,7 @@
     /**
      * Adds another input HTML element below the submit button that allows the user to add another link for the song.
     **/
-    function addTagToPage(tagName){
+    function addTagToPage(tagName,parent){
 
         let url 
         //change into a PARAMETER later so this works better
@@ -62,7 +63,7 @@
 
 </script>
 
-<body id = "body" onload = "getInfo()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
+<body id = "body" onload = "getInfo(1)" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
     <label style = "font-size: 20px;">Tags</label>
     <br>
 
