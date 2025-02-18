@@ -206,35 +206,41 @@ app.post(apiPath+'tagQueue',(req,res) => {
 
 //accept a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
-    const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
 
-    const tag = tagQuery.get(req.params.id);
+        const tag = tagQuery.get(req.params.id);
 
-    const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
-    const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
+        const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
 
-    deleteData.run(req.params.id);
-    
-    console.log(tag.tagData);
+        deleteData.run(req.params.id);
+        
+        console.log(tag.tagData);
 
-    const tagData = JSON.parse(tag.tagData);
-    
-    addData.run(tagData.name, JSON.stringify(tagData.children));
+        const tagData = JSON.parse(tag.tagData);
+        
+        addData.run(tagData.name, JSON.stringify(tagData.children));
 
-    //add the tag adding thing
+        //add the tag adding thing
 
-    //const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
+        //const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
-    //console.log(req.body.data)
+        //console.log(req.body.data)
 
-    //let result = request.run(JSON.stringify(req.body.data))
+        //let result = request.run(JSON.stringify(req.body.data))
+    }
 })
 
 //deny a tag and remove it from the queue permentantly
 app.post(apiPath+'denyTag/:id',(req,res) => {
-    const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
         
-    var result = insertData.run(req.params.id)
+        var result = insertData.run(req.params.id)
+    }
 })
 
 //#endregion
