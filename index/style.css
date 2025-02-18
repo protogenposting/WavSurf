@@ -2,10 +2,7 @@
 for other pieces of content to go off of.*/
 body {
     position: relative;
-    left: 50%;
-    top: 50px;
-    max-width: 100%;
-    min-width: -100%;
+    margin: auto;
     align-items: center;
     justify-content: center;
     background-color: #979797;
@@ -16,6 +13,7 @@ Makes their positioning go off of the body.
 Sets the font and color*/
 label {
     position: absolute;
+    left: 50%;
     transform: translate(-275px);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color:#000000;
@@ -26,6 +24,7 @@ Makes their positioning go off of the body.
 Sets the font and color*/
 popup {
     position:absolute;
+    left: 50%;
     transform: translate(-50%);
     top: 225%;
     color: rgb(185, 3, 3);
@@ -36,6 +35,7 @@ Makes their positioning go off of the body.
 Sets the font and color*/
 button {
     position: absolute;
+    left: 50%;
     transform: translate(-50%);
     top: 120%;
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -46,5 +46,6 @@ button {
 Makes their positioning go off of the body.*/
 input {
     position: absolute;
+    left: 50%;
     transform: translate(-50%);
 }
