@@ -47,7 +47,7 @@ function verifyRank(_key,_rank)
                 SELECT * FROM users WHERE username = ?
                 `).get(element.username);
             
-            if(user.rank > _rank)
+            if(user.rank >= _rank)
             {
                 returnsTrue = true
             }
@@ -206,35 +206,41 @@ app.post(apiPath+'tagQueue',(req,res) => {
 
 //accept a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
-    const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
 
-    const tag = tagQuery.get(req.params.id);
+        const tag = tagQuery.get(req.params.id);
 
-    const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
-    const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
+        const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
 
-    deleteData.run(req.params.id);
-    
-    console.log(tag.tagData);
+        deleteData.run(req.params.id);
+        
+        console.log(tag.tagData);
 
-    const tagData = JSON.parse(tag.tagData);
-    
-    addData.run(tagData.name, JSON.stringify(tagData.children));
+        const tagData = JSON.parse(tag.tagData);
+        
+        addData.run(tagData.name, JSON.stringify(tagData.children));
 
-    //add the tag adding thing
+        //add the tag adding thing
 
-    //const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
+        //const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
-    //console.log(req.body.data)
+        //console.log(req.body.data)
 
-    //let result = request.run(JSON.stringify(req.body.data))
+        //let result = request.run(JSON.stringify(req.body.data))
+    }
 })
 
 //deny a tag and remove it from the queue permentantly
 app.post(apiPath+'denyTag/:id',(req,res) => {
-    const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
         
-    var result = insertData.run(req.params.id)
+        var result = insertData.run(req.params.id)
+    }
 })
 
 //#endregion
@@ -252,31 +258,37 @@ app.get(apiPath+'postQueue',(req,res) => {
 
 //add a new post to the queue
 app.post(apiPath+'postQueue',(req,res) => {
-    const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+    if(verifySessionKey(req.headers.authorization))
+    {
+        const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
 
-    console.log(req.body.data)
+        console.log(req.body.data)
 
-    let result = request.run(JSON.stringify(req.body.data))
+        let result = request.run(JSON.stringify(req.body.data))
 
-    console.log(result);
+        console.log(result);
 
-    res.json(result)
+        res.json(result)
+    }
 })
 
 //accept a post and add it to the main table
 app.post(apiPath+'acceptPost/:id',(req,res) => {
-    const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
 
-    const post = postQuery.get(req.params.id);
+        const post = postQuery.get(req.params.id);
 
-    const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-    const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
+        const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
 
-    deleteData.run(req.params.id);
+        deleteData.run(req.params.id);
 
-    const postData = JSON.parse(post.postData);
+        const postData = JSON.parse(post.postData);
 
-    addData.run(postData.songName, postData.tags, postData.links);
+        addData.run(postData.songName, postData.tags, postData.links);
+    }
 
     //add the post adding thing
 
@@ -289,9 +301,12 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
 
 //deny a tag and remove it from the queue permentantly
 app.post(apiPath+'denyPost/:id',(req,res) => {
-    const insertData = db.prepare("DELETE FROM postQueue WHERE id=?");
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const insertData = db.prepare("DELETE FROM postQueue WHERE id=?");
         
-    var result = insertData.run(req.params.id)
+        var result = insertData.run(req.params.id)
+    }
 })
 
 //#endregion
@@ -327,9 +342,12 @@ app.get(apiPath+'user/:name',(req,res) => {
 
 //delete a user
 app.delete(apiPath+'user/:name',(req,res) => {
-    //db.prepare(`DELETE * FROM users WHERE username = ?`).run();
+    if(verifyRank(req.headers.authorization,2))
+    {
+        db.prepare(`DELETE * FROM users WHERE username = ?`).run();
 
-    res.send("Ok did that");
+        res.send("Ok did that");
+    }
 })
 
 //create a user :3
