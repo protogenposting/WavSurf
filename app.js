@@ -17,8 +17,7 @@ class Session
  * @param {*} _username 
  * @returns boolean of whether the session key is accurate or not
  */
-function verifySessionKey(_key)
-{
+function verifySessionKey(_key) {
     console.log(_key)
     let returnsTrue = false;
     currentSessions.forEach(element => {
@@ -175,6 +174,10 @@ app.get('/login',(req,res) => {
 //defines a get request
 app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
+})
+
+app.get('/moderation',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/moderation.html'))
 })
 
 //#region tag queue api calls
