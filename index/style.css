@@ -15,7 +15,7 @@ Sets the font and color*/
 label {
     position: absolute;
     left: 50%;
-    transform: translate(-275px);
+    transform: translate(-50%);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     color:#000000;
 }
