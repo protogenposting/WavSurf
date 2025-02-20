@@ -128,6 +128,21 @@ const query = `
 
 db.exec(query)
 
+function populate() {
+    let query = `
+        INSERT INTO users (name, username, password, rank) VALUES ('Oli','Oliver','ownerLol',3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Tiger','Tiger','ownerLol',3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Carson','Carson','ownerLol',3);
+
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
+    `
+    db.exec(query);
+}
+
+populate();
+
 //defines a get request
 app.get('/style.css',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/style.css'))
