@@ -29,15 +29,12 @@
         //check if there is a valid Youtube ID before sending to queue.
         if (youtubeUrl.length == 0) {
             popup.textContent = "Youtube ID or URL is required!"
-            popup.style.top = "30px";
-            popup.style.left = "410px";
+            popup.style.top = "70px";
             return
         }
 
         else if (youtubeUrl.length < 11) {
             popup.textContent = "Youtube ID is too short! Not 11 digits long!"
-            popup.style.top = "30px";
-            popup.style.left = "410px";
             return
         }
 
@@ -45,8 +42,6 @@
             //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
             youtubeID = youtubeUrl.substr(length - 11)
             popup.textContent = "Post added to queue!"
-            popup.style.top = "30px";
-            popup.style.left = "410px";
         }
 
         let allLinks = []
@@ -116,7 +111,7 @@
 <body id = "body1">
 
     <!--User inputs the song's name here.-->
-    <label style = "font-size: 20px;">Song name:</label>
+    <label style = "font-size: 20px; left: 570px;">Song name:</label>
     <input
         type = "text"
         id = "songName"
@@ -125,7 +120,7 @@
     </input><br>
 
     <!--User inputs the Youtube URL here.-->
-    <label style = "font-size: 20px; left: -61.5px; top: 30px;">Youtube Link / ID:</label>
+    <label style = "font-size: 20px; left: 540px; top: 30px;">Youtube Link / ID:</label>
     <input
         type = "text"
         id = "youtubeUrl"
@@ -140,7 +135,7 @@
     <button
         id = "firstButton"
         type = "button";
-        style = "height: 75px; width: 200px; font-size: 20px; left: -100px; top : 65px;"
+        style = "height: 75px; width: 200px; font-size: 20px; top : 120px;"
         onclick = "addAnotherInput()">
         Add Other Option
     </button>
@@ -149,7 +144,7 @@
     <button
         id = 'secondButton';
         type = "button";
-        style = "height: 75px; width: 150px; font-size: 20px; left: 100px; top : 65px;"
+        style = "height: 75px; width: 150px; font-size: 20px; top : 200px;"
         onclick = "submit()">
         Create Post
     </button><br>

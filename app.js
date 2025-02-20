@@ -204,6 +204,8 @@ app.post(apiPath+'tagQueue',(req,res) => {
         console.log(result);
 
         res.json(result)
+    }else{
+        console.log(req.headers.authorization);
     }
 })
 
@@ -355,13 +357,13 @@ app.delete(apiPath+'user/:name',(req,res) => {
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
-    const addData = db.prepare("INSERT INTO users (name, username, password) VALUES (?,?,?)")
+    const addData = db.prepare("INSERT INTO users (name, username, password, rank) VALUES (?,?,?,?)")
     
     console.log(req.body)
 
     let result;
 
-    result = addData.run(req.body.name,req.body.username,req.body.password)
+    result = addData.run(req.body.name,req.body.username,req.body.password,0)
 
     res.json({result: result})
 })
@@ -393,6 +395,8 @@ app.post(apiPath+'login',(req,res) => {
         res.send({sessionID: sessionID})
     }
 })
+
+
 
 //#endregion
 
