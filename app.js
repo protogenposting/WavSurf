@@ -74,14 +74,16 @@ function generateSessionKey(length) {
 
 const databaseName='app.db'
 
+//copying thing load
+const fs = require('fs');
+
+fs.unlinkSync(databaseName);
+
 //load in the database
 const db = require('better-sqlite3')(databaseName);
 
 //load in express
 const express = require('express');
-
-//copying thing load
-const fs = require('fs');
 
 //pathhhhh yayyyy
 const path = require('path');
@@ -134,13 +136,17 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('Tiger','Tiger','ownerLol',3);
         INSERT INTO users (name, username, password, rank) VALUES ('Carson','Carson','ownerLol',3);
 
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
-    `
+        INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
+     `
     db.exec(query);
 }
 
+//disable this if database hasn't been deleted so duplicate data isn't made
 populate();
 
 //defines a get request
