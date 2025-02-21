@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang = "en">
+    
 <head>
+    <meta charset = "UTF-8">
+    <meta
+        name = "viewport"
+        content = "width = device-width, initial-scale = 1"
+    >
+    <title>WavSurf Post Queue Interface</title>
     <link rel="stylesheet" href="style.css">
 </head>
-<body>
-    <label>This spot will allow users to see the song's youtube video</label><br>
-    <label>It should also show the tags of the song below the link / video</label><br>
 
+<body>
     <!--The embed for the actual Youtube video. Replace "src" with a suitable link accordingly.-->
     <iframe
-        style = "width: 50%; height: 100%; position:relative; top: 50px; left: 300px"
+        style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
         src = "https://www.youtube.com/embed/ly36kn0ug4k"
         title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
         frameborder = "0"
@@ -18,7 +23,7 @@
         allowfullscreen>
     </iframe><br>
 
-    <label>Tags area</label>
+    <label style = "top: 450px">Tags area</label>
 
 </body>
 
