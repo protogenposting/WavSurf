@@ -1,6 +1,3 @@
-//YO
-//all the stuff in this file is just some basic stuff stolen from the timbre api, CHANGE THIS ASAP
-
 class Session
 { 
     constructor(_username,_key)
@@ -77,6 +74,7 @@ const databaseName='app.db'
 //copying thing load
 const fs = require('fs');
 
+//deletes database on load, delete this line later
 fs.unlinkSync(databaseName);
 
 //load in the database
@@ -132,21 +130,33 @@ db.exec(query)
 
 function populate() {
     let query = `
-        INSERT INTO users (name, username, password, rank) VALUES ('Oli','Oliver','ownerLol',3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Tiger','Tiger','ownerLol',3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Carson','Carson','ownerLol',3);
-
+        INSERT INTO users (name, username, password, rank) VALUES ('Oli', 'Oliver', 'ownerLol', 3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Tiger', 'Tiger', 'ownerLol', 3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Carson', 'Carson', 'ownerLol', 3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Bob', 'BobRoss', 'bestpainter', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('God', 'RealGod123', 'password', 2);
+        INSERT INTO users (name, username, password, rank) VALUES ('AlanWalker', 'AlanWalker', 'TheSpectre', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('PeterGriffin', 'PeterGriffinFromFamilyGuy', 'simpsonssucks', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('RandomMod', 'RandomMod', 'modmod', 2);
+        INSERT INTO users (name, username, password, rank) VALUES ('randomUSER', 'RandomUser', 'guyyes', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('personyes' 'personperson', 'yeyaye', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('justamod' 'justamod' 'modyesyes' 2);
+  
         INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[]');
      `
     db.exec(query);
 }
 
-//disable this if database hasn't been deleted so duplicate data isn't made
 populate();
 
 //defines a get request
