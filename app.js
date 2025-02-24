@@ -74,7 +74,10 @@ const databaseName='app.db'
 const fs = require('fs');
 
 //deletes database on load, delete this line later
-fs.unlinkSync(databaseName);
+if(fs.existsSync(databaseName)) {
+    fs.unlinkSync(databaseName);
+}
+
 
 //load in the database
 const db = require('better-sqlite3')(databaseName);
@@ -149,19 +152,37 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
         INSERT INTO users (name, username, password, rank) VALUES ('RandomMod', 'RandomMod', 'modmod', 2);
         INSERT INTO users (name, username, password, rank) VALUES ('randomUSER', 'RandomUser', 'guyyes', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('personyes' 'personperson', 'yeyaye', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('justamod' 'justamod' 'modyesyes' 2);
-  
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6]');
+        INSERT INTO users (name, username, password, rank) VALUES ('personyes', 'personperson', 'yeyaye', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
+
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
         INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
+
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7, 9]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16, 9]', 'jK2aIUmmdP4');
+        INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7, 9]', '60ItHLz5WEA');
+        INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7, 9]', 'lqYQXIt4SpA');
+        INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7, 9]', '3UzvQowg9Po');
+        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1, 5, 14]', 'KvaxYUfGHnk');
+        INSERT INTO posts (songName, tags, links) VALUES ('Beird', '[3]', 'fsrc_njfRTM');
+        INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11, 9]', 'CBIGJohVMgw');
+        INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12, 9]', 'L4eE_vvmo2k');
+        INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2, 9]', 'MdAzl3sOwmY');
+        INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3, 9]', 'QB4uxDo4FXQ');
      `
     db.exec(query);
 }
