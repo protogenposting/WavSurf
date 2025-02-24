@@ -9,9 +9,8 @@ class Session
 }
 
 /**
- * verify if the session token and username match any of the other sessions, wip currently
+ * verify if the session token exists
  * @param {*} _token 
- * @param {*} _username 
  * @returns boolean of whether the session key is accurate or not
  */
 function verifySessionKey(_key) {
@@ -27,10 +26,10 @@ function verifySessionKey(_key) {
 }
 
 /**
- * verify if the session token and username match any of the other sessions, wip currently
+ * verify if the session token exists and is attached to a user with high enough rank
  * @param {*} _token 
- * @param {*} _username 
- * @returns boolean of whether the session key is accurate or not
+ * @param {*} _rank
+ * @returns boolean of whether the session key fits the rank
  */
 function verifyRank(_key,_rank)
 {
@@ -71,7 +70,7 @@ function generateSessionKey(length) {
 
 const databaseName='app.db'
 
-//copying thing load
+//load fs, the file system library
 const fs = require('fs');
 
 //deletes database on load, delete this line later
@@ -96,7 +95,11 @@ app.use(express.json());
 const port = 3000;
 const apiPath='/api/'
 
-//create the tables if they don't exist
+/**
+ * These tables are used to store a large amount of data.
+ * The users table containts info on each user, including their rank
+ * 
+ */
 const query = `
     CREATE TABLE IF NOT EXISTS users (
         id INTEGER PRIMARY KEY UNIQUE,
@@ -128,6 +131,9 @@ const query = `
 
 db.exec(query)
 
+/**
+ * this function just populates the database. Used for testing.
+ */
 function populate() {
     let query = `
         INSERT INTO users (name, username, password, rank) VALUES ('Oli', 'Oliver', 'ownerLol', 3);
@@ -159,14 +165,12 @@ function populate() {
 
 populate();
 
-//defines a get request
+//#region front end page requests
 app.get('/style.css',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/style.css'))
 })
 
-//defines a get request
 app.get('/search',(req,res) => {
-    //this is sent after /search is called
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
@@ -174,7 +178,6 @@ app.get('/postSearch',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/postSearch.html'))
 })
 
-//defines a get request
 app.get('/tagCreate',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
 })
@@ -202,7 +205,7 @@ app.get('/signUp',(req,res) => {
 app.get('/login',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/login.html'))
 })
-//defines a get request
+
 app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
 })
@@ -211,65 +214,54 @@ app.get('/moderation',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/moderation.html'))
 })
 
+//#endregion
+
 //#region tag queue api calls
 
-//get tags from the queue
+//this request gets every entry from the tag queue
 app.get(apiPath+'tagQueue',(req,res) => {
-    const users = db.prepare('SELECT * FROM tagQueue').all();
+    const tags = db.prepare('SELECT * FROM tagQueue').all();
 
-    console.log(users);
+    console.log(tags);
 
-    res.json(users)
+    res.json(tags)
 })
 
-//add a new tag to the queue
+//this request adds a new entry to the tag queue.
 app.post(apiPath+'tagQueue',(req,res) => {
+    //verify that the session
     if(verifySessionKey(req.headers.authorization))
     {
+        //
         const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
-        console.log(req.body.data)
-
+        //parse the result and add it
         let result = request.run(JSON.stringify(req.body.data))
 
-        console.log(result);
-
         res.json(result)
-    }else{
-        console.log(req.headers.authorization);
     }
 })
 
-//accept a tag and add it to the main table
+//this request accepts a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
+        //get the tag
         const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
-
         const tag = tagQuery.get(req.params.id);
 
+        //delete the tag from the database
         const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
-        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
-
         deleteData.run(req.params.id);
-        
-        console.log(tag.tagData);
 
+        //insert the tag into the database
+        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
         const tagData = JSON.parse(tag.tagData);
-        
         addData.run(tagData.name, JSON.stringify(tagData.children));
-
-        //add the tag adding thing
-
-        //const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
-
-        //console.log(req.body.data)
-
-        //let result = request.run(JSON.stringify(req.body.data))
     }
 })
 
-//deny a tag and remove it from the queue permentantly
+//this request denies a tag and removes it from the queue
 app.post(apiPath+'denyTag/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
@@ -283,7 +275,7 @@ app.post(apiPath+'denyTag/:id',(req,res) => {
 
 //#region post queue api calls
 
-//get posts from the queue
+//this request gets posts from the queue
 app.get(apiPath+'postQueue',(req,res) => {
     const users = db.prepare('SELECT * FROM postQueue').all();
 
@@ -292,17 +284,15 @@ app.get(apiPath+'postQueue',(req,res) => {
     res.json(users)
 })
 
-//add a new post to the queue
+//this request adds a new post to the queue if the user has a valid session key
 app.post(apiPath+'postQueue',(req,res) => {
+    //check if the session key is valid
     if(verifySessionKey(req.headers.authorization))
     {
+        //insert data into queue
         const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
 
-        console.log(req.body.data)
-
         let result = request.run(JSON.stringify(req.body.data))
-
-        console.log(result);
 
         res.json(result)
     }
