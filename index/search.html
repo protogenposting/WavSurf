@@ -12,20 +12,15 @@
 </head>
 
 <script>
-    var tags = []
-
-    fetch("http://localhost:3000/api/tags")
-    .then(response => response.json())
-    .then(json => {
-        tags = json;
-        document.getElementById('tags').innerHTML = JSON.stringify(json);
-        console.log(json);
-    });
 
 </script>
 
 <body>
-    <p id = "tags"></p>
+<input 
+    id="searchBar"
+    style = "font-size: 20px; width: 700px;"
+    type = "text"
+    placeholder = 'Song Name "Tag Name"'>
 </body>
 
 </html>
