@@ -98,7 +98,10 @@ const apiPath='/api/'
 /**
  * These tables are used to store a large amount of data.
  * The users table containts info on each user, including their rank
- * 
+ * The tags table contains tags and their children. Children is a string of a json array.
+ * The tagQueue table is where all the tags not added yet are stored.
+ * The postQueue table is where the queued up posts are stored in.
+ * the posts table has all the posts currently available.
  */
 const query = `
     CREATE TABLE IF NOT EXISTS users (
