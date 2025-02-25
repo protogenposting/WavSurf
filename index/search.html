@@ -11,9 +11,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<script>
 
-</script>
 
 <body>
 <input 
@@ -22,5 +20,43 @@
     type = "text"
     placeholder = 'Song Name "Tag Name"'>
 </body>
+<script>
+    const searchId = document.getElementById("searchBar");
+    searchId.onkeydown = function(event) {
+        if(event.keyCode == 13) {
+            searchMade();
+        }
+    }
+    function searchMade () {
+        fetch("http://localhost:3000/api/postSearch", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                search : document.getElementById("searchBar").value,
+            })
+        })
+        .then(response => response.json())
+        .then(json => {
+            /*
+            console.log(json)
+            if(json.sessionID == "0")
+            {
+                popup.textContent = "Your username or password is incorrect, please try again"
+            }
+            else
+            {
+                popup.textContent = "Logged in!"
+                popup.style = "top: 65px; color: black; font-size: 20px;"
 
+                localStorage.setItem("sessionID", json.sessionID);
+
+                localStorage.setItem("username", username);
+            }
+            */
+        });
+    
+    }
+</script>
 </html>

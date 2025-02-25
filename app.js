@@ -471,6 +471,37 @@ app.get(apiPath+'posts',(req,res) => {
 
     res.json(posts);
 })
+
+app.post(apiPath+'postSearch',(req,res) => {
+    var tagNames = [];
+    var search = req.body.search;
+    var reading = false;
+    var currentString = "";
+
+    for (var i=0; i < search.length; i++) {
+        var searchChar = search.charAt(i);
+        if (searchChar == '"') {
+            reading = !reading;
+            //fix this if statement so it is not nested
+            if (!reading) {
+                tagNames.push(currentString);
+                currentString = "";
+                
+            }
+            search = search.slice(0, i) + search.slice(i + 1);
+            i--;
+        }else if (reading) {
+            currentString = currentString + searchChar;
+            search = search.slice(0, i) + search.slice(i + 1);
+            i--;
+        }
+    }
+    
+    const posts = db.prepare('SELECT * FROM posts').all();
+    
+   console.log(tagNames);
+   console.log(search);
+})
 //#endregion
 
 app.listen(port,() => {
