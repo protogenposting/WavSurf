@@ -482,7 +482,6 @@ app.post(apiPath+'postSearch',(req,res) => {
         var searchChar = search.charAt(i);
         if (searchChar == '"') {
             reading = !reading;
-            //fix this if statement so it is not nested
             if (!reading) {
                 tagNames.push(currentString);
                 currentString = "";
