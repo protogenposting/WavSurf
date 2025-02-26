@@ -88,7 +88,7 @@ const express = require('express');
 //pathhhhh yayyyy
 const path = require('path');
 
-//?
+//these are the current active sessions, stored in memory since they're not that important
 const currentSessions = [
 
 ]
@@ -463,6 +463,7 @@ app.post(apiPath+'login',(req,res) => {
 //#endregion
 
 //#region tag api calls
+//this request gets every single tag
 app.get(apiPath+'tags',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags').all();
 
@@ -471,7 +472,7 @@ app.get(apiPath+'tags',(req,res) => {
     res.json(tags)
 })
 
-//?
+//this request gets a tag from its id
 app.get(apiPath+'tags/:id',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.id);
 
@@ -497,8 +498,6 @@ app.get(apiPath+'post/:id',(req,res) => {
 
     res.json(posts);
 })
-<<<<<<< HEAD
-=======
 
 //this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
 app.post(apiPath+'postSearch',(req,res) => {
@@ -530,10 +529,9 @@ app.post(apiPath+'postSearch',(req,res) => {
    console.log(tagNames);
    console.log(search);
 })
->>>>>>> 770fe19460ef3a7f532140e8343f41f93a79470c
 //#endregion
 
-//?
+//this starts the server on the port
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
