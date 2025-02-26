@@ -86,21 +86,37 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('personyes', 'personperson', 'yeyaye', 1);
         INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
 
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]');
+        --id = 1
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]'); 
+        --id = 2
         INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
+        --id = 3
         INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
+        --id = 4
         INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
+        --id = 5
         INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
+        --id = 6
         INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
+        --id = 7
         INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
+        --id = 8
         INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]');
+        --id = 9
         INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]');
+        --id = 10
         INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]');
+        --id = 11
         INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]');
+        --id = 12
         INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]');
+        --id = 13
         INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]');
+        --id = 14
         INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]');
+        --id = 15
         INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]');
+        --id = 16
         INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
 
         INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7, 9]', 'pb-EwykPTv8');
