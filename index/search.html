@@ -11,9 +11,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<script>
 
-</script>
 
 <body>
 <input 
@@ -22,5 +20,42 @@
     type = "text"
     placeholder = 'Song Name "Tag Name"'>
 </body>
-
+<script>
+    /**
+     * TEST CASES
+     * 
+     * test: "Pop"
+     * result : Beird, the japanese one
+     * 
+     * test: "Electronic"
+     * result: Ghosts N Stuff, My Heart, Faded, Force, I Remember, Macintosh plus 2k17, Summer Is Over (Fury Weekend Remix), Labyrinth, 宇宙ステーションのレベル7
+     * 
+     * test: "POOP"
+     * result: nothing
+     * 
+     * test: "Drumstep"
+     * result: my heart
+    */
+    const searchId = document.getElementById("searchBar");
+    searchId.onkeydown = function(event) {
+        if(event.keyCode == 13) {
+            searchMade();
+        }
+    }
+    function searchMade () {
+        fetch("http://localhost:3000/api/postSearch", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                search : document.getElementById("searchBar").value,
+            })
+        })
+        .then(response => response.json())
+        .then(json => {
+        });
+    
+    }
+</script>
 </html>
