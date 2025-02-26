@@ -156,21 +156,37 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('personyes', 'personperson', 'yeyaye', 1);
         INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
 
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]');
+        --id = 1
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]'); 
+        --id = 2
         INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
+        --id = 3
         INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
+        --id = 4
         INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
+        --id = 5
         INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
+        --id = 6
         INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
+        --id = 7
         INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
+        --id = 8
         INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]');
+        --id = 9
         INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]');
+        --id = 10
         INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]');
+        --id = 11
         INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]');
+        --id = 12
         INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]');
+        --id = 13
         INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]');
+        --id = 14
         INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]');
+        --id = 15
         INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]');
+        --id = 16
         INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
 
         INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7, 9]', 'pb-EwykPTv8');
@@ -466,13 +482,55 @@ app.get(apiPath+'tags/:id',(req,res) => {
 //#endregion
 
 //#region post api calls
+//this request sends the data of every single post
 app.get(apiPath+'posts',(req,res) => {
     const posts = db.prepare('SELECT * FROM posts').all();
+
+    res.json(posts);
+})
+
+//this request gives the data of a single post
+app.get(apiPath+'post/:id',(req,res) => {
+    const posts = db.prepare('SELECT * FROM posts WHERE id = ?').get(req.params.id);
 
     console.log(posts);
 
     res.json(posts);
 })
+<<<<<<< HEAD
+=======
+
+//this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
+app.post(apiPath+'postSearch',(req,res) => {
+    var tagNames = [];
+    var search = req.body.search;
+    var reading = false;
+    var currentString = "";
+
+    for (var i=0; i < search.length; i++) {
+        var searchChar = search.charAt(i);
+        if (searchChar == '"') {
+            reading = !reading;
+            if (!reading) {
+                tagNames.push(currentString);
+                currentString = "";
+                
+            }
+            search = search.slice(0, i) + search.slice(i + 1);
+            i--;
+        }else if (reading) {
+            currentString = currentString + searchChar;
+            search = search.slice(0, i) + search.slice(i + 1);
+            i--;
+        }
+    }
+    
+    const posts = db.prepare('SELECT * FROM posts').all();
+    
+   console.log(tagNames);
+   console.log(search);
+})
+>>>>>>> 770fe19460ef3a7f532140e8343f41f93a79470c
 //#endregion
 
 //?
