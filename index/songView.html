@@ -8,12 +8,35 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>WavSurf Post Queue Interface</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="/style.css">
 </head>
 
-<body>
-    <!--The embed for the actual Youtube video. Replace "src" with a suitable link accordingly.-->
+<script>
+    function GetURLID()
+    {
+        let endPoint = window.location.href.lastIndexOf("/")
+
+        return window.location.href.slice(endPoint + 1,window.location.href.length)
+    }
+    function load()
+    {
+        let songId = GetURLID()
+
+        let embed = document.getElementById("youtube")
+
+        fetch("http://localhost:3000/api/post/"+songId)
+        .then(response => response.json())
+        .then(json => {
+            embed.src = "https://www.youtube.com/embed/"+json.links
+
+            let tags = json.tags
+        });
+    }
+</script>
+
+<body onload="load()">
     <iframe
+        id = "youtube"
         style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
         src = "https://www.youtube.com/embed/ly36kn0ug4k"
         title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"

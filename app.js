@@ -119,15 +119,15 @@ function populate() {
         --id = 16
         INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
 
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7, 9]', 'pb-EwykPTv8');
-        INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16, 9]', 'jK2aIUmmdP4');
-        INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7, 9]', '60ItHLz5WEA');
-        INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7, 9]', 'lqYQXIt4SpA');
-        INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7, 9]', '3UzvQowg9Po');
-        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1, 5, 14]', 'KvaxYUfGHnk');
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16]', 'jK2aIUmmdP4');
+        INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7]', '60ItHLz5WEA');
+        INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7]', 'lqYQXIt4SpA');
+        INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7]', '3UzvQowg9Po');
+        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1, 5]', 'KvaxYUfGHnk');
         INSERT INTO posts (songName, tags, links) VALUES ('Beird', '[3]', 'fsrc_njfRTM');
-        INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11, 9]', 'CBIGJohVMgw');
-        INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12, 9]', 'L4eE_vvmo2k');
+        INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11]', 'CBIGJohVMgw');
+        INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12]', 'L4eE_vvmo2k');
         INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2, 9]', 'MdAzl3sOwmY');
         INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3, 9]', 'QB4uxDo4FXQ');
      `
@@ -230,7 +230,7 @@ app.get('/postCreate',(req,res) => {
     res.sendFile(path.join(__dirname, 'index/postCreate.html'))
 })
 
-app.get('/songView',(req,res) => {
+app.get('/songView/:id',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/songView.html'))
 })
 
