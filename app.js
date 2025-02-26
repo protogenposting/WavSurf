@@ -68,6 +68,58 @@ function generateSessionKey(length) {
     return result;
 }
 
+/**
+ * this function just populates the database. Used for testing.
+ */
+function populate() {
+    let query = `
+        INSERT INTO users (name, username, password, rank) VALUES ('Oli', 'Oliver', 'ownerLol', 3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Tiger', 'Tiger', 'ownerLol', 3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Carson', 'Carson', 'ownerLol', 3);
+        INSERT INTO users (name, username, password, rank) VALUES ('Bob', 'BobRoss', 'bestpainter', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('God', 'RealGod123', 'password', 2);
+        INSERT INTO users (name, username, password, rank) VALUES ('AlanWalker', 'AlanWalker', 'TheSpectre', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('PeterGriffin', 'PeterGriffinFromFamilyGuy', 'simpsonssucks', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('RandomMod', 'RandomMod', 'modmod', 2);
+        INSERT INTO users (name, username, password, rank) VALUES ('randomUSER', 'RandomUser', 'guyyes', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('personyes', 'personperson', 'yeyaye', 1);
+        INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
+
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
+
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7, 9]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16, 9]', 'jK2aIUmmdP4');
+        INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7, 9]', '60ItHLz5WEA');
+        INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7, 9]', 'lqYQXIt4SpA');
+        INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7, 9]', '3UzvQowg9Po');
+        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1, 5, 14]', 'KvaxYUfGHnk');
+        INSERT INTO posts (songName, tags, links) VALUES ('Beird', '[3]', 'fsrc_njfRTM');
+        INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11, 9]', 'CBIGJohVMgw');
+        INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12, 9]', 'L4eE_vvmo2k');
+        INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2, 9]', 'MdAzl3sOwmY');
+        INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3, 9]', 'QB4uxDo4FXQ');
+     `
+    db.exec(query);
+}
+
+//#region setup
+
 const databaseName='app.db'
 
 //load fs, the file system library
@@ -137,57 +189,9 @@ const query = `
 
 db.exec(query)
 
-/**
- * this function just populates the database. Used for testing.
- */
-function populate() {
-    let query = `
-        INSERT INTO users (name, username, password, rank) VALUES ('Oli', 'Oliver', 'ownerLol', 3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Tiger', 'Tiger', 'ownerLol', 3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Carson', 'Carson', 'ownerLol', 3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Bob', 'BobRoss', 'bestpainter', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('God', 'RealGod123', 'password', 2);
-        INSERT INTO users (name, username, password, rank) VALUES ('AlanWalker', 'AlanWalker', 'TheSpectre', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('PeterGriffin', 'PeterGriffinFromFamilyGuy', 'simpsonssucks', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('RandomMod', 'RandomMod', 'modmod', 2);
-        INSERT INTO users (name, username, password, rank) VALUES ('randomUSER', 'RandomUser', 'guyyes', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('personyes', 'personperson', 'yeyaye', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
-
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]');
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
-
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7, 9]', 'pb-EwykPTv8');
-        INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16, 9]', 'jK2aIUmmdP4');
-        INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7, 9]', '60ItHLz5WEA');
-        INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7, 9]', 'lqYQXIt4SpA');
-        INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7, 9]', '3UzvQowg9Po');
-        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1, 5, 14]', 'KvaxYUfGHnk');
-        INSERT INTO posts (songName, tags, links) VALUES ('Beird', '[3]', 'fsrc_njfRTM');
-        INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11, 9]', 'CBIGJohVMgw');
-        INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12, 9]', 'L4eE_vvmo2k');
-        INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2, 9]', 'MdAzl3sOwmY');
-        INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3, 9]', 'QB4uxDo4FXQ');
-     `
-    db.exec(query);
-}
-
 populate();
+
+//#endregion
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
@@ -289,8 +293,8 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
 app.post(apiPath+'denyTag/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
+        //just delete the tag
         const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
-        
         var result = insertData.run(req.params.id)
     }
 })
@@ -322,34 +326,26 @@ app.post(apiPath+'postQueue',(req,res) => {
     }
 })
 
-//accept a post and add it to the main table
+//this request accepts a post and adds it to the main table
 app.post(apiPath+'acceptPost/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
+        //get the post data from the queue
         const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
-
         const post = postQuery.get(req.params.id);
 
+        //delete the post
         const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
-
         deleteData.run(req.params.id);
 
+        //add the post
+        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
         const postData = JSON.parse(post.postData);
-
         addData.run(postData.songName, postData.tags, postData.links);
     }
-
-    //add the post adding thing
-
-    //const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
-
-    //console.log(req.body.data)
-
-    //let result = request.run(JSON.stringify(req.body.data))
 })
 
-//deny a tag and remove it from the queue permentantly
+//this request denies a tag and removes it from the queue permentantly
 app.post(apiPath+'denyPost/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
@@ -503,6 +499,7 @@ app.post(apiPath+'postSearch',(req,res) => {
 })
 //#endregion
 
+//start listening on the set port, the server is running now
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
