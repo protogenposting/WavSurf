@@ -61,6 +61,12 @@
             let body = document.getElementById(type)
             body.appendChild(newButton)
             body.appendChild(lineBreak)
+            body.style.position = "absolute"
+            if(json.type > 0)
+            {
+                body.style.top = (offsets[json.type-1] * 2).toString()+"px"
+            }
+            body.style.left = "50%"
 
             offsets[json.type] += 15
         })
@@ -84,6 +90,8 @@
 
             console.log(tags)
 
+            
+
             for(var i = 0; i < tags.length; i++)
             {
                 createTagButton(tags[i])
@@ -104,13 +112,13 @@
         allowfullscreen>
     </iframe><br>
 
-    <div id="artist" class="container" style="margin-top:400px">
+    <div id="artist" class="container">
         <label>Artists</label>
     </div><br>
-    <div id="genre" class="container" style="margin-top:400px">
+    <div id="genre" class="container">
         <label>Genres</label>
     </div><br>
-    <div id="misc" class="container" style="margin-top:400px">
+    <div id="misc" class="container">
         <label>Misc</label>
     </div><br>
 
