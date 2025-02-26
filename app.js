@@ -68,6 +68,76 @@ function generateSessionKey(length) {
     return result;
 }
 
+const databaseName='app.db'
+
+//load fs, the file system library
+const fs = require('fs');
+
+//deletes database on load, delete this line later
+if(fs.existsSync(databaseName)) {
+    fs.unlinkSync(databaseName);
+}
+
+
+//load in the database
+const db = require('better-sqlite3')(databaseName);
+
+//load in express
+const express = require('express');
+
+//pathhhhh yayyyy
+const path = require('path');
+
+//?
+const currentSessions = [
+
+]
+
+//activate express
+const app = express();
+app.use(express.json());
+const port = 3000;
+const apiPath='/api/'
+
+/**
+ * These tables are used to store a large amount of data.
+ * The users table containts info on each user, including their rank
+ * The tags table contains tags and their children. Children is a string of a json array.
+ * The tagQueue table is where all the tags not added yet are stored.
+ * The postQueue table is where the queued up posts are stored in.
+ * the posts table has all the posts currently available.
+ */
+const query = `
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY UNIQUE,
+        name STRING NOT NULL,
+        username STRING NOT NULL UNIQUE,
+        password STRING NOT NULL,
+        rank INTEGER NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS tags (
+        id INTEGER PRIMARY KEY UNIQUE,
+        tagName STRING NOT NULL,
+        tagChildren STRING NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS tagQueue (
+        id INTEGER PRIMARY KEY UNIQUE,
+        tagData STRING NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS postQueue (
+        id INTEGER PRIMARY KEY UNIQUE,
+        postData STRING NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS posts (
+        id INTEGER PRIMARY KEY UNIQUE,
+        songName STRING NOT NULL,
+        tags INTEGER [],
+        links STRING [] NOT NULL
+    );
+`;
+
+db.exec(query)
+
 /**
  * this function just populates the database. Used for testing.
  */
@@ -118,80 +188,7 @@ function populate() {
     db.exec(query);
 }
 
-//#region setup
-
-const databaseName='app.db'
-
-//load fs, the file system library
-const fs = require('fs');
-
-//deletes database on load, delete this line later
-if(fs.existsSync(databaseName)) {
-    fs.unlinkSync(databaseName);
-}
-
-
-//load in the database
-const db = require('better-sqlite3')(databaseName);
-
-//load in express
-const express = require('express');
-
-//pathhhhh yayyyy
-const path = require('path');
-
-const currentSessions = [
-
-]
-
-//activate express
-const app = express();
-app.use(express.json());
-const port = 3000;
-const apiPath='/api/'
-
-/**
- * These tables are used to store a large amount of data.
- * The users table containts info on each user, including their rank
- * The tags table contains tags and their children. Children is a string of a json array.
- * The tagQueue table is where all the tags not added yet are stored.
- * The postQueue table is where the queued up posts are stored in.
- * the posts table has all the posts currently available.
- */
-const query = `
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY UNIQUE,
-        name STRING NOT NULL,
-        username STRING NOT NULL UNIQUE,
-        password STRING NOT NULL,
-        rank INTEGER NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS tags (
-        id INTEGER PRIMARY KEY UNIQUE,
-        tagName STRING NOT NULL,
-        tagChildren STRING NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS tagQueue (
-        id INTEGER PRIMARY KEY UNIQUE,
-        tagData STRING NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS postQueue (
-        id INTEGER PRIMARY KEY UNIQUE,
-        postData STRING NOT NULL
-    );
-    CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY UNIQUE,
-        songName STRING NOT NULL,
-        tags INTEGER [],
-        links STRING [] NOT NULL
-    );
-`;
-
-db.exec(query)
-
 populate();
-
-//#endregion
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
@@ -293,8 +290,8 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
 app.post(apiPath+'denyTag/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
-        //just delete the tag
         const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+        
         var result = insertData.run(req.params.id)
     }
 })
@@ -326,26 +323,34 @@ app.post(apiPath+'postQueue',(req,res) => {
     }
 })
 
-//this request accepts a post and adds it to the main table
+//accept a post and add it to the main table
 app.post(apiPath+'acceptPost/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
-        //get the post data from the queue
         const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
+
         const post = postQuery.get(req.params.id);
 
-        //delete the post
         const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
+        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
+
         deleteData.run(req.params.id);
 
-        //add the post
-        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
         const postData = JSON.parse(post.postData);
+
         addData.run(postData.songName, postData.tags, postData.links);
     }
+
+    //add the post adding thing
+
+    //const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
+
+    //console.log(req.body.data)
+
+    //let result = request.run(JSON.stringify(req.body.data))
 })
 
-//this request denies a tag and removes it from the queue permentantly
+//deny a tag and remove it from the queue permentantly
 app.post(apiPath+'denyPost/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
@@ -450,6 +455,7 @@ app.get(apiPath+'tags',(req,res) => {
     res.json(tags)
 })
 
+//?
 app.get(apiPath+'tags/:id',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.id);
 
@@ -467,39 +473,9 @@ app.get(apiPath+'posts',(req,res) => {
 
     res.json(posts);
 })
-
-app.post(apiPath+'postSearch',(req,res) => {
-    var tagNames = [];
-    var search = req.body.search;
-    var reading = false;
-    var currentString = "";
-
-    for (var i=0; i < search.length; i++) {
-        var searchChar = search.charAt(i);
-        if (searchChar == '"') {
-            reading = !reading;
-            if (!reading) {
-                tagNames.push(currentString);
-                currentString = "";
-                
-            }
-            search = search.slice(0, i) + search.slice(i + 1);
-            i--;
-        }else if (reading) {
-            currentString = currentString + searchChar;
-            search = search.slice(0, i) + search.slice(i + 1);
-            i--;
-        }
-    }
-    
-    const posts = db.prepare('SELECT * FROM posts').all();
-    
-   console.log(tagNames);
-   console.log(search);
-})
 //#endregion
 
-//start listening on the set port, the server is running now
+//?
 app.listen(port,() => {
     console.log(`Listening on port ${port}`)
 })
