@@ -158,43 +158,43 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
 
         --id = 1
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rock', '[5, 6, 13]', 1); 
         --id = 2
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rap', '[]', 1); 
         --id = 3
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Pop', '[]', 1); 
         --id = 4
-        INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('HipHop', '[]', 1); 
         --id = 5
-        INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('IndieRock', '[]', 1); 
         --id = 6
-        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('AlternativeRock', '[]', 1); 
         --id = 7
-        INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('EDM', '[]', 1); 
         --id = 8
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Dubstep', '[16]', 1); 
         --id = 9
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]', 1); 
         --id = 10
-        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('DnB', '[16]', 1); 
         --id = 11
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Vaporwave', '[]', 1); 
         --id = 12
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Synthwave', '[]', 1); 
         --id = 13
-        INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('GrungeRock', '[]', 1); 
         --id = 14
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Indie', '[5, 15]', 1); 
         --id = 15
-        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('AlternativeIndie', '[]', 1); 
         --id = 16
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Drumstep', '[]', 1); 
         --id = 17
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Deadmau5', '[]', 0);
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Deadmau5', '[]', 0);
         --id = 18
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rob Swire', '[]', 0);
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rob Swire', '[]', 0);
 
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18]', 'pb-EwykPTv8');
         INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16]', 'jK2aIUmmdP4');
         INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7]', '60ItHLz5WEA');
         INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7]', 'lqYQXIt4SpA');

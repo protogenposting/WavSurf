@@ -12,7 +12,10 @@
 </head>
 
 <script>
-    var tagTop = 480;
+    var offsets = new Array(10)
+
+    offsets = offsets.fill(30,0,offsets.length)
+
     function getURLID()
     {
         let endPoint = window.location.href.lastIndexOf("/")
@@ -33,14 +36,33 @@
 
             newButton.textContent = json.tagName
 
-            //newButton.setAttribute("onclick", goToTagPage)
-            newButton.setAttribute("style", "font-size: 20px; top: "+tagTop+"px;")
+            console.log(json.type)
 
-            let body = document.getElementById("body")
+            //newButton.setAttribute("onclick", goToTagPage)
+            newButton.setAttribute("style", "font-size: 20px; margin-top: "+offsets[json.type]+"px;")
+
+            let type;
+
+            switch(json.type)
+            {
+                case 0:
+                    type = "artist"
+                    break
+                case 1:
+                    type = "genre"
+                    break
+                case 2:
+                    type = "misc"
+                    break
+                default:
+                    type = "misc"
+            }
+
+            let body = document.getElementById(type)
             body.appendChild(newButton)
             body.appendChild(lineBreak)
 
-            tagTop += 30
+            offsets[json.type] += 15
         })
     }
     function load()
@@ -82,7 +104,15 @@
         allowfullscreen>
     </iframe><br>
 
-    <label style = "top: 450px" id = "tags">Tags:</label>
+    <div id="artist" class="container" style="margin-top:400px">
+        <label>Artists</label>
+    </div><br>
+    <div id="genre" class="container" style="margin-top:400px">
+        <label>Genres</label>
+    </div><br>
+    <div id="misc" class="container" style="margin-top:400px">
+        <label>Misc</label>
+    </div><br>
 
 </body>
 
