@@ -12,33 +12,69 @@
 </head>
 
 <script>
-    function GetURLID()
+    var tagTop = 480;
+    function getURLID()
     {
         let endPoint = window.location.href.lastIndexOf("/")
 
         return window.location.href.slice(endPoint + 1,window.location.href.length)
     }
+    function createTagButton(tagID){
+        fetch("http://localhost:3000/api/tags/"+tagID)
+        .then(response => response.json())
+        .then(json => {
+            if(json.tagName == undefined)
+            {
+                return
+            }
+            //thanks for the code tiger :3
+            let lineBreak = document.createElement("br")
+            let newButton = document.createElement("button")
+
+            newButton.textContent = json.tagName
+
+            //newButton.setAttribute("onclick", goToTagPage)
+            newButton.setAttribute("style", "font-size: 20px; top: "+tagTop+"px;")
+
+            let body = document.getElementById("body")
+            body.appendChild(newButton)
+            body.appendChild(lineBreak)
+
+            tagTop += 30
+        })
+    }
     function load()
     {
-        let songId = GetURLID()
+        let songId = getURLID()
 
         let embed = document.getElementById("youtube")
+
+        let songData = {}
 
         fetch("http://localhost:3000/api/post/"+songId)
         .then(response => response.json())
         .then(json => {
-            embed.src = "https://www.youtube.com/embed/"+json.links
+            songData = json
 
-            let tags = json.tags
+            embed.src = "https://www.youtube.com/embed/"+songData.links
+
+            let tags = JSON.parse(songData.tags)
+
+            console.log(tags)
+
+            for(var i = 0; i < tags.length; i++)
+            {
+                createTagButton(tags[i])
+            }
         });
     }
 </script>
 
-<body onload="load()">
+<body onload="load()" id = "body">
     <iframe
         id = "youtube"
         style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
-        src = "https://www.youtube.com/embed/ly36kn0ug4k"
+        src = ""
         title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
         frameborder = "0"
         allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -46,7 +82,7 @@
         allowfullscreen>
     </iframe><br>
 
-    <label style = "top: 450px">Tags area</label>
+    <label style = "top: 450px" id = "tags">Tags:</label>
 
 </body>
 
