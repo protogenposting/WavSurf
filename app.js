@@ -454,6 +454,14 @@ app.get(apiPath+'tags',(req,res) => {
     res.json(tags)
 })
 
+app.get(apiPath+'tagsOrdered',(req,res) => {
+    const tags = db.prepare('SELECT * FROM tags ORDER BY tagName').all();
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
 app.get(apiPath+'tags/:id',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.id);
 

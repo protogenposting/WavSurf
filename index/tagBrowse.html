@@ -11,35 +11,102 @@
 </head>
 
 <script defer>
+
+    // These three arrays should have the same length, especially "tagNames" and "checksIfTagIsChild".
+    // That way, they can act as parameters for addTagToPage().
+    // ("tagNames" does not need the same length until addTagToPage is called.)
+
+    let tagsToBeDisplayed = new Array()
+    let checksIfTagIsChild = new Array()
+    let tagNames = new Array()
+
     /**
-     * Gets all tags from the database and displays it on the page.
-     * Stores the information in the tags array.
-     * @param none
+     * Gets all tags from the database and their children in order.
+     * Stores the information in the tagsToBeDisplayed array.
+     * @param tag
      * @returns nothing
     **/
-    function getInfo(currentTag) {
-        fetch("http://localhost:3000/api/tags/"+currentTag)
+    function getInfo() {
+        fetch("http://localhost:3000/api/tagsOrdered")
         .then(response => response.json())
         .then(json => {
-            tags = json;
-            console.log(json);
-            console.log(tags)
+            let tags = json
 
-            for(let i = 0; i < tags.length; i++)
-            {
-                addTagToPage(tags[i].tagName,currentTag)
-                for(let child = 0; child < tags.children.length; child++)
-                {
-                    getInfo(tags[i].children[child])
+            // Adds a tag's id for each one in the database. "tags" is sorted alphabetically.
+            for (let i = 0; i < tags.length; i++){
+
+                tagsToBeDisplayed.push(tags[i].id)
+                checksIfTagIsChild.push(false)
+
+                tags[i].tagChildren = JSON.parse(tags[i].tagChildren) // Change tagChildren from a string to an array.
+
+                let length = tags[i].tagChildren.length
+
+                // If the tag has children, add the ids of them below it.
+                if (length > 0){
+                    
+                    for(let child = 0; child < length; child++) {
+
+                        let tagID = tags[i].tagChildren[child]
+
+                        tagsToBeDisplayed.push(tagID)
+                        checksIfTagIsChild.push(true)
+                    }
                 }
             }
-        });        
+
+            getNames()
+
+        });
+    }
+
+    function getNames(){
+        fetch("http://localhost:3000/api/tagsOrdered")
+        .then(response => response.json())
+        .then(json => {
+
+            tags = json
+
+            console.log(tagsToBeDisplayed)
+
+            for (let i = 0; i < tagsToBeDisplayed.length; i++){
+
+                // check for any tag with tagsToBeDisplayed's current id
+                // once found, add its name to tagNames
+
+                for (let o = 0; o < tags.length; o++){
+
+                    if (tags[o].id == tagsToBeDisplayed[i]){
+                        tagNames.push(tags[o].tagName)
+                    }
+
+                }
+            }
+
+            console.log(tagNames)
+
+            displayTags()
+        })
+    }
+
+    function displayTags(){
+
+        console.log("displaying")
+
+        console.log(tagNames.length)
+
+        for (let i = 0; i < tagNames.length; i++){
+
+            console.log(i)
+
+            addTagToPage(tagNames[i], checksIfTagIsChild[i])
+        }
     }
 
     /**
      * Adds another input HTML element below the submit button that allows the user to add another link for the song.
     **/
-    function addTagToPage(tagName,parent){
+    function addTagToPage(tagName, isChild){
 
         let url 
         //change into a PARAMETER later so this works better
@@ -51,19 +118,28 @@
         let newButton = document.createElement("button")
 
         const text = document.createTextNode(tagName)
-        newButton.appendChild(text)
+        const childText = document.createTextNode(" - " + tagName)
+
+        if (isChild) {
+            newButton.appendChild(childText)
+            newButton.setAttribute("style", "font-size: 20px; position:relative; left: 25px;")
+        }
+        else {
+            newButton.appendChild(text)
+            newButton.setAttribute("style", "font-size: 20px;")
+        }
 
         //newButton.setAttribute("onclick", goToTagPage)
-        newButton.setAttribute("style", "font-size: 20px;")
 
         let body = document.getElementById("body")
         body.appendChild(newButton)
         body.appendChild(lineBreak)
+
     }        
 
 </script>
 
-<body id = "body" onload = "getInfo(1)" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
+<body id = "body" onload = "getInfo()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
     <label style = "font-size: 20px;">Tags</label>
     <br>
 
