@@ -118,7 +118,8 @@ const query = `
     CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
         tagName STRING NOT NULL,
-        tagChildren STRING NOT NULL
+        tagChildren STRING NOT NULL,
+        type INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tagQueue (
         id INTEGER PRIMARY KEY UNIQUE,
@@ -157,39 +158,43 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
 
         --id = 1
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]'); 
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rock', '[5, 6, 13]', 1); 
         --id = 2
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rap', '[]', 1); 
         --id = 3
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Pop', '[]', 1); 
         --id = 4
-        INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('HipHop', '[]', 1); 
         --id = 5
-        INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('IndieRock', '[]', 1); 
         --id = 6
-        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeRock', '[]', 1); 
         --id = 7
-        INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('EDM', '[]', 1); 
         --id = 8
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Dubstep', '[16]', 1); 
         --id = 9
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]', 1); 
         --id = 10
-        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('DnB', '[16]', 1); 
         --id = 11
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Vaporwave', '[]', 1); 
         --id = 12
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Synthwave', '[]', 1); 
         --id = 13
-        INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('GrungeRock', '[]', 1); 
         --id = 14
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Indie', '[5, 15]', 1); 
         --id = 15
-        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('AlternativeIndie', '[]', 1); 
         --id = 16
-        INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]');
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Drumstep', '[]', 1); 
+        --id = 17
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Deadmau5', '[]', 0);
+        --id = 18
+        INSERT INTO tags (tagName, tagChildren) VALUES ('Rob Swire', '[]', 0);
 
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18]', 'pb-EwykPTv8');
         INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16]', 'jK2aIUmmdP4');
         INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7]', '60ItHLz5WEA');
         INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7]', 'lqYQXIt4SpA');
@@ -296,9 +301,9 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
         deleteData.run(req.params.id);
 
         //insert the tag into the database
-        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren) VALUES (?,?)")
+        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren, type) VALUES (?,?,)")
         const tagData = JSON.parse(tag.tagData);
-        addData.run(tagData.name, JSON.stringify(tagData.children));
+        addData.run(tagData.name, JSON.stringify(tagData.children),tagData.type);
     }
 })
 
