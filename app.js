@@ -476,14 +476,23 @@ app.get(apiPath+'tags/:id',(req,res) => {
 //#endregion
 
 //#region post api calls
+//this request sends the data of every single post
 app.get(apiPath+'posts',(req,res) => {
     const posts = db.prepare('SELECT * FROM posts').all();
+
+    res.json(posts);
+})
+
+//this request gives the data of a single post
+app.get(apiPath+'post/:id',(req,res) => {
+    const posts = db.prepare('SELECT * FROM posts WHERE id = ?').get(req.params.id);
 
     console.log(posts);
 
     res.json(posts);
 })
 
+//this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
     var search = req.body.search;
