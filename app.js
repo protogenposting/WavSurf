@@ -497,8 +497,6 @@ app.get(apiPath+'post/:id',(req,res) => {
 
     res.json(posts);
 })
-<<<<<<< HEAD
-=======
 
 //this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
 app.post(apiPath+'postSearch',(req,res) => {
@@ -530,15 +528,20 @@ app.post(apiPath+'postSearch',(req,res) => {
 
     for (var i=0; i < tagNames.length; i++) {
         var compare = tagNames[i];
-        var result = db.prepare("SELECT id FROM tags WHERE tagName = ?");
-        searchedIds.push(result.get(compare));
+        var receivedIds = db.prepare("SELECT id FROM tags WHERE tagName = ?");
+        searchedIds.push(receivedIds.get(compare));
+    }
+
+    for (var i=0; i < searchedIds.length; i++) {
+        var compare = searchedIds[i];
+        var receivedSong = db.prepare("SELECT songName FROM posts WHERE tags LIKE '%?%'");
+        console.log(receivedSong.get(compare));
     }
 
     console.log(searchedIds);
-   console.log(tagNames);
-   console.log(search);
+    console.log(tagNames);
+    console.log(search);
 })
->>>>>>> 770fe19460ef3a7f532140e8343f41f93a79470c
 //#endregion
 
 //?
