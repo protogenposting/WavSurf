@@ -474,6 +474,7 @@ app.get(apiPath+'posts',(req,res) => {
 
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
+    var searchedIds = [];
     var search = req.body.search;
     var reading = false;
     var currentString = "";
@@ -497,6 +498,17 @@ app.post(apiPath+'postSearch',(req,res) => {
     }
     
     const posts = db.prepare('SELECT * FROM posts').all();
+
+    for (var i=0; i < tagNames.length; i++) {
+        var compare = tagNames[i];
+        var result = db.prepare("SELECT id FROM tags WHERE tagName = ?");
+        searchedIds.push(result.get(compare));
+    }
+
+    //logs the array of searched ids
+    for (var i=0; i<searchedIds.length; i++) {
+        console.log(searchedIds[i]);
+    }
     
    console.log(tagNames);
    console.log(search);
