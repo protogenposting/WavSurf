@@ -505,11 +505,7 @@ app.post(apiPath+'postSearch',(req,res) => {
         searchedIds.push(result.get(compare));
     }
 
-    //logs the array of searched ids
-    for (var i=0; i<searchedIds.length; i++) {
-        console.log(searchedIds[i]);
-    }
-    
+    console.log(searchedIds);
    console.log(tagNames);
    console.log(search);
 })
