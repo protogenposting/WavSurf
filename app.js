@@ -194,7 +194,7 @@ function populate() {
         --id = 18
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rob Swire', '[]', 0);
 
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18]', 'pb-EwykPTv8');
         INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16]', 'jK2aIUmmdP4');
         INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7]', '60ItHLz5WEA');
         INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7]', 'lqYQXIt4SpA');
