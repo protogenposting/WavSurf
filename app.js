@@ -158,7 +158,7 @@ function populate() {
         INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
 
         --id = 1
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rock', '[5, 6, 13]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rock', '[5,6,13]', 1); 
         --id = 2
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rap', '[]', 1); 
         --id = 3
@@ -174,7 +174,7 @@ function populate() {
         --id = 8
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('Dubstep', '[16]', 1); 
         --id = 9
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Electronic', '[7, 8, 10, 11, 12, 16]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Electronic', '[7,8,10,11,12,16]', 1); 
         --id = 10
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('DnB', '[16]', 1); 
         --id = 11
@@ -184,7 +184,7 @@ function populate() {
         --id = 13
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('GrungeRock', '[]', 1); 
         --id = 14
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Indie', '[5, 15]', 1); 
+        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Indie', '[5,15]', 1); 
         --id = 15
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('AlternativeIndie', '[]', 1); 
         --id = 16
@@ -194,17 +194,17 @@ function populate() {
         --id = 18
         INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rob Swire', '[]', 0);
 
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18,18]', 'pb-EwykPTv8');
+        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18]', 'pb-EwykPTv8');
         INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16]', 'jK2aIUmmdP4');
         INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7]', '60ItHLz5WEA');
         INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7]', 'lqYQXIt4SpA');
         INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7]', '3UzvQowg9Po');
-        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1, 5]', 'KvaxYUfGHnk');
+        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1,5]', 'KvaxYUfGHnk');
         INSERT INTO posts (songName, tags, links) VALUES ('Beird', '[3]', 'fsrc_njfRTM');
         INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11]', 'CBIGJohVMgw');
         INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12]', 'L4eE_vvmo2k');
-        INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2, 9]', 'MdAzl3sOwmY');
-        INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3, 9]', 'QB4uxDo4FXQ');
+        INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2,9]', 'MdAzl3sOwmY');
+        INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3,9]', 'QB4uxDo4FXQ');
      `
     db.exec(query);
 }
@@ -507,7 +507,7 @@ app.get(apiPath+'post/:id',(req,res) => {
 //this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
-    var searchedIds = [];
+    var tagsToSearch = [];
     var search = req.body.search;
     var reading = false;
     var currentString = "";
@@ -517,7 +517,7 @@ app.post(apiPath+'postSearch',(req,res) => {
         if (searchChar == '"') {
             reading = !reading;
             if (!reading) {
-                tagNames.push(currentString);
+                tagNames.push({name:currentString, parent: tagNames.length});
                 currentString = "";
                 
             }
@@ -529,25 +529,63 @@ app.post(apiPath+'postSearch',(req,res) => {
             i--;
         }
     }
-    
-    const posts = db.prepare('SELECT * FROM posts').all();
 
     for (var i=0; i < tagNames.length; i++) {
-        var compare = tagNames[i];
-        var receivedIds = db.prepare("SELECT id FROM tags WHERE tagName = ?");
-        searchedIds.push(receivedIds.get(compare));
-    }
-    
-    for (var i=0; i < searchedIds.length; i++) {
-        var compare = searchedIds[i];
-        var receivedSong = db.prepare("SELECT songName FROM posts WHERE tags LIKE '%?%'");//okay so the LIKE operator DOES WORK but it only selects one of the songs and i dont know if it gets input correctly
-        //console.log(receivedSong.get(compare));
-        console.log(compare);
+        while(tagsToSearch.length <= tagNames[i].parent)
+        {
+            tagsToSearch.push([])
+        }
+        var tagName = tagNames[i].name;
+        var receivedIds = db.prepare("SELECT * FROM tags WHERE tagName = ?");
+        var tag = receivedIds.get(tagName)
+        if(tag != undefined)
+        {
+            tag.children = JSON.parse(tag.tagChildren)
+            for (var o=0; o < tag.children.length; o++) {
+                var childTag = db.prepare("SELECT * FROM tags WHERE id = ?").get(tag.children[o])
+                tagNames.push({name:childTag.tagName, parent:tagNames[i].parent})
+            }
+            tagsToSearch[tagNames[i].parent].push(tag.id);
+        }
     }
 
-    console.log(searchedIds);
-    console.log(tagNames);
-    console.log(search);
+    console.log(tagsToSearch)
+
+    search = search.replaceAll(" ","")
+    
+    var songQuery = db.prepare("SELECT * FROM posts WHERE songName LIKE '%' || ? || '%'");
+    var receivedSongs = songQuery.all(search);
+    for(var o = 0; o < receivedSongs.length; o++)
+    {
+        receivedSongs[o].tagChecks = JSON.parse(receivedSongs[o].tags)
+    }
+
+    //loop through every tag and check if each song has it. if not, remove it from the list
+    for(var o = 0; o < receivedSongs.length; o++)
+    {
+        receivedSongs[o].tagsNeeded = tagsToSearch.length
+        for(var i = 0; i < tagsToSearch.length; i++)
+        {
+            for(var e = 0; e < tagsToSearch[i].length; e++)
+            {
+                var index = receivedSongs[o].tagChecks.indexOf(tagsToSearch[i][e])
+                if(index > -1)
+                {
+                    receivedSongs[o].tagsNeeded--
+                    break;
+                }
+            }
+        }
+        if(receivedSongs[o].tagsNeeded > 0)
+        {
+            receivedSongs.splice(o,1)
+            o--
+        }
+    }
+
+    console.log(receivedSongs)
+
+    res.send(receivedSongs);
 })
 //#endregion
 
