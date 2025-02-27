@@ -14,19 +14,18 @@
 
     // These three arrays should have the same length, especially "tagNames" and "checksIfTagIsChild".
     // That way, they can act as parameters for addTagToPage().
-    // ("tagNames" does not need the same length until addTagToPage is called.)
+    // ("tagNames" does not need the same length until displayTags() is called.)
 
     let tagsToBeDisplayed = new Array()
     let checksIfTagIsChild = new Array()
     let tagNames = new Array()
 
     /**
-     * Gets all tags from the database and their children in order.
+     * Gets all tags' IDs from the database and their children's IDs in order.
      * Stores the information in the tagsToBeDisplayed array.
-     * @param tag
      * @returns nothing
     **/
-    function getInfo() {
+    function getIDs() {
         fetch("http://localhost:3000/api/tagsOrdered")
         .then(response => response.json())
         .then(json => {
@@ -60,6 +59,10 @@
         });
     }
 
+    /**
+     * Gets all of the tags' names from tagsToBeDisplayed's IDs and inserts them into tagNames.
+     * Needs tagsToBeDisplayed to be initialized before called.
+    **/
     function getNames(){
         fetch("http://localhost:3000/api/tagsOrdered")
         .then(response => response.json())
@@ -67,12 +70,13 @@
 
             tags = json
 
-            console.log(tagsToBeDisplayed)
+            // Later on, add code so that it only displays 20-50 new tags each time it's called.
+            // That way, it's more performance efficient and loads the webpage faster.
 
             for (let i = 0; i < tagsToBeDisplayed.length; i++){
 
-                // check for any tag with tagsToBeDisplayed's current id
-                // once found, add its name to tagNames
+                // Check for any tag with tagsToBeDisplayed's current ID.
+                // Once found, add its name to tagNames.
 
                 for (let o = 0; o < tags.length; o++){
 
@@ -83,34 +87,28 @@
                 }
             }
 
-            console.log(tagNames)
-
             displayTags()
         })
     }
 
+    /**
+     * Displays all of the tags onto the page.
+     * Needs "tagNames" and "checksIfTagIsChild" to be initialized before being called.
+    **/
     function displayTags(){
 
-        console.log("displaying")
-
-        console.log(tagNames.length)
-
         for (let i = 0; i < tagNames.length; i++){
-
-            console.log(i)
-
             addTagToPage(tagNames[i], checksIfTagIsChild[i])
         }
     }
 
     /**
-     * Adds another input HTML element below the submit button that allows the user to add another link for the song.
+     * Adds a tag to the page.
+     * LATER, EACH TAG SHOULD BE CLICKABLE AND TAKE USER TO SEARCH BAR WITH THE TAG THEY CLICKED ON.
+     * @param tagName is the name of the tag that will show up on the page.
+     * @param isChild indents and puts a "-" before the tagName if true. Otherwise, it does nothing.
     **/
     function addTagToPage(tagName, isChild){
-
-        let url 
-        //change into a PARAMETER later so this works better
-        // url should be a newly created page that
 
         //Line break needed so the input buttons stay in a column
         //Button needed so that the user can go to its page
@@ -129,6 +127,7 @@
             newButton.setAttribute("style", "font-size: 20px;")
         }
 
+        // CHANGE THIS ATTRIBUTE IN THE FUTURE
         //newButton.setAttribute("onclick", goToTagPage)
 
         let body = document.getElementById("body")
@@ -139,11 +138,10 @@
 
 </script>
 
-<body id = "body" onload = "getInfo()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
-    <label style = "font-size: 20px;">Tags</label>
+<!--Note: Make sure that this file uses CSS later.-->
+<body id = "body" onload = "getIDs()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
+    <label style = "font-size: 30px;">Tags</label>
     <br>
-
-
 </body>
 
 </html>
