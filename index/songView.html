@@ -39,7 +39,7 @@
             console.log(json.type)
 
             //newButton.setAttribute("onclick", goToTagPage)
-            newButton.setAttribute("style", "font-size: 20px; margin-top: "+offsets[json.type]+"px;")
+            //newButton.setAttribute("style", "font-size: 20px; margin-top: "+offsets[json.type]+"px;")
 
             let type;
 
@@ -61,12 +61,12 @@
             let body = document.getElementById(type)
             body.appendChild(newButton)
             body.appendChild(lineBreak)
-            body.style.position = "absolute"
+            //body.style.position = "absolute"
             if(json.type > 0)
             {
-                body.style.top = (offsets[json.type-1] * 2).toString()+"px"
+                //body.style.top = (offsets[json.type-1] * 2).toString()+"px"
             }
-            body.style.left = "50%"
+            //body.style.left = "50%"
 
             offsets[json.type] += 15
         })
@@ -101,25 +101,26 @@
 </script>
 
 <body onload="load()" id = "body">
-    <iframe
-        id = "youtube"
-        style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
-        src = ""
-        title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
-        frameborder = "0"
-        allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy = "strict-origin-when-cross-origin"
-        allowfullscreen>
-    </iframe><br>
-
+    <div id="embed" class="container">
+        <iframe
+            id = "youtube"
+            style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
+            src = ""
+            title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
+            frameborder = "0"
+            allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy = "strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+    </div><br>
     <div id="artist" class="container">
-        <label>Artists</label>
+        <label>Artists</label><br>
     </div><br>
     <div id="genre" class="container">
-        <label>Genres</label>
+        <label>Genres</label><br>
     </div><br>
     <div id="misc" class="container">
-        <label>Misc</label>
+        <label>Misc</label><br>
     </div><br>
 
 </body>
