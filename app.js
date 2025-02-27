@@ -549,8 +549,6 @@ app.post(apiPath+'postSearch',(req,res) => {
         }
     }
 
-    console.log(tagsToSearch)
-
     search = search.replaceAll(" ","")
     
     var songQuery = db.prepare("SELECT * FROM posts WHERE songName LIKE '%' || ? || '%'");
