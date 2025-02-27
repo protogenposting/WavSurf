@@ -49,3 +49,11 @@ input {
     left: 50%;
     transform: translate(-50%);
 }
+/*Sets the properties for the "button" type content.
+Makes their positioning go off of the body.*/
+a {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+}

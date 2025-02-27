@@ -19,7 +19,10 @@
     style = "font-size: 20px; width: 700px;"
     type = "text"
     placeholder = 'Song Name "Tag Name"'>
-</body>
+</body><br>
+<div id="songs" class = "container" style="position:absolute; left: 50%; top: 200px; width: 640px; transform: translate(-50%);">
+
+</div>
 <script>
     /**
      * TEST CASES
@@ -54,6 +57,21 @@
         })
         .then(response => response.json())
         .then(json => {
+            let songs = document.getElementById("songs")
+            songs.innerHTML = ""
+            for(var i = 0; i < json.length; i++)
+            {
+                let lineBreak = document.createElement("br")
+                let a = document.createElement('a')
+
+                a.textContent = json[i].songName
+
+                a.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
+                a.textContent = json[i].songName
+
+                songs.appendChild(a)
+                songs.appendChild(lineBreak)
+            }
         });
     
     }
