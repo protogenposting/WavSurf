@@ -507,6 +507,7 @@ app.get(apiPath+'post/:id',(req,res) => {
 //this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
+    var searchedIds = [];
     var search = req.body.search;
     var reading = false;
     var currentString = "";
@@ -530,9 +531,23 @@ app.post(apiPath+'postSearch',(req,res) => {
     }
     
     const posts = db.prepare('SELECT * FROM posts').all();
+
+    for (var i=0; i < tagNames.length; i++) {
+        var compare = tagNames[i];
+        var receivedIds = db.prepare("SELECT id FROM tags WHERE tagName = ?");
+        searchedIds.push(receivedIds.get(compare));
+    }
     
-   console.log(tagNames);
-   console.log(search);
+    for (var i=0; i < searchedIds.length; i++) {
+        var compare = searchedIds[i];
+        var receivedSong = db.prepare("SELECT songName FROM posts WHERE tags LIKE '%?%'");//okay so the LIKE operator DOES WORK but it only selects one of the songs and i dont know if it gets input correctly
+        //console.log(receivedSong.get(compare));
+        console.log(compare);
+    }
+
+    console.log(searchedIds);
+    console.log(tagNames);
+    console.log(search);
 })
 //#endregion
 
