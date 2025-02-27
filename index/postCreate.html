@@ -16,7 +16,9 @@
 
     let otherLinksCount = 0;
     var spacing = 30;
-    var buttonSpacing = 65;
+    var buttonSpacing = 120;
+    var buttonSpacing2 = 200;
+    var buttonSpacing3 = 60;
 
     function submit() {
 
@@ -29,12 +31,13 @@
         //check if there is a valid Youtube ID before sending to queue.
         if (youtubeUrl.length == 0) {
             popup.textContent = "Youtube ID or URL is required!"
-            popup.style.top = "70px";
+            popup.style.top = buttonSpacing3+"px";
             return
         }
 
         else if (youtubeUrl.length < 11) {
             popup.textContent = "Youtube ID is too short! Not 11 digits long!"
+            popup.style.top = buttonSpacing3+"px";
             return
         }
 
@@ -42,6 +45,7 @@
             //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
             youtubeID = youtubeUrl.substr(length - 11)
             popup.textContent = "Post added to queue!"
+            popup.style.top = buttonSpacing3+"px";
         }
 
         let allLinks = []
@@ -67,6 +71,7 @@
                 }
             })
         })
+        
     }
 
     /**
@@ -76,6 +81,8 @@
         otherLinksCount += 1
         spacing += 30;
         buttonSpacing += 30;
+        buttonSpacing2 += 30;
+        buttonSpacing3 += 30;
 
         //Line break needed so the input buttons stay in a column
         //Label created so user understands purpose of input
@@ -96,7 +103,7 @@
         newInput.setAttribute("name", "data")
         newInput.setAttribute("style", "font-size: 20px; top :"+spacing+"px")
 
-        let div = document.getElementById("div1")
+        let div = document.getElementById("buttons")
         let firstButton = document.getElementById("firstButton")
         let secondButton = document.getElementById("secondButton");
 
@@ -104,53 +111,56 @@
         div.insertBefore(newLabel, firstButton)
         div.insertBefore(newInput, firstButton)
         firstButton.style.top = buttonSpacing+"px";
-        secondButton.style.top = buttonSpacing+"px";
+        secondButton.style.top = buttonSpacing2+"px";
         
     }
 </script>
 <body id = "body1">
+    <div id="inputs">
+        <!--User inputs the song's name here.-->
+        <label style = "font-size: 20px; left: 570px;">Song name:</label>
+        <input
+            type = "text"
+            id = "songName"
+            name = "data"
+            style = "font-size: 20px;">
+        </input><br>
 
-    <!--User inputs the song's name here.-->
-    <label style = "font-size: 20px; left: 570px;">Song name:</label>
-    <input
-        type = "text"
-        id = "songName"
-        name = "data"
-        style = "font-size: 20px;">
-    </input><br>
+        <!--User inputs the Youtube URL here.-->
+        <label style = "font-size: 20px; left: 540px; top: 30px;">Youtube Link / ID:</label>
+        <input
+            type = "text"
+            id = "youtubeUrl"
+            name = "data"
+            style = "font-size: 20px; top: 30px;">
+        </input><br>
+    </div>
 
-    <!--User inputs the Youtube URL here.-->
-    <label style = "font-size: 20px; left: 540px; top: 30px;">Youtube Link / ID:</label>
-    <input
-        type = "text"
-        id = "youtubeUrl"
-        name = "data"
-        style = "font-size: 20px; top: 30px;">
-    </input><br>
+    <div id = "buttons">
+        <!--Includes another option for another link when clicked. Calls addAnotherInput().-->
+        <button
+            id = "firstButton"
+            type = "button";
+            style = "height: 75px; width: 200px; font-size: 20px; top : 120px;"
+            onclick = "addAnotherInput()">
+            Add Other Option
+        </button>
+    
+        <!--Attempts to create a post when clicked. Calls submit().-->
+        <button
+            id = 'secondButton';
+            type = "button";
+            style = "height: 75px; width: 150px; font-size: 20px; top : 200px;"
+            onclick = "submit()">
+            Create Post
+        </button><br>
+    
+        <!--Warns the user or tells them post has been created.-->
+        <label id = "popup" style = "font-size: 20px;"> </label>
+    </div>
 
 </body>
 
-<div id = "div1">
-    <!--Includes another option for another link when clicked. Calls addAnotherInput().-->
-    <button
-        id = "firstButton"
-        type = "button";
-        style = "height: 75px; width: 200px; font-size: 20px; top : 120px;"
-        onclick = "addAnotherInput()">
-        Add Other Option
-    </button>
 
-    <!--Attempts to create a post when clicked. Calls submit().-->
-    <button
-        id = 'secondButton';
-        type = "button";
-        style = "height: 75px; width: 150px; font-size: 20px; top : 200px;"
-        onclick = "submit()">
-        Create Post
-    </button><br>
-
-    <!--Warns the user or tells them post has been created.-->
-    <label id = "popup" style = "font-size: 20px;"> </label>
-</div>
 
 </html>
