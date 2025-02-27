@@ -504,7 +504,7 @@ app.get(apiPath+'post/:id',(req,res) => {
     res.json(posts);
 })
 
-//this request allows you to search for posts that fit specific search terms and tags. Wip by oliver.
+//this request allows you to search for posts that fit specific search terms and tags.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
     var tagsToSearch = [];
