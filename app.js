@@ -529,14 +529,13 @@ app.post(apiPath+'postSearch',(req,res) => {
     for (var i=0; i < tagNames.length; i++) {
         var compare = tagNames[i];
         var receivedIds = db.prepare("SELECT id FROM tags WHERE tagName = ?");
-        searchedIds.push(receivedIds.get(compare));
+        searchedIds.push(receivedIds.get(compare).id);
     }
     
     for (var i=0; i < searchedIds.length; i++) {
         var compare = searchedIds[i];
         var receivedSong = db.prepare("SELECT songName FROM posts WHERE tags LIKE '%?%'");//okay so the LIKE operator DOES WORK but it only selects one of the songs and i dont know if it gets input correctly
-        //console.log(receivedSong.get(compare));
-        console.log(compare);
+        console.log(receivedSong.get(compare));
     }
 
     console.log(searchedIds);
