@@ -23,7 +23,8 @@
             body: JSON.stringify({
                 data: {
                     name: document.getElementById("name").value,
-                    children: JSON.parse(document.getElementById("children").value)
+                    children: JSON.parse(document.getElementById("children").value),
+                    type: parseInt(document.getElementById("type").value),
                 }
             })
         });
@@ -36,6 +37,8 @@
     <input type="text" id="name" name="name"><br>
     <label for="children">Tag children (JSON Array with the ids of each tag, change this to something else later)</label><br>
     <input type="text" id="children" name="children"><br>
+    <label for="type">Tag Type (0 is artist, 1 is genre, 2 is misc)</label><br>
+    <input type="text" id="type" name="type"><br>
 
     <button type="button" style = "top: 100px;" onclick="submit()">Submit</button>
 </body>

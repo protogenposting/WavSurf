@@ -12,41 +12,116 @@
 </head>
 
 <script>
-    function GetURLID()
+    var offsets = new Array(10)
+
+    offsets = offsets.fill(30,0,offsets.length)
+
+    function getURLID()
     {
         let endPoint = window.location.href.lastIndexOf("/")
 
         return window.location.href.slice(endPoint + 1,window.location.href.length)
     }
+    function createTagButton(tagID){
+        fetch("http://localhost:3000/api/tags/"+tagID)
+        .then(response => response.json())
+        .then(json => {
+            if(json.tagName == undefined)
+            {
+                return
+            }
+            //thanks for the code tiger :3
+            let lineBreak = document.createElement("br")
+            let newButton = document.createElement("button")
+
+            newButton.textContent = json.tagName
+
+            console.log(json.type)
+
+            //newButton.setAttribute("onclick", goToTagPage)
+            //newButton.setAttribute("style", "font-size: 20px; margin-top: "+offsets[json.type]+"px;")
+
+            let type;
+
+            switch(json.type)
+            {
+                case 0:
+                    type = "artist"
+                    break
+                case 1:
+                    type = "genre"
+                    break
+                case 2:
+                    type = "misc"
+                    break
+                default:
+                    type = "misc"
+            }
+
+            let body = document.getElementById(type)
+            body.appendChild(newButton)
+            body.appendChild(lineBreak)
+            //body.style.position = "absolute"
+            if(json.type > 0)
+            {
+                //body.style.top = (offsets[json.type-1] * 2).toString()+"px"
+            }
+            //body.style.left = "50%"
+
+            offsets[json.type] += 15
+        })
+    }
     function load()
     {
-        let songId = GetURLID()
+        let songId = getURLID()
 
         let embed = document.getElementById("youtube")
+
+        let songData = {}
 
         fetch("http://localhost:3000/api/post/"+songId)
         .then(response => response.json())
         .then(json => {
-            embed.src = "https://www.youtube.com/embed/"+json.links
+            songData = json
 
-            let tags = json.tags
+            embed.src = "https://www.youtube.com/embed/"+songData.links
+
+            let tags = JSON.parse(songData.tags)
+
+            console.log(tags)
+
+            
+
+            for(var i = 0; i < tags.length; i++)
+            {
+                createTagButton(tags[i])
+            }
         });
     }
 </script>
 
-<body onload="load()">
-    <iframe
-        id = "youtube"
-        style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
-        src = "https://www.youtube.com/embed/ly36kn0ug4k"
-        title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
-        frameborder = "0"
-        allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerpolicy = "strict-origin-when-cross-origin"
-        allowfullscreen>
-    </iframe><br>
-
-    <label style = "top: 450px">Tags area</label>
+<body onload="load()" id = "body">
+    <div id="embed" class="container">
+        <iframe
+            id = "youtube"
+            style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
+            src = ""
+            title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
+            frameborder = "0"
+            allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            referrerpolicy = "strict-origin-when-cross-origin"
+            allowfullscreen>
+        </iframe>
+    </div><br>
+    <div id="artist" class="container">
+        <label>Artists</label><br>
+    </div><br>
+    <div id="genre" class="container">
+        <label>Genres</label><br>
+    </div><br>
+    <div id="misc" class="container">
+        <label>Misc</label><br>
+    </div><br>
 
 </body>
 
