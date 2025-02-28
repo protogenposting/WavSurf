@@ -485,6 +485,16 @@ app.get(apiPath+'tags/:id',(req,res) => {
 
     res.json(tags)
 })
+
+//this request sends back tags starting with the letters you send
+app.get(apiPath+'tagSimilar/:name',(req,res) => {
+    var tags = db.prepare("SELECT * FROM tags WHERE tagName LIKE ? || '%'").all(req.params.name);
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
 //#endregion
 
 //#region post api calls

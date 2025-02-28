@@ -28,6 +28,7 @@
 
 <!--Script for the search bar-->
 <script>
+
     //Calls the searchMade method when enter key is pressed
     const searchId = document.getElementById("searchBar");
     searchId.onkeydown = function(event) {
@@ -70,6 +71,19 @@
             }
         });
     
+    }
+
+    function getSimilarTags(){
+        fetch("http://localhost:3000/api/postSearch", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(json => {
+            
+        });
     }
 </script>
 </html>
