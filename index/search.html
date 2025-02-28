@@ -40,6 +40,7 @@
      * Searches for the song name if it is provided and tags if they are provided.
      * If the search is a tag it must be contained in quotations "".
      * This method will search for tags if they are provided in quotations.
+     * After everything is searched, they will be displayed on the page as links to their songView page.
      */
     function searchMade () {
         fetch("http://localhost:3000/api/postSearch", {
