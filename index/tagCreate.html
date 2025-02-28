@@ -7,19 +7,24 @@
         name = "viewport"
         content = "width = device-width, initial-scale = 1"
     >
-    <title>WavSurf Tag Create</title>
+    <title>Create Tag</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
-<script>
-    function submit()
-    {
+<script defer>
+    /**
+     * Attempts to submit the user-created tag to the tagQueue.
+    **/
+    function submit() {
+
         fetch("http://localhost:3000/api/tagQueue", {
             method: "POST",
+
             headers: {
                 "Content-Type": "application/json",
                 "authorization": localStorage.getItem("sessionID")
             },
+
             body: JSON.stringify({
                 data: {
                     name: document.getElementById("name").value,
@@ -28,18 +33,21 @@
                 }
             })
         });
-
     }
 </script>
 
 <body>
-    <label for="name">Tag name:</label><br>
-    <input type="text" id="name" name="name"><br>
-    <label for="children">Tag children (JSON Array with the ids of each tag, change this to something else later)</label><br>
-    <input type="text" id="children" name="children"><br>
-    <label for="type">Tag Type (0 is artist, 1 is genre, 2 is misc)</label><br>
-    <input type="text" id="type" name="type"><br>
+    <!--Instructions and inputs for the user.-->
+    <label for = "name">Tag name:</label><br>
+    <input type = "text" id = "name" name = "name"><br>
 
-    <button type="button" style = "top: 120px;" onclick="submit()">Submit</button>
+    <label for = "children">Tag children (JSON Array with the ids of each tag, change this to something else later)</label><br>
+    <input type = "text" id = "children" name = "children"><br>
+
+    <label for = "type">Tag Type (0 is artist, 1 is genre, 2 is misc)</label><br>
+    <input type = "text" id = "type" name = "type"><br>
+
+    <!--Submits the information and attempts to send the tag to tagQueue when clicked.-->
+    <button type = "button" style = "top: 120px;" onclick = "submit()">Submit</button>
 </body>
 </html>

@@ -10,9 +10,13 @@
     <title>WavSurf Post Queue Interface</title>
 </head>
 
-<script>
+<script defer>
+    // Holds all of the posts from postQueue.
     var queue = [];
 
+    /**
+     * Gets all of the posts currently in postQueue.
+    **/
     function getInfo() {
         fetch("http://localhost:3000/api/postQueue")
         .then(response => response.json())
@@ -23,6 +27,9 @@
         });
     }
 
+    /**
+     * "Accepts" a post by adding it to the posts database.
+    **/
     function accept() {
         fetch("http://localhost:3000/api/acceptPost/" + queue[0].id, {
             method: "POST",
@@ -34,6 +41,9 @@
         
     }
 
+    /**
+     * "Denies" a post by removing it from postQueue permanently.
+    **/
     function deny() {
         fetch("http://localhost:3000/api/denyPost/" + queue[0].id, {
             method: "POST",
@@ -50,10 +60,10 @@
 <body onload = "getInfo()"></body>
 
 <!--When clicked runs the accept() function-->
-<button type = "button" onclick="accept()">Accept</button><br>
+<button type = "button" onclick = "accept()">Accept</button><br>
 
 <!--When clicked runs the deny() function-->
-<button type = "button" onclick="deny()">Deny</button><br>
+<button type = "button" onclick = "deny()">Deny</button><br>
 
 <!--Displayes the first bit of postQueue data on the page-->
 <p id = "p1">placeholder</p>
