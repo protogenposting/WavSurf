@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang = "en">
 
+<!--Head sets up viewport and css-->
 <head>
     <meta charset = "UTF-8">
     <meta
@@ -11,25 +12,32 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-
-
+<!--Body contains all the details and front end conent of the page-->
 <body>
-<div>
-    <input 
-        id="searchBar"
-        style = "font-size: 20px; width: 700px;"
-        type = "text"
-        placeholder = 'Song Name "Tag Name"'>
-</div>
+    <div>
+        <input 
+            id="searchBar"
+            style = "font-size: 20px; width: 700px;"
+            type = "text"
+            placeholder = 'Song Name "Tag Name"'>
+    </div>
 </body>
+
+<!--Script for the search bar-->
 <script>
-    
+    //Calls the searchMade method when enter key is pressed
     const searchId = document.getElementById("searchBar");
     searchId.onkeydown = function(event) {
         if(event.keyCode == 13) {
             searchMade();
         }
     }
+    /**
+     * Makes the search.
+     * Searches for the song name if it is provided and tags if they are provided.
+     * If the search is a tag it must be contained in quotations "".
+     * This method will search for tags if they are provided in quotations.
+     */
     function searchMade () {
         fetch("http://localhost:3000/api/postSearch", {
             method: "POST",

@@ -42,7 +42,7 @@ button {
     background-color:rgb(96, 180, 230)
 }
 
-/*Sets the properties for the "button" type content.
+/*Sets the properties for the "input" type content.
 Makes their positioning go off of the body.*/
 input {
     position: absolute;
