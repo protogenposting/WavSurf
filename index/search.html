@@ -62,13 +62,13 @@
                 let lineBreak = document.createElement("br")
                 let hyperLink = document.createElement('a')
 
-                linkSpacing += 20;
+                linkSpacing += 50;
 
                 hyperLink.textContent = json[i].songName
 
                 hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
                 hyperLink.textContent = json[i].songName
-                hyperLink.style = "left: 75%; top:"+linkSpacing+"px";
+                hyperLink.style = "left: 75%; font-size: 30px; text-align: center; width: 700px; top:"+linkSpacing+"px";
 
                 songs.appendChild(hyperLink)
                 songs.appendChild(lineBreak)
