@@ -17,7 +17,7 @@
     <div>
         <input 
             id="searchBar"
-            style = "font-size: 20px; width: 700px;"
+            style = "font-size: 20px; width: 700px; left: 400px"
             type = "text"
             placeholder = 'Song Name "Tag Name"'>
     </div>
@@ -55,16 +55,20 @@
         .then(response => response.json())
         .then(json => {
             let songs = document.getElementById("songs")
+            let linkSpacing = 50;
             songs.innerHTML = ""
             for(var i = 0; i < json.length; i++)
             {
                 let lineBreak = document.createElement("br")
                 let hyperLink = document.createElement('a')
 
+                linkSpacing += 20;
+
                 hyperLink.textContent = json[i].songName
 
                 hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
                 hyperLink.textContent = json[i].songName
+                hyperLink.style = "left: 75%; top:"+linkSpacing+"px";
 
                 songs.appendChild(hyperLink)
                 songs.appendChild(lineBreak)
