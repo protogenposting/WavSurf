@@ -7,24 +7,30 @@
         name = "viewport"
         content = "width = device-width, initial-scale = 1"
     >
-    <title>WavSurf Post Queue Interface</title>
+    <title>WavSurf Song View</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 
-<script>
-    function GetURLID()
-    {
+<script defer>
+
+    /**
+     * Gets the Youtube video ID from the URL and returns it.
+    **/
+    function GetURLID() {
         let endPoint = window.location.href.lastIndexOf("/")
 
         return window.location.href.slice(endPoint + 1,window.location.href.length)
     }
-    function load()
-    {
+
+    /**
+     * Loads the song's Youtube embed into the page and posts the tags below it.
+    **/
+    function load() {
         let songId = GetURLID()
 
         let embed = document.getElementById("youtube")
 
-        fetch("http://localhost:3000/api/post/"+songId)
+        fetch("http://localhost:3000/api/post/" + songId)
         .then(response => response.json())
         .then(json => {
             embed.src = "https://www.youtube.com/embed/"+json.links
@@ -32,6 +38,7 @@
             let tags = json.tags
         });
     }
+
 </script>
 
 <body onload="load()">
@@ -39,7 +46,7 @@
         id = "youtube"
         style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
         src = "https://www.youtube.com/embed/ly36kn0ug4k"
-        title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
+        title = "HTML &amp; CSS - Song"
         frameborder = "0"
         allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
         referrerpolicy = "strict-origin-when-cross-origin"
