@@ -42,10 +42,18 @@ button {
     background-color:rgb(96, 180, 230)
 }
 
-/*Sets the properties for the "button" type content.
+/*Sets the properties for the "input" type content.
 Makes their positioning go off of the body.*/
 input {
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+}
+/*Sets the properties for the "button" type content.
+Makes their positioning go off of the body.*/
+a {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%);
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
 }
