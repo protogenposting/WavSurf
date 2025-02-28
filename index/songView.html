@@ -7,30 +7,37 @@
         name = "viewport"
         content = "width = device-width, initial-scale = 1"
     >
-    <title>WavSurf Post Queue Interface</title>
+    <title>WavSurf Song View</title>
     <link rel="stylesheet" href="/style.css">
 </head>
 
-<script>
-    var offsets = new Array(10)
+<script defer>
+    let offsets = new Array(10)
 
     offsets = offsets.fill(30,0,offsets.length)
 
-    function getURLID()
-    {
+    /**
+     * Gets the Youtube video ID from the end of the page's URL and returns it.
+    **/
+    function getURLID() {
         let endPoint = window.location.href.lastIndexOf("/")
 
-        return window.location.href.slice(endPoint + 1,window.location.href.length)
+        return window.location.href.slice(endPoint + 1, window.location.href.length)
     }
+
+    /**
+     * Creates a tag button for a certain tag and puts it under the Youtube video embed.
+     * The tag button is sorted and placed into the "Artist", "Genre", and "Misc" areas respectively.
+    **/
     function createTagButton(tagID){
-        fetch("http://localhost:3000/api/tags/"+tagID)
+        fetch("http://localhost:3000/api/tags/" + tagID)
         .then(response => response.json())
         .then(json => {
             if(json.tagName == undefined)
             {
                 return
             }
-            //thanks for the code tiger :3
+            //thanks for the code tiger :3 // np
             let lineBreak = document.createElement("br")
             let newButton = document.createElement("button")
 
@@ -43,8 +50,7 @@
 
             let type;
 
-            switch(json.type)
-            {
+            switch(json.type) {
                 case 0:
                     type = "artist"
                     break
@@ -61,9 +67,9 @@
             let body = document.getElementById(type)
             body.appendChild(newButton)
             body.appendChild(lineBreak)
+
             //body.style.position = "absolute"
-            if(json.type > 0)
-            {
+            if(json.type > 0) {
                 //body.style.top = (offsets[json.type-1] * 2).toString()+"px"
             }
             //body.style.left = "50%"
@@ -71,8 +77,11 @@
             offsets[json.type] += 15
         })
     }
-    function load()
-    {
+
+    /**
+     * Loads the song's Youtube video embed into the page and posts the song's tags below it.
+    **/
+    function load() {
         let songId = getURLID()
 
         let embed = document.getElementById("youtube")
@@ -84,45 +93,65 @@
         .then(json => {
             songData = json
 
-            embed.src = "https://www.youtube.com/embed/"+songData.links
+            embed.title = songData.songName
+
+            /* Although the "links" property is plural and sounds like an array,
+               all it actually does is return a single string containing the Youtube video ID.
+               We should fix that later. */
+
+            embed.src = "https://www.youtube.com/embed/" + songData.links
 
             let tags = JSON.parse(songData.tags)
 
-            console.log(tags)
+            // console.log(tags)
 
-            
-
-            for(var i = 0; i < tags.length; i++)
-            {
+            // For every tag the song has, create a tag button for them.
+            for(var i = 0; i < tags.length; i++) {
                 createTagButton(tags[i])
             }
         });
     }
 </script>
 
-<body onload="load()" id = "body">
-    <div id="embed" class="container">
+<body onload = "load()" id = "body">
+
+    
+    <div class = "container">
+
+        <!--The embed for the song's Youtube video. "src" and "title" are initialized during load().-->
         <iframe
             id = "youtube"
             style = "width: 640px; height: 360px; position:absolute; top: 50px; left: 50%; transform: translate(-50%);"
             src = ""
-            title = "HTML &amp; CSS - How to Embed a YouTube Video in Your Website"
+            title = ""
             frameborder = "0"
             allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
             referrerpolicy = "strict-origin-when-cross-origin"
             allowfullscreen>
         </iframe>
-    </div><br>
-    <div style="position:absolute; left: 50%; top: 450px; width: 640px; transform: translate(-50%);">
-        <div id="artist" class="container">
+
+    </div>
+    <br>
+
+    <div style = "position:absolute; left: 50%; top: 450px; width: 640px; transform: translate(-50%);">
+
+        <!--All of the tags go into one of these three divs.-->
+
+        <div id = "artist" class = "container">
         <label>Artists</label><br>
-        </div><br>
-        <div id="genre" class="container">
+        </div>
+        <br>
+
+        <div id = "genre" class = "container">
         <label>Genres</label><br>
-        </div><br>
-        <div id="misc" class="container">
+        </div>
+        <br>
+
+        <div id = "misc" class = "container">
         <label>Misc</label><br>
-        </div><br>
+        </div>
+        <br>
+
     </div><br>
 
 </body>
