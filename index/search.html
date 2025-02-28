@@ -55,14 +55,14 @@
             for(var i = 0; i < json.length; i++)
             {
                 let lineBreak = document.createElement("br")
-                let a = document.createElement('a')
+                let hyperLink = document.createElement('a')
 
-                a.textContent = json[i].songName
+                hyperLink.textContent = json[i].songName
 
-                a.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
-                a.textContent = json[i].songName
+                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
+                hyperLink.textContent = json[i].songName
 
-                songs.appendChild(a)
+                songs.appendChild(hyperLink)
                 songs.appendChild(lineBreak)
             }
         });
