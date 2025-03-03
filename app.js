@@ -118,7 +118,6 @@ const query = `
     CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
         tagName STRING NOT NULL,
-        tagChildren STRING NOT NULL,
         type INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tagQueue (
@@ -132,17 +131,38 @@ const query = `
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
-        tags INTEGER [],
-        links STRING [] NOT NULL
+        link STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS songTags (
         id INTEGER PRIMARY KEY UNIQUE,
         songID INTEGER NOT NULL,
         tagID INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS tagChildren (
+        id INTEGER PRIMARY KEY UNIQUE,
+        tagID INTEGER NOT NULL,
+        childID INTEGER NOT NULL
+    );
 `;
 
 db.exec(query)
+
+function addUser(name, username, password, rank) {
+    
+}
+
+function addTag(tagName, type, parents) {
+
+}
+
+function addPost(songName, links) {
+
+}
+
+function populate() {
+    addUser('Oli', 'Oliver', 'ownerLol', 3);
+    addUser('Tiger', 'Tiger')
+}
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
