@@ -118,7 +118,6 @@ const query = `
     CREATE TABLE IF NOT EXISTS tags (
         id INTEGER PRIMARY KEY UNIQUE,
         tagName STRING NOT NULL,
-        tagChildren STRING NOT NULL,
         type INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tagQueue (
@@ -132,84 +131,38 @@ const query = `
     CREATE TABLE IF NOT EXISTS posts (
         id INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
-        tags INTEGER [],
-        links STRING [] NOT NULL
+        link STRING NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS songTags (
+        id INTEGER PRIMARY KEY UNIQUE,
+        songID INTEGER NOT NULL,
+        tagID INTEGER NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS tagChildren (
+        id INTEGER PRIMARY KEY UNIQUE,
+        tagID INTEGER NOT NULL,
+        childID INTEGER NOT NULL
     );
 `;
 
 db.exec(query)
 
-/**
- * this function just populates the database. Used for testing.
- */
-function populate() {
-    let query = `
-        INSERT INTO users (name, username, password, rank) VALUES ('Oli', 'Oliver', 'ownerLol', 3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Tiger', 'Tiger', 'ownerLol', 3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Carson', 'Carson', 'ownerLol', 3);
-        INSERT INTO users (name, username, password, rank) VALUES ('Bob', 'BobRoss', 'bestpainter', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('God', 'RealGod123', 'password', 2);
-        INSERT INTO users (name, username, password, rank) VALUES ('AlanWalker', 'AlanWalker', 'TheSpectre', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('PeterGriffin', 'PeterGriffinFromFamilyGuy', 'simpsonssucks', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('RandomMod', 'RandomMod', 'modmod', 2);
-        INSERT INTO users (name, username, password, rank) VALUES ('randomUSER', 'RandomUser', 'guyyes', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('personyes', 'personperson', 'yeyaye', 1);
-        INSERT INTO users (name, username, password, rank) VALUES ('justamod', 'justamod', 'modyesyes', 2);
-
-        --id = 1
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rock', '[5,6,13]', 1); 
-        --id = 2
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rap', '[]', 1); 
-        --id = 3
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Pop', '[]', 1); 
-        --id = 4
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('HipHop', '[]', 1); 
-        --id = 5
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('IndieRock', '[]', 1); 
-        --id = 6
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('AlternativeRock', '[]', 1); 
-        --id = 7
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('EDM', '[]', 1); 
-        --id = 8
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Dubstep', '[16]', 1); 
-        --id = 9
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Electronic', '[7,8,10,11,12,16]', 1); 
-        --id = 10
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('DnB', '[16]', 1); 
-        --id = 11
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Vaporwave', '[]', 1); 
-        --id = 12
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Synthwave', '[]', 1); 
-        --id = 13
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('GrungeRock', '[]', 1); 
-        --id = 14
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Indie', '[5,15]', 1); 
-        --id = 15
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('AlternativeIndie', '[]', 1); 
-        --id = 16
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Drumstep', '[]', 1); 
-        --id = 17
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Deadmau5', '[]', 0);
-        --id = 18
-        INSERT INTO tags (tagName, tagChildren, type) VALUES ('Rob Swire', '[]', 0);
-
-        INSERT INTO posts (songName, tags, links) VALUES ('Ghosts N Stuff', '[7,17,18]', 'pb-EwykPTv8');
-        INSERT INTO posts (songName, tags, links) VALUES ('My Heart', '[16]', 'jK2aIUmmdP4');
-        INSERT INTO posts (songName, tags, links) VALUES ('Faded', '[7]', '60ItHLz5WEA');
-        INSERT INTO posts (songName, tags, links) VALUES ('Force', '[7]', 'lqYQXIt4SpA');
-        INSERT INTO posts (songName, tags, links) VALUES ('I Remember', '[7]', '3UzvQowg9Po');
-        INSERT INTO posts (songName, tags, links) VALUES ('Devil Town', '[1,5]', 'KvaxYUfGHnk');
-        INSERT INTO posts (songName, tags, links) VALUES ('Beird', '[3]', 'fsrc_njfRTM');
-        INSERT INTO posts (songName, tags, links) VALUES ('Macintosh plus 2k17', '[11]', 'CBIGJohVMgw');
-        INSERT INTO posts (songName, tags, links) VALUES ('Summer Is Over (Fury Weekend Remix)', '[12]', 'L4eE_vvmo2k');
-        INSERT INTO posts (songName, tags, links) VALUES ('Labyrinth', '[2,9]', 'MdAzl3sOwmY');
-        INSERT INTO posts (songName, tags, links) VALUES ('宇宙ステーションのレベル7', '[3,9]', 'QB4uxDo4FXQ');
-     `
-    db.exec(query);
+function addUser(name, username, password, rank) {
+    
 }
 
-populate();
+function addTag(tagName, type, parents) {
+
+}
+
+function addPost(songName, links) {
+
+}
+
+function populate() {
+    addUser('Oli', 'Oliver', 'ownerLol', 3);
+    addUser('Tiger', 'Tiger')
+}
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
