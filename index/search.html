@@ -14,10 +14,10 @@
 
 <!--Body contains all the details and front end conent of the page-->
 <body>
-    <div>
+    <div id="search">
         <input 
             id="searchBar"
-            style = "font-size: 20px; width: 700px;"
+            style = "font-size: 20px; width: 700px; left: 400px"
             type = "text"
             placeholder = 'Song Name "Tag Name"'>
     </div>
@@ -41,6 +41,7 @@
      * Searches for the song name if it is provided and tags if they are provided.
      * If the search is a tag it must be contained in quotations "".
      * This method will search for tags if they are provided in quotations.
+     * After everything is searched, they will be displayed on the page as links to their songView page.
      */
     function searchMade () {
         fetch("http://localhost:3000/api/postSearch", {
@@ -55,18 +56,22 @@
         .then(response => response.json())
         .then(json => {
             let songs = document.getElementById("songs")
+            let linkSpacing = 50;
             songs.innerHTML = ""
             for(var i = 0; i < json.length; i++)
             {
                 let lineBreak = document.createElement("br")
-                let a = document.createElement('a')
+                let hyperLink = document.createElement('a')
 
-                a.textContent = json[i].songName
+                linkSpacing += 50;
 
-                a.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
-                a.textContent = json[i].songName
+                hyperLink.textContent = json[i].songName
 
-                songs.appendChild(a)
+                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
+                hyperLink.textContent = json[i].songName
+                hyperLink.style = "left: 75%; font-size: 30px; text-align: center; width: 700px; top:"+linkSpacing+"px";
+
+                songs.appendChild(hyperLink)
                 songs.appendChild(lineBreak)
             }
         });
