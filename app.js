@@ -209,6 +209,18 @@ function populate() {
     addTag('Deadmau5', 0, []);
     //id = 18
     addTag('Rob Swire', 0, []);
+
+    addPost('Ghosts n Stuff', 'pb-EwykPTv8');
+    addPost('My Heart', 'jK2aIUmmdP4');
+    addPost('Faded', '60ItHLz5WEA');
+    addPost('Force', 'lqYQXIt4SpA');
+    addPost('I Remember', '3UzvQowg9Po');
+    addPost('Devil Town', 'KvaxYUfGHnk');
+    addPost('Beird', 'fsrc_njfRTM');
+    addPost('Macintosh plus 2k17', 'CBIGJohVMgw');
+    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k');
+    addPost('Labyrinth', 'MdAzl3sOwmY');
+    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ');
 }
 
 //#region front end page requests
