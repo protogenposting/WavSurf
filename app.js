@@ -148,15 +148,37 @@ const query = `
 db.exec(query)
 
 function addUser(name, username, password, rank) {
-    
+    const addData = db.prepare("INSERT INTO users (name, username, password, rank) VALUES (?,?,?,?)")
+
+    let result = addData.run(name,username,password,rank)
+
+    return result
 }
 
 function addTag(tagName, type, parents) {
+    const addData = db.prepare("INSERT INTO tags (tagName, type) VALUES (?,?)")
+    let result = addData.run(tagName, type);
+    console.log(result)
+    
+    for(var i = 0; i < parents.length; i++)
+    {
+        let parentParents = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(parents[i]);
 
+        console.log(parentParents)
+
+        for(var o = 0; o < parentParents.length; o++)
+        {
+            parents.push(parentParents[o].tagID)
+        }
+
+        const addData = db.prepare("INSERT INTO tagChildren (tagID, childID) VALUES (?,?)")
+        addData.run(parents[i],result.lastInsertRowid);
+    }
 }
 
-function addPost(songName, links) {
-
+function addPost(songName, tags, link) {
+    const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?,?,?)");
+    addData.run(songName, link);
 }
 
 function populate() {
@@ -254,9 +276,8 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
         deleteData.run(req.params.id);
 
         //insert the tag into the database
-        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren, type) VALUES (?,?,)")
         const tagData = JSON.parse(tag.tagData);
-        addData.run(tagData.name, JSON.stringify(tagData.children),tagData.type);
+        addTag(tagData.name, tagData.type, JSON.stringify(tagData.parents));
     }
 })
 
@@ -302,26 +323,15 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
         const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
-
         const post = postQuery.get(req.params.id);
 
         const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
-
         deleteData.run(req.params.id);
 
+        const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)");
         const postData = JSON.parse(post.postData);
-
-        addData.run(postData.songName, postData.tags, postData.links);
+        addPost(postData.songName, postData.tags, postData.links);
     }
-
-    //add the post adding thing
-
-    //const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
-
-    //console.log(req.body.data)
-
-    //let result = request.run(JSON.stringify(req.body.data))
 })
 
 //deny a tag and remove it from the queue permentantly
@@ -377,13 +387,7 @@ app.delete(apiPath+'user/:name',(req,res) => {
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
-    const addData = db.prepare("INSERT INTO users (name, username, password, rank) VALUES (?,?,?,?)")
-    
-    console.log(req.body)
-
-    let result;
-
-    result = addData.run(req.body.name,req.body.username,req.body.password,0)
+    let result = addUser(req.body.name,req.body.username,req.body.password,0)
 
     res.json({result: result})
 })
