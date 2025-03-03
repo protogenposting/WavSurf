@@ -183,7 +183,66 @@ function addPost(songName, tags, link) {
 
 function populate() {
     addUser('Oli', 'Oliver', 'ownerLol', 3);
-    addUser('Tiger', 'Tiger')
+    addUser('Tiger', 'Tiger', 'ownerLol', 3);
+    addUser('Carson', 'Carson', 'ownerLol', 3);
+    addUser('Bob', 'BobRoss', 'bestpainter', 1);
+    addUser('God', 'RealGod123', 'password', 2);
+    addUser('AlanWalker', 'AlanWalker', 'TheSpectre', 1);
+    addUser('PeterGriffin', 'PeterGriffinFromFamilyGuy', 'simposnssucks', 1);
+    addUser('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
+    addUser('RandomMod', 'RandomMod', 'modmod', 2);
+    addUser('randomUSER', 'RandomUser', 'guyyes', 1);
+    addUser('personyes', 'personperson', 'yeyaye', 1);
+    addUser('justamod', 'justamod', 'modyesyes', 2);
+
+    // id = 1
+    addTag('Rock', 1, []);
+    // id = 2
+    addTag('Rap', 1, []);
+    //id = 3
+    addTag('Pop', 1, []);
+    //id = 4
+    addTag('HipHop', 1, []);
+    //id = 5
+    addTag('IndieRock', 1, [1]);
+    //id = 6
+    addTag('AlternativeRock', 1, [1]);
+    //id = 7
+    addTag('EDM', 1, [9]);
+    //id = 8
+    addTag('Dubstep', 1, [9]);
+    //id = 9
+    addTag('Electronic', 1, []);
+    //id = 10
+    addTag('DnB', 1, [9]);
+    //id = 11
+    addTag('Vaporwave', 1 ,[9]);
+    //id = 12
+    addTag('Synthwave', 1, [9]);
+    //id = 13
+    addTag('GrungeRock', 1, [1]);
+    //id = 14
+    addTag('Indie', 1, []);
+    //id = 15
+    addTag('AlternativeIndie', 1, [1]);
+    //id = 16
+    addTag('Drumpstep', 1, [9]);
+    //id = 17
+    addTag('Deadmau5', 0, []);
+    //id = 18
+    addTag('Rob Swire', 0, []);
+
+    addPost('Ghosts n Stuff', 'pb-EwykPTv8');
+    addPost('My Heart', 'jK2aIUmmdP4');
+    addPost('Faded', '60ItHLz5WEA');
+    addPost('Force', 'lqYQXIt4SpA');
+    addPost('I Remember', '3UzvQowg9Po');
+    addPost('Devil Town', 'KvaxYUfGHnk');
+    addPost('Beird', 'fsrc_njfRTM');
+    addPost('Macintosh plus 2k17', 'CBIGJohVMgw');
+    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k');
+    addPost('Labyrinth', 'MdAzl3sOwmY');
+    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ');
 }
 
 //#region front end page requests
