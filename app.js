@@ -158,17 +158,17 @@ function addUser(name, username, password, rank) {
 function addTag(tagName, type, parents) {
     const addData = db.prepare("INSERT INTO tags (tagName, type) VALUES (?,?)")
     let result = addData.run(tagName, type);
-    console.log(result)
     
     for(var i = 0; i < parents.length; i++)
     {
         let parentParents = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(parents[i]);
 
-        console.log(parentParents)
-
         for(var o = 0; o < parentParents.length; o++)
         {
-            parents.push(parentParents[o].tagID)
+            if(parents.indexOf(parentParents[o].tagID) <= -1)
+            {
+                parents.push(parentParents[o].tagID)
+            }
         }
 
         const addData = db.prepare("INSERT INTO tagChildren (tagID, childID) VALUES (?,?)")
@@ -176,9 +176,24 @@ function addTag(tagName, type, parents) {
     }
 }
 
-function addPost(songName, tags, link) {
-    const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?,?,?)");
-    addData.run(songName, link);
+function addPost(songName, link, tags) {
+    const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?,?)");
+    let result = addData.run(songName, link);
+    for(var i = 0; i < tags.length; i++)
+    {
+        let parentTags = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(tags[i]);
+
+        for(var o = 0; o < parentTags.length; o++)
+        {
+            if(tags.indexOf(parentTags[o].tagID) <= -1)
+            {
+                tags.push(parentTags[o].tagID)
+            }
+        }
+
+        const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
+        addData.run(tags[i],result.lastInsertRowid);
+    }
 }
 
 function populate() {
@@ -226,24 +241,26 @@ function populate() {
     //id = 15
     addTag('AlternativeIndie', 1, [1]);
     //id = 16
-    addTag('Drumpstep', 1, [9]);
+    addTag('Drumpstep', 1, [10,8]);
     //id = 17
     addTag('Deadmau5', 0, []);
     //id = 18
     addTag('Rob Swire', 0, []);
 
-    addPost('Ghosts n Stuff', 'pb-EwykPTv8');
-    addPost('My Heart', 'jK2aIUmmdP4');
-    addPost('Faded', '60ItHLz5WEA');
-    addPost('Force', 'lqYQXIt4SpA');
-    addPost('I Remember', '3UzvQowg9Po');
-    addPost('Devil Town', 'KvaxYUfGHnk');
-    addPost('Beird', 'fsrc_njfRTM');
-    addPost('Macintosh plus 2k17', 'CBIGJohVMgw');
-    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k');
-    addPost('Labyrinth', 'MdAzl3sOwmY');
-    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ');
+    addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18]);
+    addPost('My Heart', 'jK2aIUmmdP4',[16]);
+    addPost('Faded', '60ItHLz5WEA',[7]);
+    addPost('Force', 'lqYQXIt4SpA',[7]);
+    addPost('I Remember', '3UzvQowg9Po',[7]);
+    addPost('Devil Town', 'KvaxYUfGHnk',[1,5]);
+    addPost('Beird', 'fsrc_njfRTM',[3]);
+    addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11]);
+    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12]);
+    addPost('Labyrinth', 'MdAzl3sOwmY',[2,9]);
+    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9]);
 }
+
+populate()
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
@@ -541,7 +558,6 @@ app.get(apiPath+'post/:id',(req,res) => {
 //this request allows you to search for posts that fit specific search terms and tags.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
-    var tagsToSearch = [];
     var search = req.body.search;
     var reading = false;
     var currentString = "";
@@ -551,7 +567,7 @@ app.post(apiPath+'postSearch',(req,res) => {
         if (searchChar == '"') {
             reading = !reading;
             if (!reading) {
-                tagNames.push({name:currentString, parent: tagNames.length});
+                tagNames.push(currentString);
                 currentString = "";
                 
             }
@@ -564,56 +580,21 @@ app.post(apiPath+'postSearch',(req,res) => {
         }
     }
 
-    for (var i=0; i < tagNames.length; i++) {
-        while(tagsToSearch.length <= tagNames[i].parent)
-        {
-            tagsToSearch.push([])
-        }
-        var tagName = tagNames[i].name;
-        var receivedIds = db.prepare("SELECT * FROM tags WHERE tagName = ?");
-        var tag = receivedIds.get(tagName)
-        if(tag != undefined)
-        {
-            tag.children = JSON.parse(tag.tagChildren)
-            for (var o=0; o < tag.children.length; o++) {
-                var childTag = db.prepare("SELECT * FROM tags WHERE id = ?").get(tag.children[o])
-                tagNames.push({name:childTag.tagName, parent:tagNames[i].parent})
-            }
-            tagsToSearch[tagNames[i].parent].push(tag.id);
-        }
-    }
-
     search = search.replaceAll(" ","")
-    
-    var songQuery = db.prepare("SELECT * FROM posts WHERE songName LIKE '%' || ? || '%'");
-    var receivedSongs = songQuery.all(search);
-    for(var o = 0; o < receivedSongs.length; o++)
+
+    let songQuery = `
+                        SELECT * FROM posts INNER JOIN songTags ON songTags.songID = posts.id INNER JOIN tags ON songTags.tagID = tags.id WHERE songName LIKE '%' || ? || '%'
+                    `
+
+
+    for(var i = 0; i < tagNames.length; i++)
     {
-        receivedSongs[o].tagChecks = JSON.parse(receivedSongs[o].tags)
+        songQuery = songQuery + " AND '" + tagNames[i] + "' = tags.tagName"
     }
 
-    //loop through every tag and check if each song has it. if not, remove it from the list
-    for(var o = 0; o < receivedSongs.length; o++)
-    {
-        receivedSongs[o].tagsNeeded = tagsToSearch.length
-        for(var i = 0; i < tagsToSearch.length; i++)
-        {
-            for(var e = 0; e < tagsToSearch[i].length; e++)
-            {
-                var index = receivedSongs[o].tagChecks.indexOf(tagsToSearch[i][e])
-                if(index > -1)
-                {
-                    receivedSongs[o].tagsNeeded--
-                    break;
-                }
-            }
-        }
-        if(receivedSongs[o].tagsNeeded > 0)
-        {
-            receivedSongs.splice(o,1)
-            o--
-        }
-    }
+    console.log(songQuery)
+        
+    var receivedSongs = db.prepare(songQuery).all(search);
 
     console.log(receivedSongs)
 
