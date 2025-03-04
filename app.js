@@ -116,7 +116,7 @@ const query = `
         rank INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tags (
-        id INTEGER PRIMARY KEY UNIQUE,
+        tagID INTEGER PRIMARY KEY UNIQUE,
         tagName STRING NOT NULL,
         type INTEGER NOT NULL
     );
@@ -129,7 +129,7 @@ const query = `
         postData STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY UNIQUE,
+        songID INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
         link STRING NOT NULL
     );
@@ -246,6 +246,10 @@ function populate() {
     addTag('Deadmau5', 0, []);
     //id = 18
     addTag('Rob Swire', 0, []);
+    //id = 19
+    addTag('House', 1, [9]);
+    //id = 20
+    addTag('Hardbass', 1, [19]);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -258,6 +262,7 @@ function populate() {
     addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12]);
     addPost('Labyrinth', 'MdAzl3sOwmY',[2,9]);
     addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9]);
+    addPost('Disco Panzer', 'uRSAatLI2QY',[20]);
 }
 
 populate()
@@ -520,7 +525,7 @@ app.get(apiPath+'tagsOrdered',(req,res) => {
 
 //?
 app.get(apiPath+'tags/:id',(req,res) => {
-    const tags = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.id);
+    const tags = db.prepare('SELECT * FROM tags WHERE tagID = ?').get(req.params.id);
 
     console.log(tags);
 
@@ -548,7 +553,7 @@ app.get(apiPath+'posts',(req,res) => {
 
 //this request gives the data of a single post
 app.get(apiPath+'post/:id',(req,res) => {
-    const posts = db.prepare('SELECT * FROM posts WHERE id = ?').get(req.params.id);
+    const posts = db.prepare('SELECT * FROM posts WHERE songID = ?').get(req.params.id);
 
     console.log(posts);
 
@@ -583,7 +588,7 @@ app.post(apiPath+'postSearch',(req,res) => {
     search = search.replaceAll(" ","")
 
     let songQuery = `
-                        SELECT * FROM posts INNER JOIN songTags ON songTags.songID = posts.id INNER JOIN tags ON songTags.tagID = tags.id WHERE songName LIKE '%' || ? || '%'
+                        SELECT DISTINCT songID, songName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'
                     `
 
 
