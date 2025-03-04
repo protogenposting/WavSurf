@@ -312,6 +312,10 @@ app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
 })
 
+app.get('/main',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/main.html'))
+})
+
 app.get('/moderation',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/moderation.html'))
 })

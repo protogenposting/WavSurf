@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+    <meta charset = "UTF-8">
+    <meta
+        name = "viewport"
+        content = "width = device-width, initial-scale = 1"
+    >
+    <title>Main Page</title>
+</head>
+
+<script>
+
+    //Calls the search() method when enter key is pressed
+    const searchId = document.getElementById("searchBar");
+
+    searchId.onkeydown = function(event) {
+        if(event.keyCode == 13) {
+            search();
+        }
+    }
+
+    /**
+     * Goes to the search page with the stuff the user entered. Or whatever Carson wanted lol
+    **/
+    function search(){
+        console.log("not finished")
+    }
+
+
+    
+</script>
+
+<!-- MAIN PAGE SHOULD HAVE: 
+ 
+Buttons that go to:
+    Login
+    SignUp
+    Search
+    PostCreate
+    TagCreate
+
+Also a search bar but idk how to implement that
+-->
+
+<body style = "align-items: center; background-color: gray;">
+
+    <input type = "text" id = "searchBar" style = "font-size: 20px;"><br>
+
+    <button type = "button" style = "top: 120px; font-size: 20px;">Search</button><br><br>
+
+    <button type = "button" style = "top: 120px; font-size: 20px;">Login</button>
+
+</body>
+
+</html>
