@@ -32,8 +32,6 @@
         .then(json => {
             const tags = json
 
-            console.log(tags)
-
             // Adds a tag's ID for each one in the database. "tags" is sorted alphabetically.
             for (let i = 0; i < tags.length; i++){
                 
@@ -86,8 +84,6 @@
         fetch("http://localhost:3000/api/tagsOrdered")
         .then(response => response.json())
         .then(json => {
-
-            console.log("getting names")
 
             tags = json
 
@@ -158,7 +154,6 @@
         let body = document.getElementById("body")
         body.appendChild(newButton)
         body.appendChild(lineBreak)
-
     }        
 
 </script>
