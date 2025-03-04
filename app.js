@@ -587,16 +587,27 @@ app.post(apiPath+'postSearch',(req,res) => {
 
     search = search.replaceAll(" ","")
 
-    let songQuery = `
-                        SELECT DISTINCT posts.songID, posts.songName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'
-                    `
-
+    let songQuery = `SELECT DISTINCT posts.songID, posts.songName, tags.tagName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'`
 
     for(var i = 0; i < tagNames.length; i++)
     {
-        songQuery = songQuery + " AND '" + tagNames[i] + "' = tags.tagName"
+        let type = "AND ("
+        if(i > 0)
+        {
+            type = "OR"
+        }
+        songQuery = songQuery + " " + type + " '" + tagNames[i] + "' = tags.tagName"
     }
+
+    if(tagNames.length > 0)
+    {
+        songQuery = songQuery + ")"
+    }
+
+    songQuery = songQuery + " GROUP BY posts.songName HAVING COUNT(DISTINCT tags.tagName) = " + tagNames.length
         
+    console.log(songQuery)
+
     var receivedSongs = db.prepare(songQuery).all(search);
 
     console.log(receivedSongs)
