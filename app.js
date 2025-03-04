@@ -597,7 +597,7 @@ app.post(apiPath+'postSearch',(req,res) => {
     search = search.replaceAll(" ","")
 
     let songQuery = `
-                        SELECT DISTINCT songID, songName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'
+                        SELECT DISTINCT posts.songID, posts.songName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'
                     `
 
 
@@ -605,8 +605,6 @@ app.post(apiPath+'postSearch',(req,res) => {
     {
         songQuery = songQuery + " AND '" + tagNames[i] + "' = tags.tagName"
     }
-
-    console.log(songQuery)
         
     var receivedSongs = db.prepare(songQuery).all(search);
 
