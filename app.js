@@ -541,6 +541,15 @@ app.get(apiPath+'tagSimilar/:name',(req,res) => {
     res.json(tags)
 })
 
+app.get(apiPath+'tagChildren/:id',(req,res) => {
+    const tags = db.prepare('SELECT childID FROM tagChildren WHERE tagID = ?').all(req.params.id);
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
+
 //#endregion
 
 //#region post api calls

@@ -13,45 +13,31 @@
 <script defer>
 
     /* These three arrays should have the same length, especially "tagNames" and "checksIfTagIsChild".
-       That way, they can act as parameters for addTagToPage().
-       ("tagNames" does not need the same length until displayTags() is called.) */
+       That way, they can act as pairs for addTagToPage().
+       "tagNames" does not need the same length until displayTags() is called. */
 
     let tagsToBeDisplayed = new Array()
-    let checksIfTagIsChild = new Array()
     let tagNames = new Array()
+    let checksIfTagIsChild = new Array()
 
     /**
-     * Gets all tags' IDs from the database and their children's IDs in order.
+     * Gets all tags' IDs from the database.
      * Stores the information in the tagsToBeDisplayed array.
+     * Calls getTagsToBeDisplayed() and getNames().
      * @returns nothing
     **/
     function getIDs() {
         fetch("http://localhost:3000/api/tagsOrdered")
         .then(response => response.json())
         .then(json => {
-            let tags = json
+            const tags = json
 
-            // Adds a tag's id for each one in the database. "tags" is sorted alphabetically.
+            console.log(tags)
+
+            // Adds a tag's ID for each one in the database. "tags" is sorted alphabetically.
             for (let i = 0; i < tags.length; i++){
-
-                tagsToBeDisplayed.push(tags[i].id)
-                checksIfTagIsChild.push(false)
-
-                tags[i].tagChildren = JSON.parse(tags[i].tagChildren) // Change tagChildren from a string to an array.
-
-                let length = tags[i].tagChildren.length
-
-                // If the tag has children, add the ids of them below it.
-                if (length > 0){
-                    
-                    for(let child = 0; child < length; child++) {
-
-                        let tagID = tags[i].tagChildren[child]
-
-                        tagsToBeDisplayed.push(tagID)
-                        checksIfTagIsChild.push(true)
-                    }
-                }
+                
+                getTagsToBeDisplayed(tags[i].tagID)
             }
 
             getNames()
@@ -60,27 +46,63 @@
     }
 
     /**
+     * Gets all of the tags that need to be displayed to the page; includes tags and their children.
+     * @param tagID is the tag the function gets tagChildren from.
+     * @returns nothing.
+    **/
+    function getTagsToBeDisplayed(tagID){
+        fetch("http://localhost:3000/api/tagChildren/" + tagID)
+        .then(response => response.json())
+        .then(json => {
+
+            // Always add the next tag.
+            tagsToBeDisplayed.push(tagID)
+            checksIfTagIsChild.push(false)
+
+            // If the tag has no children, no need to proceed further.
+            if (json.length == 0){
+                return
+            }
+
+            const tagChildren = json
+
+            // Adds all of the tag's children to tagsToBeDisplayed.
+            for (let i = 0; i < tagChildren.length; i++){
+
+                tagsToBeDisplayed.push(tagChildren[i].childID)
+                checksIfTagIsChild.push(true)
+
+            }
+        })
+    }
+
+    /**
      * Gets all of the tags' names from tagsToBeDisplayed's IDs and inserts them into tagNames.
      * Needs tagsToBeDisplayed to be initialized before called.
+     * Calls displayTags().
+     * @returns nothing.
     **/
     function getNames(){
         fetch("http://localhost:3000/api/tagsOrdered")
         .then(response => response.json())
         .then(json => {
 
+            console.log("getting names")
+
             tags = json
 
+            // !!! IMPORTANT !!!
             // Later on, add code so that it only displays 20-50 new tags each time it's called.
-            // That way, it's more performance efficient and loads the webpage faster.
+            // That way, it's more performance efficient and also loads the webpage faster in general.
 
             for (let i = 0; i < tagsToBeDisplayed.length; i++){
 
-                // Check for any tag with tagsToBeDisplayed's current ID.
+                // Check for any tag with tagsToBeDisplayed[i]'s current tagID.
                 // Once found, add its name to tagNames.
 
                 for (let o = 0; o < tags.length; o++){
 
-                    if (tags[o].id == tagsToBeDisplayed[i]){
+                    if (tags[o].tagID == tagsToBeDisplayed[i]){
                         tagNames.push(tags[o].tagName)
                     }
 
@@ -94,6 +116,7 @@
     /**
      * Displays all of the tags onto the page.
      * Needs "tagNames" and "checksIfTagIsChild" to be initialized before being called.
+     * @returns nothing.
     **/
     function displayTags(){
 
@@ -105,13 +128,15 @@
     /**
      * Adds a tag to the page.
      * LATER, EACH TAG SHOULD BE CLICKABLE AND TAKE USER TO SEARCH BAR WITH THE TAG THEY CLICKED ON.
+     * 
      * @param tagName is the name of the tag that will show up on the page.
      * @param isChild indents and puts a "-" before the tagName if true. Otherwise, it does nothing.
+     * @returns nothing.
     **/
     function addTagToPage(tagName, isChild){
 
-        //Line break needed so the input buttons stay in a column
-        //Button needed so that the user can go to its page
+        /* Line break needed so the input buttons stay in a column.
+           Button is needed so that the user can go to its page. */
         let lineBreak = document.createElement("br")
         let newButton = document.createElement("button")
 
@@ -128,7 +153,7 @@
         }
 
         // CHANGE THIS ATTRIBUTE IN THE FUTURE
-        //newButton.setAttribute("onclick", goToTagPage)
+        //newButton.setAttribute("onclick", goToTagPage(?))
 
         let body = document.getElementById("body")
         body.appendChild(newButton)
@@ -138,8 +163,7 @@
 
 </script>
 
-<!--Note: Make sure that this file uses CSS later.-->
-<body id = "body" onload = "getIDs()" style = "position:relative; top: 50px; left: 50px; background-color: gray;">
+<body id = "body" onload = "getIDs()" style = "position:relative; top: 50px; left: 100px; background-color: gray;">
     <label style = "font-size: 30px;">Tags</label>
     <br>
 </body>
