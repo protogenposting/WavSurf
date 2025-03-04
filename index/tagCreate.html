@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="en">
 
 <head>
     <meta charset = "UTF-8">
@@ -7,47 +7,39 @@
         name = "viewport"
         content = "width = device-width, initial-scale = 1"
     >
-    <title>Create Tag</title>
+    <title>WavSurf Tag Create</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
-<script defer>
-    /**
-     * Attempts to submit the user-created tag to the tagQueue.
-    **/
-    function submit() {
-
+<script>
+    function submit()
+    {
         fetch("http://localhost:3000/api/tagQueue", {
             method: "POST",
-
             headers: {
                 "Content-Type": "application/json",
                 "authorization": localStorage.getItem("sessionID")
             },
-
             body: JSON.stringify({
                 data: {
                     name: document.getElementById("name").value,
-                    children: JSON.parse(document.getElementById("children").value),
+                    parents: JSON.parse(document.getElementById("parents").value),
                     type: parseInt(document.getElementById("type").value),
                 }
             })
         });
+
     }
 </script>
 
 <body>
-    <!--Instructions and inputs for the user.-->
-    <label for = "name">Tag name:</label><br>
-    <input type = "text" id = "name" name = "name"><br>
+    <label for="name">Tag name:</label><br>
+    <input type="text" id="name" name="name"><br>
+    <label for="parents">Tag parents (JSON Array with the ids of each tag, change this to something else later)</label><br>
+    <input type="text" id="parents" name="parents"><br>
+    <label for="type">Tag Type (0 is artist, 1 is genre, 2 is misc)</label><br>
+    <input type="text" id="type" name="type"><br>
 
-    <label for = "children">Tag children (JSON Array with the ids of each tag, change this to something else later)</label><br>
-    <input type = "text" id = "children" name = "children"><br>
-
-    <label for = "type">Tag Type (0 is artist, 1 is genre, 2 is misc)</label><br>
-    <input type = "text" id = "type" name = "type"><br>
-
-    <!--Submits the information and attempts to send the tag to tagQueue when clicked.-->
-    <button type = "button" style = "top: 120px;" onclick = "submit()">Submit</button>
+    <button type="button" style = "top: 120px;" onclick="submit()">Submit</button>
 </body>
 </html>

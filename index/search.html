@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<!--Body contains all the details and front end content of the page-->
+<!--Body contains all the details and front end conent of the page-->
 <body>
     <div id="search">
         <input 
@@ -27,7 +27,8 @@
 </body>
 
 <!--Script for the search bar-->
-<script defer>
+<script>
+
     //Calls the searchMade method when enter key is pressed
     const searchId = document.getElementById("searchBar");
     searchId.onkeydown = function(event) {
@@ -75,6 +76,19 @@
             }
         });
     
+    }
+
+    function getSimilarTags(){
+        fetch("http://localhost:3000/api/postSearch", {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(json => {
+            
+        });
     }
 </script>
 </html>
