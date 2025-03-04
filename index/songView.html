@@ -84,7 +84,7 @@
         .then(json => {
             songData = json
 
-            embed.src = "https://www.youtube.com/embed/"+songData.links
+            embed.src = "https://www.youtube.com/embed/"+songData.link
 
             let tags = JSON.parse(songData.tags)
 
