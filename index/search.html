@@ -22,8 +22,10 @@
             placeholder = 'Song Name "Tag Name"'
             list="autoSuggest"
             oninput="getAutoCorrect()">
+        <!--Data is present but datalist wont update
+        try adding data to a label or other type of content-->
         <datalist id="autoSuggest">
-            
+            <option value="test"></option>
         </datalist>
             
     </div>
@@ -128,10 +130,11 @@
             .then(json => {
                 for(var i=0; i<json.length; i++) {
                     var newOption = document.createElement("option");
-                    newOption.setAttribute("value", json[i].tagName);
+                    newOption.value = json[i].tagName;
                     dataList.appendChild(newOption);
                     console.log(json[i]);
                 }
+                dataList.focus();
             });
             
         }
