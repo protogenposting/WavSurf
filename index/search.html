@@ -19,7 +19,13 @@
             id="searchBar"
             style = "font-size: 20px; width: 700px; left: 400px"
             type = "text"
-            placeholder = 'Song Name "Tag Name"'>
+            placeholder = 'Song Name "Tag Name"'
+            list="autoSuggest"
+            oninput="getAutoCorrect()">
+        <datalist id="autoSuggest">
+            
+        </datalist>
+            
     </div>
     <div id = "songs">
 
@@ -89,6 +95,46 @@
         .then(json => {
             
         });
+    }
+
+    function getAutoCorrect() {
+        var search = document.getElementById("searchBar").value;
+        var tagNames = [];
+        var reading = false;
+        var currentString = "";
+        var dataList = document.getElementById("autoSuggest");
+
+        for (var i=0; i < search.length; i++) {
+            var searchChar = search.charAt(i);
+            if (searchChar == '"') {
+                reading = !reading;
+                if (!reading) {
+                    currentString = "";
+                }
+            }else if (reading) {
+                currentString = currentString + searchChar;
+            }
+            console.log(currentString);
+        }
+        dataList.innerHTML = "";
+        if(currentString != ""){
+            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+                for(var i=0; i<json.length; i++) {
+                    var newOption = document.createElement("option");
+                    newOption.setAttribute("value", json[i].tagName);
+                    dataList.appendChild(newOption);
+                    console.log(json[i]);
+                }
+            });
+            
+        }
     }
 </script>
 </html>
