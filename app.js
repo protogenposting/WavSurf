@@ -116,7 +116,7 @@ const query = `
         rank INTEGER NOT NULL
     );
     CREATE TABLE IF NOT EXISTS tags (
-        id INTEGER PRIMARY KEY UNIQUE,
+        tagID INTEGER PRIMARY KEY UNIQUE,
         tagName STRING NOT NULL,
         type INTEGER NOT NULL
     );
@@ -129,7 +129,7 @@ const query = `
         postData STRING NOT NULL
     );
     CREATE TABLE IF NOT EXISTS posts (
-        id INTEGER PRIMARY KEY UNIQUE,
+        songID INTEGER PRIMARY KEY UNIQUE,
         songName STRING NOT NULL,
         link STRING NOT NULL
     );
@@ -148,15 +148,52 @@ const query = `
 db.exec(query)
 
 function addUser(name, username, password, rank) {
-    
+    const addData = db.prepare("INSERT INTO users (name, username, password, rank) VALUES (?,?,?,?)")
+
+    let result = addData.run(name,username,password,rank)
+
+    return result
 }
 
 function addTag(tagName, type, parents) {
+    const addData = db.prepare("INSERT INTO tags (tagName, type) VALUES (?,?)")
+    let result = addData.run(tagName, type);
+    
+    for(var i = 0; i < parents.length; i++)
+    {
+        let parentParents = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(parents[i]);
 
+        for(var o = 0; o < parentParents.length; o++)
+        {
+            if(parents.indexOf(parentParents[o].tagID) <= -1)
+            {
+                parents.push(parentParents[o].tagID)
+            }
+        }
+
+        const addData = db.prepare("INSERT INTO tagChildren (tagID, childID) VALUES (?,?)")
+        addData.run(parents[i],result.lastInsertRowid);
+    }
 }
 
-function addPost(songName, links) {
+function addPost(songName, link, tags) {
+    const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?,?)");
+    let result = addData.run(songName, link);
+    for(var i = 0; i < tags.length; i++)
+    {
+        let parentTags = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(tags[i]);
 
+        for(var o = 0; o < parentTags.length; o++)
+        {
+            if(tags.indexOf(parentTags[o].tagID) <= -1)
+            {
+                tags.push(parentTags[o].tagID)
+            }
+        }
+
+        const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
+        addData.run(tags[i],result.lastInsertRowid);
+    }
 }
 
 function populate() {
@@ -204,24 +241,31 @@ function populate() {
     //id = 15
     addTag('AlternativeIndie', 1, [1]);
     //id = 16
-    addTag('Drumpstep', 1, [9]);
+    addTag('Drumpstep', 1, [10,8]);
     //id = 17
     addTag('Deadmau5', 0, []);
     //id = 18
     addTag('Rob Swire', 0, []);
+    //id = 19
+    addTag('House', 1, [9]);
+    //id = 20
+    addTag('Hardbass', 1, [19]);
 
-    addPost('Ghosts n Stuff', 'pb-EwykPTv8');
-    addPost('My Heart', 'jK2aIUmmdP4');
-    addPost('Faded', '60ItHLz5WEA');
-    addPost('Force', 'lqYQXIt4SpA');
-    addPost('I Remember', '3UzvQowg9Po');
-    addPost('Devil Town', 'KvaxYUfGHnk');
-    addPost('Beird', 'fsrc_njfRTM');
-    addPost('Macintosh plus 2k17', 'CBIGJohVMgw');
-    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k');
-    addPost('Labyrinth', 'MdAzl3sOwmY');
-    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ');
+    addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18]);
+    addPost('My Heart', 'jK2aIUmmdP4',[16]);
+    addPost('Faded', '60ItHLz5WEA',[7]);
+    addPost('Force', 'lqYQXIt4SpA',[7]);
+    addPost('I Remember', '3UzvQowg9Po',[7]);
+    addPost('Devil Town', 'KvaxYUfGHnk',[1,5]);
+    addPost('Beird', 'fsrc_njfRTM',[3]);
+    addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11]);
+    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12]);
+    addPost('Labyrinth', 'MdAzl3sOwmY',[2,9]);
+    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9]);
+    addPost('Disco Panzer', 'uRSAatLI2QY',[20]);
 }
+
+populate()
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
@@ -313,9 +357,8 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
         deleteData.run(req.params.id);
 
         //insert the tag into the database
-        const addData = db.prepare("INSERT INTO tags (tagName, tagChildren, type) VALUES (?,?,)")
         const tagData = JSON.parse(tag.tagData);
-        addData.run(tagData.name, JSON.stringify(tagData.children),tagData.type);
+        addTag(tagData.name, tagData.type, JSON.stringify(tagData.parents));
     }
 })
 
@@ -361,26 +404,15 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
     if(verifyRank(req.headers.authorization,2))
     {
         const postQuery = db.prepare('SELECT * FROM postQueue WHERE id=?');
-
         const post = postQuery.get(req.params.id);
 
         const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
-        const addData = db.prepare("INSERT INTO posts (songName, tags, links) VALUES (?,?,?)");
-
         deleteData.run(req.params.id);
 
+        const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)");
         const postData = JSON.parse(post.postData);
-
-        addData.run(postData.songName, postData.tags, postData.links);
+        addPost(postData.songName, postData.tags, postData.links);
     }
-
-    //add the post adding thing
-
-    //const request = db.prepare("INSERT INTO postQueue (postData) VALUES (?)");
-
-    //console.log(req.body.data)
-
-    //let result = request.run(JSON.stringify(req.body.data))
 })
 
 //deny a tag and remove it from the queue permentantly
@@ -436,13 +468,7 @@ app.delete(apiPath+'user/:name',(req,res) => {
 
 //create a user :3
 app.post(apiPath+'newUser',(req,res) => {
-    const addData = db.prepare("INSERT INTO users (name, username, password, rank) VALUES (?,?,?,?)")
-    
-    console.log(req.body)
-
-    let result;
-
-    result = addData.run(req.body.name,req.body.username,req.body.password,0)
+    let result = addUser(req.body.name,req.body.username,req.body.password,0)
 
     res.json({result: result})
 })
@@ -499,12 +525,22 @@ app.get(apiPath+'tagsOrdered',(req,res) => {
 
 //?
 app.get(apiPath+'tags/:id',(req,res) => {
-    const tags = db.prepare('SELECT * FROM tags WHERE id = ?').get(req.params.id);
+    const tags = db.prepare('SELECT * FROM tags WHERE tagID = ?').get(req.params.id);
 
     console.log(tags);
 
     res.json(tags)
 })
+
+//this request sends back tags starting with the letters you send
+app.get(apiPath+'tagSimilar/:name',(req,res) => {
+    var tags = db.prepare("SELECT * FROM tags WHERE tagName LIKE ? || '%'").all(req.params.name);
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
 //#endregion
 
 //#region post api calls
@@ -517,7 +553,7 @@ app.get(apiPath+'posts',(req,res) => {
 
 //this request gives the data of a single post
 app.get(apiPath+'post/:id',(req,res) => {
-    const posts = db.prepare('SELECT * FROM posts WHERE id = ?').get(req.params.id);
+    const posts = db.prepare('SELECT * FROM posts WHERE songID = ?').get(req.params.id);
 
     console.log(posts);
 
@@ -527,7 +563,6 @@ app.get(apiPath+'post/:id',(req,res) => {
 //this request allows you to search for posts that fit specific search terms and tags.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
-    var tagsToSearch = [];
     var search = req.body.search;
     var reading = false;
     var currentString = "";
@@ -537,7 +572,7 @@ app.post(apiPath+'postSearch',(req,res) => {
         if (searchChar == '"') {
             reading = !reading;
             if (!reading) {
-                tagNames.push({name:currentString, parent: tagNames.length});
+                tagNames.push(currentString);
                 currentString = "";
                 
             }
@@ -550,56 +585,21 @@ app.post(apiPath+'postSearch',(req,res) => {
         }
     }
 
-    for (var i=0; i < tagNames.length; i++) {
-        while(tagsToSearch.length <= tagNames[i].parent)
-        {
-            tagsToSearch.push([])
-        }
-        var tagName = tagNames[i].name;
-        var receivedIds = db.prepare("SELECT * FROM tags WHERE tagName = ?");
-        var tag = receivedIds.get(tagName)
-        if(tag != undefined)
-        {
-            tag.children = JSON.parse(tag.tagChildren)
-            for (var o=0; o < tag.children.length; o++) {
-                var childTag = db.prepare("SELECT * FROM tags WHERE id = ?").get(tag.children[o])
-                tagNames.push({name:childTag.tagName, parent:tagNames[i].parent})
-            }
-            tagsToSearch[tagNames[i].parent].push(tag.id);
-        }
-    }
-
     search = search.replaceAll(" ","")
-    
-    var songQuery = db.prepare("SELECT * FROM posts WHERE songName LIKE '%' || ? || '%'");
-    var receivedSongs = songQuery.all(search);
-    for(var o = 0; o < receivedSongs.length; o++)
+
+    let songQuery = `
+                        SELECT DISTINCT songID, songName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'
+                    `
+
+
+    for(var i = 0; i < tagNames.length; i++)
     {
-        receivedSongs[o].tagChecks = JSON.parse(receivedSongs[o].tags)
+        songQuery = songQuery + " AND '" + tagNames[i] + "' = tags.tagName"
     }
 
-    //loop through every tag and check if each song has it. if not, remove it from the list
-    for(var o = 0; o < receivedSongs.length; o++)
-    {
-        receivedSongs[o].tagsNeeded = tagsToSearch.length
-        for(var i = 0; i < tagsToSearch.length; i++)
-        {
-            for(var e = 0; e < tagsToSearch[i].length; e++)
-            {
-                var index = receivedSongs[o].tagChecks.indexOf(tagsToSearch[i][e])
-                if(index > -1)
-                {
-                    receivedSongs[o].tagsNeeded--
-                    break;
-                }
-            }
-        }
-        if(receivedSongs[o].tagsNeeded > 0)
-        {
-            receivedSongs.splice(o,1)
-            o--
-        }
-    }
+    console.log(songQuery)
+        
+    var receivedSongs = db.prepare(songQuery).all(search);
 
     console.log(receivedSongs)
 
