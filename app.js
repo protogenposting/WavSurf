@@ -250,19 +250,27 @@ function populate() {
     addTag('House', 1, [9]);
     //id = 20
     addTag('Hardbass', 1, [19]);
+    //id = 21
+    addTag('Metal', 1, [1]);
+    //id = 22
+    addTag('Lyrics', 2, []);
+    //id = 23
+    addTag('Vocaloid', 2, [22]);
 
-    addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18]);
+    addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
-    addPost('Faded', '60ItHLz5WEA',[7]);
+    addPost('Faded', '60ItHLz5WEA',[7,22]);
     addPost('Force', 'lqYQXIt4SpA',[7]);
-    addPost('I Remember', '3UzvQowg9Po',[7]);
-    addPost('Devil Town', 'KvaxYUfGHnk',[1,5]);
-    addPost('Beird', 'fsrc_njfRTM',[3]);
-    addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11]);
-    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12]);
-    addPost('Labyrinth', 'MdAzl3sOwmY',[2,9]);
-    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9]);
-    addPost('Disco Panzer', 'uRSAatLI2QY',[20]);
+    addPost('I Remember', '3UzvQowg9Po',[7,22]);
+    addPost('Devil Town', 'KvaxYUfGHnk',[1,5,22]);
+    addPost('Beird', 'fsrc_njfRTM',[3,22]);
+    addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11,22]);
+    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12,22]);
+    addPost('Labyrinth', 'MdAzl3sOwmY',[2,9,22]);
+    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9,22]);
+    addPost('Disco Panzer', 'uRSAatLI2QY',[20,22]);
+    addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
+    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[21,9,23]);
 }
 
 populate()
@@ -560,6 +568,15 @@ app.get(apiPath+'post/:id',(req,res) => {
     res.json(posts);
 })
 
+//this request gives the data of a single post
+app.get(apiPath+'postTags/:id',(req,res) => {
+    const posts = db.prepare('SELECT * FROM songTags WHERE songID = ?').all(req.params.id);
+
+    console.log(posts);
+
+    res.json(posts);
+})
+
 //this request allows you to search for posts that fit specific search terms and tags.
 app.post(apiPath+'postSearch',(req,res) => {
     var tagNames = [];
@@ -589,22 +606,29 @@ app.post(apiPath+'postSearch',(req,res) => {
 
     let songQuery = `SELECT DISTINCT posts.songID, posts.songName, tags.tagName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'`
 
-    for(var i = 0; i < tagNames.length; i++)
-    {
-        let type = "AND ("
-        if(i > 0)
-        {
-            type = "OR"
-        }
-        songQuery = songQuery + " " + type + " '" + tagNames[i] + "' = tags.tagName"
-    }
-
     if(tagNames.length > 0)
     {
-        songQuery = songQuery + ")"
-    }
+        for(var i = 0; i < tagNames.length; i++)
+        {
+            let type = "AND ("
+            if(i > 0)
+            {
+                type = "OR"
+            }
+            songQuery = songQuery + " " + type + " '" + tagNames[i] + "' = tags.tagName"
+        }
 
-    songQuery = songQuery + " GROUP BY posts.songName HAVING COUNT(DISTINCT tags.tagName) = " + tagNames.length
+        if(tagNames.length > 0)
+        {
+            songQuery = songQuery + ")"
+        }
+
+        songQuery = songQuery + " GROUP BY posts.songName HAVING COUNT(DISTINCT tags.tagName) = " + tagNames.length
+    }
+    else
+    {
+        songQuery = songQuery + " GROUP BY posts.songName"
+    }
         
     console.log(songQuery)
 

@@ -85,16 +85,15 @@
             songData = json
 
             embed.src = "https://www.youtube.com/embed/"+songData.link
+        });
 
-            let tags = JSON.parse(songData.tags)
-
-            console.log(tags)
-
-            
-
-            for(var i = 0; i < tags.length; i++)
+        fetch("http://localhost:3000/api/postTags/"+songId)
+        .then(response => response.json())
+        .then(json => {
+            console.log(json)
+            for(var i = 0; i < json.length; i++)
             {
-                createTagButton(tags[i])
+                createTagButton(json[i].tagID)
             }
         });
     }
