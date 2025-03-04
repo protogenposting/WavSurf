@@ -256,6 +256,18 @@ function populate() {
     addTag('Lyrics', 2, []);
     //id = 23
     addTag('Vocaloid', 2, [22]);
+    //id = 24
+    addTag('Breakcore', 1, [9]);
+    //id = 25
+    addTag('Remix', 2, []);
+    //id = 26
+    addTag('Hardcore', 1, [9]);
+    //id = 27
+    addTag('T+Pazolite', 0, []);
+    //id = 28
+    addTag('Wayne Lytle', 0, []);
+    //id = 29
+    addTag('Kurorak', 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -271,6 +283,10 @@ function populate() {
     addPost('Disco Panzer', 'uRSAatLI2QY',[20,22]);
     addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
     addPost('ROT FOR CLOUT', '_AjJZEcMdww',[21,9,23]);
+    addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
+    addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27]);
+    addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28]);
+    addPost('Pyromania', '89v7_lyItwk',[26,29]);
 }
 
 populate()
