@@ -289,7 +289,7 @@ function populate() {
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
     addPost('Faded', '60ItHLz5WEA',[7,22]);
     addPost('Force', 'lqYQXIt4SpA',[7]);
-    addPost('I Remember', '3UzvQowg9Po',[7,22]);
+    addPost('I Remember', '3UzvQowg9Po',[7,22,17]);
     addPost('Devil Town', 'KvaxYUfGHnk',[1,5,22]);
     addPost('Beird', 'fsrc_njfRTM',[3,22]);
     addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11,22]);
@@ -311,7 +311,8 @@ function populate() {
     addPost('Meltdown', '06nVFlRZ1B0',[7]);
     addPost('Pipe Dream', 'HmoUSSVSV7I',[9,28,37]);
     addPost('Drum Machine', '0bPU4bdMlqM',[9,28,37]);
-    addPost('Drum Machine', 'i_6Z1VouytE',[9,28,37]);
+    addPost('Acoustic Curves', 'i_6Z1VouytE',[9,28,37]);
+    addPost('HYPER4ID', 'xYLkpQRe40I',[26,27]);
 }
 
 populate()
