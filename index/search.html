@@ -130,11 +130,11 @@
             .then(json => {
                 for(var i=0; i<json.length; i++) {
                     var newOption = document.createElement("option");
-                    newOption.value = json[i].tagName;
+                    newOption.value = '"'+json[i].tagName+'"';
                     dataList.appendChild(newOption);
                     console.log(json[i]);
                 }
-                dataList.focus();
+                document.getElementById("searchBar").focus();
             });
             
         }
