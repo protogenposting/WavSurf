@@ -282,7 +282,7 @@ function populate() {
     addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9,22]);
     addPost('Disco Panzer', 'uRSAatLI2QY',[20,22]);
     addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
-    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[21,9,23]);
+    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23]);
     addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
     addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27]);
     addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28]);
