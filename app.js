@@ -250,19 +250,43 @@ function populate() {
     addTag('House', 1, [9]);
     //id = 20
     addTag('Hardbass', 1, [19]);
+    //id = 21
+    addTag('Metal', 1, [1]);
+    //id = 22
+    addTag('Lyrics', 2, []);
+    //id = 23
+    addTag('Vocaloid', 2, [22]);
+    //id = 24
+    addTag('Breakcore', 1, [9]);
+    //id = 25
+    addTag('Remix', 2, []);
+    //id = 26
+    addTag('Hardcore', 1, [9]);
+    //id = 27
+    addTag('T+Pazolite', 0, []);
+    //id = 28
+    addTag('Wayne Lytle', 0, []);
+    //id = 29
+    addTag('Kurorak', 0, []);
 
-    addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18]);
+    addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
-    addPost('Faded', '60ItHLz5WEA',[7]);
+    addPost('Faded', '60ItHLz5WEA',[7,22]);
     addPost('Force', 'lqYQXIt4SpA',[7]);
-    addPost('I Remember', '3UzvQowg9Po',[7]);
-    addPost('Devil Town', 'KvaxYUfGHnk',[1,5]);
-    addPost('Beird', 'fsrc_njfRTM',[3]);
-    addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11]);
-    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12]);
-    addPost('Labyrinth', 'MdAzl3sOwmY',[2,9]);
-    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9]);
-    addPost('Disco Panzer', 'uRSAatLI2QY',[20]);
+    addPost('I Remember', '3UzvQowg9Po',[7,22]);
+    addPost('Devil Town', 'KvaxYUfGHnk',[1,5,22]);
+    addPost('Beird', 'fsrc_njfRTM',[3,22]);
+    addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11,22]);
+    addPost('Summer Is Over (Fury Weekend Remix)', 'L4eE_vvmo2k',[12,22]);
+    addPost('Labyrinth', 'MdAzl3sOwmY',[2,9,22]);
+    addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9,22]);
+    addPost('Disco Panzer', 'uRSAatLI2QY',[20,22]);
+    addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
+    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[21,9,23]);
+    addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
+    addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27]);
+    addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28]);
+    addPost('Pyromania', '89v7_lyItwk',[26,29]);
 }
 
 populate()
@@ -310,10 +334,6 @@ app.get('/login',(req,res) => {
 
 app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
-})
-
-app.get('/main',(req, res) => {
-    res.sendFile(path.join(__dirname, '/index/main.html'))
 })
 
 app.get('/moderation',(req, res) => {
@@ -545,15 +565,6 @@ app.get(apiPath+'tagSimilar/:name',(req,res) => {
     res.json(tags)
 })
 
-app.get(apiPath+'tagChildren/:id',(req,res) => {
-    const tags = db.prepare('SELECT childID FROM tagChildren WHERE tagID = ?').all(req.params.id);
-
-    console.log(tags);
-
-    res.json(tags)
-})
-
-
 //#endregion
 
 //#region post api calls
@@ -567,6 +578,15 @@ app.get(apiPath+'posts',(req,res) => {
 //this request gives the data of a single post
 app.get(apiPath+'post/:id',(req,res) => {
     const posts = db.prepare('SELECT * FROM posts WHERE songID = ?').get(req.params.id);
+
+    console.log(posts);
+
+    res.json(posts);
+})
+
+//this request gives the data of a single post
+app.get(apiPath+'postTags/:id',(req,res) => {
+    const posts = db.prepare('SELECT * FROM songTags WHERE songID = ?').all(req.params.id);
 
     console.log(posts);
 
@@ -600,18 +620,34 @@ app.post(apiPath+'postSearch',(req,res) => {
 
     search = search.replaceAll(" ","")
 
-    let songQuery = `
-                        SELECT DISTINCT songID, songName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'
-                    `
+    let songQuery = `SELECT DISTINCT posts.songID, posts.songName, tags.tagName FROM posts INNER JOIN songTags ON songTags.songID = posts.songID INNER JOIN tags ON songTags.tagID = tags.tagID WHERE songName LIKE '%' || ? || '%'`
 
-
-    for(var i = 0; i < tagNames.length; i++)
+    if(tagNames.length > 0)
     {
-        songQuery = songQuery + " AND '" + tagNames[i] + "' = tags.tagName"
-    }
+        for(var i = 0; i < tagNames.length; i++)
+        {
+            let type = "AND ("
+            if(i > 0)
+            {
+                type = "OR"
+            }
+            songQuery = songQuery + " " + type + " '" + tagNames[i] + "' = tags.tagName"
+        }
 
-    console.log(songQuery)
+        if(tagNames.length > 0)
+        {
+            songQuery = songQuery + ")"
+        }
+
+        songQuery = songQuery + " GROUP BY posts.songName HAVING COUNT(DISTINCT tags.tagName) = " + tagNames.length
+    }
+    else
+    {
+        songQuery = songQuery + " GROUP BY posts.songName"
+    }
         
+    console.log(songQuery)
+
     var receivedSongs = db.prepare(songQuery).all(search);
 
     console.log(receivedSongs)
