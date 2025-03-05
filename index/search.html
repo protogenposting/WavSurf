@@ -85,20 +85,11 @@
         });
     
     }
-
-    function getSimilarTags(){
-        fetch("http://localhost:3000/api/postSearch", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        })
-        .then(response => response.json())
-        .then(json => {
-            
-        });
-    }
-
+    
+    /**
+     * Finds autocorrect suggestions.
+     * Sends them to the html datalist to be displayed.
+     */
     function getAutoCorrect() {
         var search = document.getElementById("searchBar").value;
         var tagNames = [];
