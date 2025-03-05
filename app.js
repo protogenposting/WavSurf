@@ -241,7 +241,7 @@ function populate() {
     //id = 15
     addTag('AlternativeIndie', 1, [1]);
     //id = 16
-    addTag('Drumpstep', 1, [10,8]);
+    addTag('Drumstep', 1, [10,8]);
     //id = 17
     addTag('Deadmau5', 0, []);
     //id = 18
@@ -268,6 +268,22 @@ function populate() {
     addTag('Wayne Lytle', 0, []);
     //id = 29
     addTag('Kurorak', 0, []);
+    //id = 30
+    addTag('Donk', 1, [19]);
+    //id = 31
+    addTag('Swing', 1, []);
+    //id = 32
+    addTag('Electroswing', 1, [31,9]);
+    //id = 33
+    addTag('Tanger', 0, []);
+    //id = 34
+    addTag('Toriena', 0, []);
+    //id = 35
+    addTag('Speedcore', 1, [10]);
+    //id = 36
+    addTag('Dirty Androids', 0, []);
+    //id = 37
+    addTag('Orchestral', 1, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -285,8 +301,17 @@ function populate() {
     addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23]);
     addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
     addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27]);
-    addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28]);
+    addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28,37]);
     addPost('Pyromania', '89v7_lyItwk',[26,29]);
+    addPost('Donkey Donk', 'rnisur_Ejck',[30]);
+    addPost('Garakuta Doll Play', 'V70SUqD6n14',[32,25,33]);
+    addPost('BIKE', '6v98TpTscaw',[16,33]);
+    addPost('めでてえ', 'ilzoLbT-yoc',[35,34]);
+    addPost('Fiery Stallion', 'Xn9ZF8BtQu8',[12,1,36]);
+    addPost('Meltdown', '06nVFlRZ1B0',[7]);
+    addPost('Pipe Dream', 'HmoUSSVSV7I',[9,28,37]);
+    addPost('Drum Machine', '0bPU4bdMlqM',[9,28,37]);
+    addPost('Drum Machine', 'i_6Z1VouytE',[9,28,37]);
 }
 
 populate()
