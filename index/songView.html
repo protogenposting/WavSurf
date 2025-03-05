@@ -108,6 +108,17 @@
             // For every tag the song has, create a tag button for them.
             for(var i = 0; i < tags.length; i++) {
                 createTagButton(tags[i])
+
+            embed.src = "https://www.youtube.com/embed/"+songData.link
+        });
+
+        fetch("http://localhost:3000/api/postTags/"+songId)
+        .then(response => response.json())
+        .then(json => {
+            console.log(json)
+            for(var i = 0; i < json.length; i++)
+            {
+                createTagButton(json[i].tagID)
             }
         });
     }
