@@ -10,7 +10,7 @@
     <title>Main Page</title>
 </head>
 
-<script>
+<script defer type = "text/javascript">
 
     //Calls the search() method when enter key is pressed
     const searchId = document.getElementById("searchBar");
@@ -28,7 +28,27 @@
         console.log("not finished")
     }
 
+    function load(){
+        document.getElementById("search").onclick = function () {
+            location.href = "http://localhost:3000/search";
+        };
 
+        document.getElementById("login").onclick = function () {
+            location.href = "http://localhost:3000/login";
+        };
+
+        document.getElementById("signUp").onclick = function () {
+            location.href = "http://localhost:3000/signUp";
+        };
+
+        document.getElementById("postCreate").onclick = function () {
+            location.href = "http://localhost:3000/postCreate";
+        };
+
+        document.getElementById("tagCreate").onclick = function () {
+            location.href = "http://localhost:3000/tagCreate";
+        };
+    }
     
 </script>
 
@@ -44,19 +64,39 @@ Buttons that go to:
 Also a search bar but idk how to implement that
 -->
 
-<body style = "align-items: center; background-color: gray;">
+<body style = "align-items: center; background-color: gray;" onload = "load()">
 
-    <input type = "text" id = "searchBar" style = "font-size: 20px;"><br>
+    <input type = "text" id = "searchBar" style = "font-size: 20px;" placeholder = "note: this doesn't work yet"><br>
 
-    <button type = "button" style = "top: 120px; font-size: 20px;">Search</button><br><br>
+    <button
+        type = "button"
+        id = "search"
+        style = "top: 120px; font-size: 20px;">Search
+    </button><br><br>
 
-    <button type = "button" style = "top: 120px; font-size: 20px;">Login</button><br><br>
+    <button
+        type = "button"
+        id = "login"
+        style = "top: 120px; font-size: 20px;">Login
+    </button><br><br>
 
-    <button type = "button" style = "top: 120px; font-size: 20px;">SignUp</button><br><br>
+    <button
+        type = "button"
+        id = "signUp"
+        style = "top: 120px; font-size: 20px;">Sign Up
+    </button><br><br>
 
-    <button type = "button" style = "top: 120px; font-size: 20px;">Create Post</button><br><br>
+    <button
+        type = "button"
+        id = "postCreate"
+        style = "top: 120px; font-size: 20px;">Create Post
+    </button><br><br>
 
-    <button type = "button" style = "top: 120px; font-size: 20px;">Create Tag</button><br><br>
+    <button
+        type = "button"
+        id = "tagCreate"
+        style = "top: 120px; font-size: 20px;">Create Tag
+    </button><br><br>
 
 </body>
 
