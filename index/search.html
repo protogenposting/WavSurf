@@ -106,18 +106,35 @@
         var currentString = "";
         var dataList = document.getElementById("autoSuggest");
 
-        for (var i=0; i < search.length; i++) {
+        var lastQuotation = -1
+
+        for (var i = 0; i < search.length; i++) 
+        {
             var searchChar = search.charAt(i);
             if (searchChar == '"') {
                 reading = !reading;
                 if (!reading) {
+                    lastQuotation = -1
                     currentString = "";
                 }
-            }else if (reading) {
+                else
+                {
+                    lastQuotation = i
+                }
+            }
+            else if (reading) 
+            {
                 currentString = currentString + searchChar;
             }
             console.log(currentString);
         }
+
+        //delete the current tag from the search rq
+        if(lastQuotation > -1)
+        {
+            search = search.slice(0, lastQuotation + 1)
+        }
+
         dataList.innerHTML = "";
         if(currentString != ""){
             fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
@@ -130,7 +147,7 @@
             .then(json => {
                 for(var i=0; i<json.length; i++) {
                     var newOption = document.createElement("option");
-                    newOption.value = '"'+json[i].tagName+'"';
+                    newOption.value = search + json[i].tagName + '"';
                     dataList.appendChild(newOption);
                     console.log(json[i]);
                 }
