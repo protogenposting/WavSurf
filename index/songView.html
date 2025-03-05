@@ -92,25 +92,7 @@
         .then(response => response.json())
         .then(json => {
             songData = json
-
-            embed.title = songData.songName
-
-            /* Although the "links" property is plural and sounds like an array,
-               all it actually does is return a single string containing the Youtube video ID.
-               We should fix that later. */
-
-            embed.src = "https://www.youtube.com/embed/" + songData.links
-
-            let tags = JSON.parse(songData.tags)
-
-            // console.log(tags)
-
-            // For every tag the song has, create a tag button for them.
-            for(var i = 0; i < tags.length; i++) {
-                createTagButton(tags[i])
-            }
-            embed.src = "https://www.youtube.com/embed/"+songData.link
-            
+            embed.src = "https://www.youtube.com/embed/" + songData.link
         });
 
         fetch("http://localhost:3000/api/postTags/"+songId)

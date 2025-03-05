@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang = "en">
-
+ 
 <!--Head sets up viewport and css-->
 <head>
     <meta charset = "UTF-8">
@@ -11,11 +11,11 @@
     <title>WavSurf Search</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
+ 
 <!--Body contains all the details and front end conent of the page-->
 <body>
     <div id="search">
-        <input 
+        <input
             id="searchBar"
             style = "font-size: 20px; width: 700px; left: 400px"
             type = "text"
@@ -27,16 +27,16 @@
         <datalist id="autoSuggest">
             <option value="test"></option>
         </datalist>
-            
+           
     </div>
     <div id = "songs">
-
+ 
     </div>
 </body>
-
+ 
 <!--Script for the search bar-->
 <script>
-
+ 
     //Calls the searchMade method when enter key is pressed
     const searchId = document.getElementById("searchBar");
     searchId.onkeydown = function(event) {
@@ -70,22 +70,22 @@
             {
                 let lineBreak = document.createElement("br")
                 let hyperLink = document.createElement('a')
-
+ 
                 linkSpacing += 50;
-
+ 
                 hyperLink.textContent = json[i].songName
-
-                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
+ 
+                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].songID)
                 hyperLink.textContent = json[i].songName
                 hyperLink.style = "left: 75%; font-size: 30px; text-align: center; width: 700px; top:"+linkSpacing+"px";
-
+ 
                 songs.appendChild(hyperLink)
                 songs.appendChild(lineBreak)
             }
         });
-    
+   
     }
-    
+   
     /**
      * Finds autocorrect suggestions.
      * Sends them to the html datalist to be displayed.
@@ -96,10 +96,10 @@
         var reading = false;
         var currentString = "";
         var dataList = document.getElementById("autoSuggest");
-
+ 
         var lastQuotation = -1
-
-        for (var i = 0; i < search.length; i++) 
+ 
+        for (var i = 0; i < search.length; i++)
         {
             var searchChar = search.charAt(i);
             if (searchChar == '"') {
@@ -113,19 +113,19 @@
                     lastQuotation = i
                 }
             }
-            else if (reading) 
+            else if (reading)
             {
                 currentString = currentString + searchChar;
             }
             console.log(currentString);
         }
-
+ 
         //delete the current tag from the search rq
         if(lastQuotation > -1)
         {
             search = search.slice(0, lastQuotation + 1)
         }
-
+ 
         dataList.innerHTML = "";
         if(currentString != ""){
             fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
@@ -144,7 +144,7 @@
                 }
                 document.getElementById("searchBar").focus();
             });
-            
+           
         }
     }
 </script>
