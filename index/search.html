@@ -19,7 +19,15 @@
             id="searchBar"
             style = "font-size: 20px; width: 700px; left: 400px"
             type = "text"
-            placeholder = 'Song Name "Tag Name"'>
+            placeholder = 'Song Name "Tag Name"'
+            list="autoSuggest"
+            oninput="getAutoCorrect()">
+        <!--Data is present but datalist wont update
+        try adding data to a label or other type of content-->
+        <datalist id="autoSuggest">
+            <option value="test"></option>
+        </datalist>
+            
     </div>
     <div id = "songs">
 
@@ -67,7 +75,7 @@
 
                 hyperLink.textContent = json[i].songName
 
-                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].id)
+                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].songID)
                 hyperLink.textContent = json[i].songName
                 hyperLink.style = "left: 75%; font-size: 30px; text-align: center; width: 700px; top:"+linkSpacing+"px";
 
@@ -78,17 +86,62 @@
     
     }
 
-    function getSimilarTags(){
-        fetch("http://localhost:3000/api/postSearch", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
+    function getAutoCorrect() {
+        var search = document.getElementById("searchBar").value;
+        var tagNames = [];
+        var reading = false;
+        var currentString = "";
+        var dataList = document.getElementById("autoSuggest");
+
+        var lastQuotation = -1
+
+        for (var i = 0; i < search.length; i++) 
+        {
+            var searchChar = search.charAt(i);
+            if (searchChar == '"') {
+                reading = !reading;
+                if (!reading) {
+                    lastQuotation = -1
+                    currentString = "";
+                }
+                else
+                {
+                    lastQuotation = i
+                }
             }
-        })
-        .then(response => response.json())
-        .then(json => {
+            else if (reading) 
+            {
+                currentString = currentString + searchChar;
+            }
+            console.log(currentString);
+        }
+
+        //delete the current tag from the search rq
+        if(lastQuotation > -1)
+        {
+            search = search.slice(0, lastQuotation + 1)
+        }
+
+        dataList.innerHTML = "";
+        if(currentString != ""){
+            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+                for(var i=0; i<json.length; i++) {
+                    var newOption = document.createElement("option");
+                    newOption.value = search + json[i].tagName + '"';
+                    dataList.appendChild(newOption);
+                    console.log(json[i]);
+                }
+                document.getElementById("searchBar").focus();
+            });
             
-        });
+        }
     }
 </script>
 </html>
