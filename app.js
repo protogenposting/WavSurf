@@ -321,7 +321,7 @@ app.get('/style.css',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/style.css'))
 })
 
-app.get('/search',(req,res) => {
+app.get('/search/:search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 

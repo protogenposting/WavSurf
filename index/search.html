@@ -9,19 +9,21 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>WavSurf Search</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel = "stylesheet" href = "style.css">
 </head>
  
 <!--Body contains all the details and front end conent of the page-->
-<body>
-    <div id="search">
+<body onload = "mainPageSearch()">
+    <div id = "search">
         <input
-            id="searchBar"
+            id = "searchBar"
             style = "font-size: 20px; width: 700px; left: 400px"
             type = "text"
             placeholder = 'Song Name "Tag Name"'
             list="autoSuggest"
-            oninput="getAutoCorrect()">
+            oninput="getAutoCorrect()"
+        >
+
         <!--Data is present but datalist wont update
         try adding data to a label or other type of content-->
         <datalist id="autoSuggest">
@@ -29,6 +31,7 @@
         </datalist>
            
     </div>
+
     <div id = "songs">
  
     </div>
@@ -44,6 +47,32 @@
             searchMade();
         }
     }
+
+    /**
+     * Makes a search from the info at the end of the page's URL.
+     * Only called once. Doesn't go through if the URL doesn't have a search.
+     * @returns nothing
+    **/
+    function mainPageSearch() {
+
+        const URL = window.location.href
+
+        if (URL == "http://localhost:3000/search/"){
+            return
+        }
+
+        const endPoint = URL.lastIndexOf("/")
+
+        let mainSearch = window.location.href.slice(endPoint + 1, window.location.href.length)
+        let replacer = new RegExp("%22", 'g')
+
+        mainSearch = mainSearch.replace(replacer, '"')
+
+        document.getElementById("searchBar").value = mainSearch
+        searchMade()
+    }
+
+
     /**
      * Makes the search.
      * Searches for the song name if it is provided and tags if they are provided.
@@ -83,7 +112,6 @@
                 songs.appendChild(lineBreak)
             }
         });
-   
     }
    
     /**
