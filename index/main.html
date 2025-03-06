@@ -62,7 +62,13 @@
         const searchText = document.getElementById("searchBar").value
         console.log(searchText)
 
-        location.href = "http://localhost:3000/search/" + searchText
+        let URL = "http://localhost:3000/search"
+
+        if (!(searchText == "")){
+            URL += "/"
+        }
+
+        location.href = URL + searchText
     }
 
     /**
