@@ -59,7 +59,7 @@
 
         newInput.setAttribute("type", "text")
         newInput.setAttribute("id", (inputID))
-        newInput.setAttribute("name", "data")
+        newInput.setAttribute("name", "parent")
         newInput.setAttribute("style", "font-size: 20px; top :"+spacing+"px")
         newInput.setAttribute("list", "autoSuggest")
         newInput.setAttribute("oninput", "getAutoCorrect(this)")
@@ -99,10 +99,10 @@
     <div id="inputs">
         <!--Instructions and inputs for the user.-->
         <label style = "font-size: 20px; left: 570px;">Tag name:</label>
-        <input type="text" id="name" name="data" style="font-size: 20px;"><br>
+        <input type="text" id="name" name="name" style="font-size: 20px;"><br>
 
         <label style = "font-size: 20px; left: 570px; top: 30px;">Tag Type:</label>
-        <input type="text" id="type" name="data" style="font-size: 20px; top: 30px;"><br>
+        <input type="text" id="type" name="type" style="font-size: 20px; top: 30px;"><br>
         <label style="font-size: 20px; left: 570px; top: 60px;">Tag Parents:</label>
         <!--
         <label for="parents">Tag parents (JSON Array with the ids of each tag, change this to something else later)</label><br>
