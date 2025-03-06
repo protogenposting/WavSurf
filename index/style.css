@@ -49,7 +49,9 @@ input {
     left: 50%;
     transform: translate(-50%);
 }
-/**/
+/*Sets the properties for the "a" type content.
+Makes their positioning go off of the body.
+Sets the font and color*/
 a {
     position: absolute;
     left: 50%;
