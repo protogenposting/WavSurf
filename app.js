@@ -177,7 +177,7 @@ function addTag(tagName, type, parents) {
 }
 
 function addPost(songName, link, tags) {
-    const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?,?)");
+    const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?, ?)");
     let result = addData.run(songName, link);
     for(var i = 0; i < tags.length; i++)
     {
@@ -289,7 +289,7 @@ function populate() {
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
     addPost('Faded', '60ItHLz5WEA',[7,22]);
     addPost('Force', 'lqYQXIt4SpA',[7]);
-    addPost('I Remember', '3UzvQowg9Po',[7,22]);
+    addPost('I Remember', '3UzvQowg9Po',[7,22,17]);
     addPost('Devil Town', 'KvaxYUfGHnk',[1,5,22]);
     addPost('Beird', 'fsrc_njfRTM',[3,22]);
     addPost('Macintosh plus 2k17', 'CBIGJohVMgw',[11,22]);
@@ -311,7 +311,8 @@ function populate() {
     addPost('Meltdown', '06nVFlRZ1B0',[7]);
     addPost('Pipe Dream', 'HmoUSSVSV7I',[9,28,37]);
     addPost('Drum Machine', '0bPU4bdMlqM',[9,28,37]);
-    addPost('Drum Machine', 'i_6Z1VouytE',[9,28,37]);
+    addPost('Acoustic Curves', 'i_6Z1VouytE',[9,28,37]);
+    addPost('HYPER4ID', 'xYLkpQRe40I',[26,27]);
 }
 
 populate()
@@ -385,9 +386,9 @@ app.get(apiPath+'tagQueue',(req,res) => {
 //this request adds a new entry to the tag queue.
 app.post(apiPath+'tagQueue',(req,res) => {
     //verify that the session
+
     if(verifySessionKey(req.headers.authorization))
     {
-        //
         const request = db.prepare("INSERT INTO tagQueue (tagData) VALUES (?)");
 
         //parse the result and add it
@@ -448,6 +449,8 @@ app.post(apiPath+'postQueue',(req,res) => {
 
         let result = request.run(JSON.stringify(req.body.data))
 
+        console.log(req.body.data)
+
         res.json(result)
     }
 })
@@ -462,9 +465,12 @@ app.post(apiPath+'acceptPost/:id',(req,res) => {
         const deleteData = db.prepare("DELETE FROM postQueue WHERE id=?");
         deleteData.run(req.params.id);
 
-        const addData = db.prepare("INSERT INTO posts (songName, tags, link) VALUES (?,?,?)");
         const postData = JSON.parse(post.postData);
-        addPost(postData.songName, postData.tags, postData.links);
+        for(var i = 0; i < postData.tags.length; i++)
+        {
+            postData.tags[i] = db.prepare("SELECT * FROM tags WHERE tagName = ?").get(postData.tags[i]).tagID;
+        }
+        addPost(postData.songName, postData.link, postData.tags);
     }
 })
 

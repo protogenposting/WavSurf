@@ -35,6 +35,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "authorization": localStorage.getItem("sessionID")
             },
         })
         .then(getInfo())
@@ -49,6 +50,7 @@
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                "authorization": localStorage.getItem("sessionID")
             },
         })
         .then(getInfo())
