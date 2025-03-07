@@ -400,10 +400,11 @@ app.post(apiPath+'tagQueue',(req,res) => {
 
 //this request accepts a tag and add it to the main table
 app.post(apiPath+'acceptTag/:id',(req,res) => {
+    /*
     if(verifyRank(req.headers.authorization,2))
     {
         //get the tag
-        const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id = ?');
+        const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id=?');
         const tag = tagQuery.get(req.params.id);
 
         //delete the tag from the database
@@ -413,6 +414,22 @@ app.post(apiPath+'acceptTag/:id',(req,res) => {
         //insert the tag into the database
         const tagData = JSON.parse(tag.tagData);
         addTag(tagData.name, tagData.type, JSON.stringify(tagData.parents));
+    }
+    */
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const tagQuery = db.prepare('SELECT * FROM tagQueue WHERE id=?');
+        const tag = tagQuery.get(req.params.id);
+    
+        const deleteData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+        deleteData.run(req.params.id);
+    
+        const tagData = JSON.parse(tag.tagData);
+        for(var i = 0; i < tagData.parents.length; i++)
+        {
+            tagData.parents[i] = db.prepare("SELECT * FROM tags WHERE tagName = ?").get(tagData.parents[i]).tagID;
+        }
+        addTag(tagData.name, tagData.type, tagData.parents);
     }
 })
 

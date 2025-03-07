@@ -25,6 +25,16 @@
     **/
     function submit()
     {
+        let parents = []
+
+        for (let i = 1; i <= tagCount; i++) {
+            let info = document.getElementById("tag" + i.toString()).value
+
+            console.log(i)
+
+            parents.push(info)
+        }
+
         fetch("http://localhost:3000/api/tagQueue", {
             method: "POST",
             headers: {
@@ -34,7 +44,8 @@
             body: JSON.stringify({
                 data: {
                     name: document.getElementById("name").value,
-                    parents: JSON.parse(document.getElementById("parents").value),
+                    //parents: JSON.parse(document.getElementById("parents").value),
+                    parents: parents,
                     type: parseInt(document.getElementById("type").value),
                 }
             })
@@ -59,7 +70,7 @@
 
         newInput.setAttribute("type", "text")
         newInput.setAttribute("id", (inputID))
-        newInput.setAttribute("name", "parent")
+        newInput.setAttribute("name", "parents")
         newInput.setAttribute("style", "font-size: 20px; top :"+spacing+"px")
         newInput.setAttribute("list", "autoSuggest")
         newInput.setAttribute("oninput", "getAutoCorrect(this)")
