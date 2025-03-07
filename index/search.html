@@ -70,9 +70,12 @@
         const endPoint = URL.lastIndexOf("/")
 
         let mainSearch = window.location.href.slice(endPoint + 1, window.location.href.length)
-        let replacer = new RegExp("%22", 'g')
 
-        mainSearch = mainSearch.replace(replacer, '"')
+        const quotationReplacer = new RegExp("%22", 'g')
+        const spaceReplacer = new RegExp("%20", 'g')
+
+        mainSearch = mainSearch.replace(quotationReplacer, '"')
+        mainSearch = mainSearch.replace(spaceReplacer, ' ')
 
         document.getElementById("searchBar").value = mainSearch
         searchMade()

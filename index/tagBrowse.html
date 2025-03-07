@@ -101,7 +101,6 @@
                     if (tags[o].tagID == tagsToBeDisplayed[i]){
                         tagNames.push(tags[o].tagName)
                     }
-
                 }
             }
 
@@ -131,6 +130,8 @@
     **/
     function addTagToPage(tagName, isChild){
 
+        searchTag = tagName
+
         /* Line break needed so the input buttons stay in a column.
            Button is needed so that the user can go to its page. */
         let lineBreak = document.createElement("br")
@@ -138,6 +139,10 @@
 
         const text = document.createTextNode(tagName)
         const childText = document.createTextNode(" - " + tagName)
+
+        newButton.addEventListener('click', function(){
+            location.href = "http://localhost:3000/search/" + '"' + tagName + '"'
+        })
 
         if (isChild) {
             newButton.appendChild(childText)
@@ -148,13 +153,10 @@
             newButton.setAttribute("style", "font-size: 20px;")
         }
 
-        // CHANGE THIS ATTRIBUTE IN THE FUTURE
-        //newButton.setAttribute("onclick", goToTagPage(?))
-
         let body = document.getElementById("body")
         body.appendChild(newButton)
         body.appendChild(lineBreak)
-    }        
+    }
 
 </script>
 
