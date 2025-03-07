@@ -9,11 +9,17 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>WavSurf Search</title>
+
+    <!--For when the page is loaded WITHOUT a main page search, as URL won't have the extra slash.-->
     <link rel = "stylesheet" href = "style.css">
 </head>
  
-<!--Body contains all the details and front end conent of the page-->
+<!--Body contains all the details and front end content of the page-->
 <body onload = "mainPageSearch()">
+
+    <!--For when the user searches on the main page and goes to this page.-->
+    <link rel = "stylesheet" href = "/style.css">
+
     <div id = "search">
         <input
             id = "searchBar"

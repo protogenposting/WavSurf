@@ -8,59 +8,59 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>Main Page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<body style = "align-items: center; background-color: gray; position: absolute; left: 50px; top: 50px;" onload = "load()">
-
+<body onload = "load()">
+    
     <input
         type = "text"
         id = "searchBar"
-        style = "font-size: 20px;"
+        style = "top: 55px; font-size: 35px;"
         placeholder = 'Song Name "Tag Name"'
-    ><br>
+    >
 
     <button
         type = "button"
         id = "search"
         onclick = "search()"
-        style = "top: 120px; font-size: 20px;">Search
-    </button><br><br>
+        style = "top: 120px; font-size: 30px;">Search
+    </button>
 
     <button
         type = "button"
         id = "login"
-        style = "top: 120px; font-size: 20px;">Login
-    </button><br><br>
+        style = "top: 180px; font-size: 30px;">Login
+    </button>
 
     <button
         type = "button"
         id = "signUp"
-        style = "top: 120px; font-size: 20px;">Sign Up
-    </button><br><br>
+        style = "top: 240px; font-size: 30px;">Sign Up
+    </button>
 
     <button
         type = "button"
         id = "postCreate"
-        style = "top: 120px; font-size: 20px;">Create Post
-    </button><br><br>
+        style = "top: 300px; font-size: 30px;">Create Post
+    </button>
 
     <button
         type = "button"
         id = "tagCreate"
-        style = "top: 120px; font-size: 20px;">Create Tag
-    </button><br><br>
+        style = "top: 360px; font-size: 30px;">Create Tag
+    </button>
 
 </body>
 
 <script defer type = "text/javascript">
     
     /**
-     * Goes to the search page with the stuff the user entered. Or whatever Carson wanted lol
+     * Goes to the search page with the stuff the user entered.
     **/
     function search(){
 
         const searchText = document.getElementById("searchBar").value
-        console.log(searchText)
 
         let URL = "http://localhost:3000/search"
 
