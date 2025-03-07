@@ -140,6 +140,7 @@
         const text = document.createTextNode(tagName)
         const childText = document.createTextNode(" - " + tagName)
 
+        // Sends the user to the search page with the tag they clicked on.
         newButton.addEventListener('click', function(){
             location.href = "http://localhost:3000/search/" + '"' + tagName + '"'
         })
