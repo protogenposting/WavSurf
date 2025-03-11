@@ -17,7 +17,7 @@
     var spacing = 30;
     var buttonSpacing = 120;
     var buttonSpacing2 = 200;
-    var buttonSpacing3 = 60;
+    var buttonSpacing3 = 30;
 
     var tagCount = 0
 
@@ -26,7 +26,8 @@
     */
     function submit() {
 
-        //some setup stuff
+        //if there's no song name, use title of the youtube video (?)
+        let popup = document.getElementById("popup")
         let songName = document.getElementById("songName").value
         let youtubeUrl = document.getElementById("youtubeUrl").value
         let youtubeID
@@ -75,7 +76,12 @@
                     link: youtubeID
                 }
             })
-        })
+        }).then((response) => {
+            if (response.status == 401) {
+                popup.textContent="Please log in"
+                
+            }
+        });
         
     }
 
@@ -83,6 +89,7 @@
      * Adds another input HTML element below the submit button that allows the user to add another link for the song.
     **/
     function addAnotherInput(){
+
         tagCount += 1
         spacing += 30;
         buttonSpacing += 30;
@@ -191,7 +198,7 @@
         </button><br>
     
         <!--Warns the user or tells them post has been created.-->
-        <label id = "popup" style = "font-size: 20px;"> </label>
+        <a href="http://localhost:3000/login" style="font-size: 20px; width : 999px; "><label id = "popup" style = "text-decoration-line: underline;"></label></a>
     </div>
 
 </body>
