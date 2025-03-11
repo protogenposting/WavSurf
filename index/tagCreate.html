@@ -17,6 +17,7 @@
     var buttonSpacing = 120;
     var buttonSpacing2 = 200;
     var buttonSpacing3 = 60;
+    var buttonSpacing4 = 50;
 
     var tagCount = 0
 
@@ -54,6 +55,7 @@
             console.log(response.status);
             if (response.status == 401) {
                 popup.textContent="Please log in"
+                popup.style.top=buttonSpacing4+"px"
             }
         });
 
@@ -65,6 +67,7 @@
         buttonSpacing += 30;
         buttonSpacing2 += 30;
         buttonSpacing3 += 30;
+        buttonSpacing4 += 30;
 
         //Line break needed so the input buttons stay in a column
         //Label created so user understands purpose of input
@@ -135,7 +138,7 @@
         <button id="submitBtn" type="button" style = "top: 200px; height: 75px; width: 150px; font-size: 20px;" onclick="submit()">Submit</button>
     </div>
     
-    <a href="http://localhost:3000/login" style="top: 90px; font-size: 20px; width : 999px; "><label id="popup" style = "text-decoration-line: underline;" ></label></a>
+    <a href="http://localhost:3000/login" style="font-size: 20px; width : 999px; "><label id="popup" style = "text-decoration-line: underline;" ></label></a>
     
 </body>
 </html>

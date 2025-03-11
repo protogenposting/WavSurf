@@ -17,7 +17,7 @@
     var spacing = 30;
     var buttonSpacing = 120;
     var buttonSpacing2 = 200;
-    var buttonSpacing3 = 60;
+    var buttonSpacing3 = 30;
 
     var tagCount = 0
 
@@ -79,6 +79,7 @@
         }).then((response) => {
             if (response.status == 401) {
                 popup.textContent="Please log in"
+                
             }
         });
         
@@ -197,7 +198,7 @@
         </button><br>
     
         <!--Warns the user or tells them post has been created.-->
-        <label id = "popup" style = "font-size: 20px;"> </label>
+        <a href="http://localhost:3000/login" style="font-size: 20px; width : 999px; "><label id = "popup" style = "text-decoration-line: underline;"></label></a>
     </div>
 
 </body>
