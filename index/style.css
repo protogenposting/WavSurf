@@ -28,7 +28,7 @@ popup {
     left: 50%;
     transform: translate(-50%);
     font-family: Verdana, Geneva, Tahoma, sans-serif;
-    color: rgb(185, 3, 3);
+    /*color: rgb(185, 3, 3);*/
 }
 
 /*Sets the properties for the "button" type content.

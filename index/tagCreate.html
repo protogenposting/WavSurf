@@ -25,6 +25,7 @@
     **/
     function submit()
     {
+        let popup = document.getElementById("popup")
         let parents = []
 
         for (let i = 1; i <= tagCount; i++) {
@@ -49,6 +50,11 @@
                     type: parseInt(document.getElementById("type").value),
                 }
             })
+        }).then((response) => {
+            console.log(response.status);
+            if (response.status == 401) {
+                popup.textContent="Please log in"
+            }
         });
 
     }
@@ -128,5 +134,8 @@
         <!--Submits the information and attempts to send the tag to tagQueue when clicked.-->
         <button id="submitBtn" type="button" style = "top: 200px; height: 75px; width: 150px; font-size: 20px;" onclick="submit()">Submit</button>
     </div>
+    
+    <a href="http://localhost:3000/login" style="top: 90px; font-size: 20px; width : 999px; "><label id="popup" style = "text-decoration-line: underline;" ></label></a>
+    
 </body>
 </html>

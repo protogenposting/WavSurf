@@ -24,7 +24,7 @@
     function submit() {
 
         //if there's no song name, use title of the youtube video (?)
-        
+        let popup = document.getElementById("popup")
         let songName = document.getElementById("songName").value
         let youtubeUrl = document.getElementById("youtubeUrl").value
         let youtubeID
@@ -72,7 +72,11 @@
                     link: youtubeID
                 }
             })
-        })
+        }).then((response) => {
+            if (response.status == 401) {
+                popup.textContent="Please log in"
+            }
+        });
         
     }
 
@@ -80,6 +84,7 @@
      * Adds another input HTML element below the submit button that allows the user to add another link for the song.
     **/
     function addAnotherInput(){
+
         tagCount += 1
         spacing += 30;
         buttonSpacing += 30;
