@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+    <meta charset = "UTF-8">
+    <meta
+        name = "viewport"
+        content = "width = device-width, initial-scale = 1"
+    >
+    <title>Post Edit</title>
+</head>
+
+<!--
+Called from songView.
+
+Should be accessible to moderators only.
+
+Displays the post's information on the left and then inputs for changing the information on the right
+-->
+
+<script defer>
+
+    /**
+     * Gets the Song ID (AKA Post ID) from the end of the page's URL and returns it.
+    **/
+    function getPostID() {
+        const URL = window.location.href
+        const endPoint = URL.lastIndexOf("/")
+
+        return URL.slice(endPoint + 1, URL.length)
+    }
+
+</script>
+
+<body>
+    <div id = "info">
+        <label style = "font-size: 25;">Song Name: </label>
+        <br>
+        <label style = "font-size: 25;">Youtube ID: </label>
+        <br>
+        <label style = "font-size: 25;">Artist Tag(s): </label>
+        <br>
+        <label style = "font-size: 25;">Genre Tag(s): </label>
+        <br>
+        <label style = "font-size: 25;">Misc Tag(s): </label>
+        <br>
+    </div>
+
+    <div id = "newInfo">
+        <input
+            type = "text"
+            style = "font-size: 25;"
+            preview = "Song Name">
+        </input>
+        <br>
+
+        <input
+            type = "text"
+            style = "font-size: 25;">
+        </input>
+        <br>
+
+        <input
+            type = "text"
+            style = "font-size: 25;">
+        </input>
+        <br>
+
+        <input
+            type = "text"
+            style = "font-size: 25;">
+        </input>
+        <br>
+
+        <input
+            type = "text"
+            style = "font-size: 25;">
+        </input>
+        <br>
+    </div>
+
+    <div id = "properties">
+    </div>
+
+</body>
+
