@@ -366,7 +366,7 @@ app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
 })
 
-app.get('/main',(req, res) => {
+app.get('/',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/main.html'))
 })
 
