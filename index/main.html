@@ -8,56 +8,91 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>Main Page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
-<script>
+<body onload = "load()">
+    
+    <input
+        type = "text"
+        id = "searchBar"
+        style = "top: 55px; font-size: 35px;"
+        placeholder = 'Song Name "Tag Name"'
+    >
 
-    //Calls the search() method when enter key is pressed
-    const searchId = document.getElementById("searchBar");
+    <button
+        type = "button"
+        id = "search"
+        onclick = "search()"
+        style = "top: 120px; font-size: 30px;">Search
+    </button>
 
-    searchId.onkeydown = function(event) {
-        if(event.keyCode == 13) {
-            search();
+    <button
+        type = "button"
+        id = "login"
+        style = "top: 180px; font-size: 30px;">Login
+    </button>
+
+    <button
+        type = "button"
+        id = "signUp"
+        style = "top: 240px; font-size: 30px;">Sign Up
+    </button>
+
+    <button
+        type = "button"
+        id = "postCreate"
+        style = "top: 300px; font-size: 30px;">Create Post
+    </button>
+
+    <button
+        type = "button"
+        id = "tagCreate"
+        style = "top: 360px; font-size: 30px;">Create Tag
+    </button>
+
+</body>
+
+<script defer type = "text/javascript">
+    
+    /**
+     * Goes to the search page with the stuff the user entered.
+    **/
+    function search(){
+
+        const searchText = document.getElementById("searchBar").value
+
+        let URL = "http://localhost:3000/search"
+
+        if (!(searchText == "")){
+            URL += "/"
         }
+
+        location.href = URL + searchText
     }
 
     /**
-     * Goes to the search page with the stuff the user entered. Or whatever Carson wanted lol
+     * Loads all of the URLs the buttons will go to.
+     * Put in a function because inlining it looks kinda ugly
     **/
-    function search(){
-        console.log("not finished")
+    function load(){
+        document.getElementById("login").onclick = function () {
+            location.href = "http://localhost:3000/login";
+        };
+
+        document.getElementById("signUp").onclick = function () {
+            location.href = "http://localhost:3000/signUp";
+        };
+
+        document.getElementById("postCreate").onclick = function () {
+            location.href = "http://localhost:3000/postCreate";
+        };
+
+        document.getElementById("tagCreate").onclick = function () {
+            location.href = "http://localhost:3000/tagCreate";
+        };
     }
-
-
     
 </script>
-
-<!-- MAIN PAGE SHOULD HAVE: 
- 
-Buttons that go to:
-    Login
-    SignUp
-    Search
-    PostCreate
-    TagCreate
-
-Also a search bar but idk how to implement that
--->
-
-<body style = "align-items: center; background-color: gray;">
-
-    <input type = "text" id = "searchBar" style = "font-size: 20px;"><br>
-
-    <button type = "button" style = "top: 120px; font-size: 20px;">Search</button><br><br>
-
-    <button type = "button" style = "top: 120px; font-size: 20px;">Login</button><br><br>
-
-    <button type = "button" style = "top: 120px; font-size: 20px;">SignUp</button><br><br>
-
-    <button type = "button" style = "top: 120px; font-size: 20px;">Create Post</button><br><br>
-
-    <button type = "button" style = "top: 120px; font-size: 20px;">Create Tag</button><br><br>
-
-</body>
 
 </html>

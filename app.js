@@ -326,6 +326,10 @@ app.get('/search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
+app.get('/search/:search',(req,res) => {
+    res.sendFile(path.join(__dirname, '/index/search.html'))
+})
+
 app.get('/postSearch',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/postSearch.html'))
 })
