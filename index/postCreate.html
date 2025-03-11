@@ -14,11 +14,12 @@
 <!--Only available after the page is done loading and has interpreted it.-->
 <script defer>
 
-    let otherLinksCount = 0;
     var spacing = 30;
     var buttonSpacing = 120;
     var buttonSpacing2 = 200;
     var buttonSpacing3 = 60;
+
+    var tagCount = 0
 
     function submit() {
 
@@ -47,14 +48,15 @@
             popup.textContent = "Post added to queue!"
             popup.style.top = buttonSpacing3+"px";
         }
+        
+        let tags = []
 
-        let allLinks = []
-        allLinks.push(youtubeID)
+        for (let i = 1; i <= tagCount; i++) {
+            let link = document.getElementById("tag" + i.toString()).value
 
-        for (let i = 1; i <= otherLinksCount; i++) {
-            let link = document.getElementById("A" + i.toString).value
+            console.log(i)
 
-            allLinks.push(link)
+            tags.push(link)
         }
 
         fetch("http://localhost:3000/api/postQueue", {
@@ -66,8 +68,8 @@
             body: JSON.stringify({
                 data: {
                     songName: songName,
-                    tags: [0],
-                    links: allLinks
+                    tags: tags,
+                    link: youtubeID
                 }
             })
         })
@@ -78,7 +80,7 @@
      * Adds another input HTML element below the submit button that allows the user to add another link for the song.
     **/
     function addAnotherInput(){
-        otherLinksCount += 1
+        tagCount += 1
         spacing += 30;
         buttonSpacing += 30;
         buttonSpacing2 += 30;
@@ -96,12 +98,14 @@
 
         //Create the actual input and set its elements
         let newInput = document.createElement("input")
-        const inputID = "A" + otherLinksCount.toString
+        const inputID = "tag" + tagCount.toString()
 
         newInput.setAttribute("type", "text")
         newInput.setAttribute("id", (inputID))
         newInput.setAttribute("name", "data")
         newInput.setAttribute("style", "font-size: 20px; top :"+spacing+"px")
+        newInput.setAttribute("list", "autoSuggest")
+        newInput.setAttribute("oninput", "getAutoCorrect(this)")
 
         let div = document.getElementById("buttons")
         let firstButton = document.getElementById("firstButton")
@@ -113,6 +117,25 @@
         firstButton.style.top = buttonSpacing+"px";
         secondButton.style.top = buttonSpacing2+"px";
         
+    }
+    function getAutoCorrect(searchBar) {
+        var dataList = document.getElementById("autoSuggest");
+        dataList.innerHTML = ""
+        fetch("http://localhost:3000/api/tagSimilar/"+searchBar.value, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(json => {
+            for(var i=0; i<json.length; i++) {
+                var newOption = document.createElement("option");
+                newOption.value = json[i].tagName;
+                dataList.appendChild(newOption);
+            }
+            searchBar.focus();
+        });
     }
 </script>
 <body id = "body1">
@@ -134,6 +157,11 @@
             name = "data"
             style = "font-size: 20px; top: 30px;">
         </input><br>
+
+        <label style = "font-size: 20px; left: 540px; top: 60px;">Tag Names:</label>
+
+        <datalist id="autoSuggest">
+        </datalist>
     </div>
 
     <div id = "buttons">
@@ -143,7 +171,7 @@
             type = "button";
             style = "height: 75px; width: 200px; font-size: 20px; top : 120px;"
             onclick = "addAnotherInput()">
-            Add Other Option
+            Add Tag
         </button>
     
         <!--Attempts to create a post when clicked. Calls submit().-->
