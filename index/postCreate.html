@@ -21,10 +21,12 @@
 
     var tagCount = 0
 
+    /**
+     * this function submits the data to the server
+    */
     function submit() {
 
-        //if there's no song name, use title of the youtube video (?)
-        
+        //some setup stuff
         let songName = document.getElementById("songName").value
         let youtubeUrl = document.getElementById("youtubeUrl").value
         let youtubeID
@@ -35,13 +37,11 @@
             popup.style.top = buttonSpacing3+"px";
             return
         }
-
         else if (youtubeUrl.length < 11) {
             popup.textContent = "Youtube ID is too short! Not 11 digits long!"
             popup.style.top = buttonSpacing3+"px";
             return
         }
-
         else {
             //gets the last 11 digits of the URL because no matter what format the link is in, the ID is always last
             youtubeID = youtubeUrl.substr(length - 11)
@@ -49,9 +49,11 @@
             popup.style.top = buttonSpacing3+"px";
         }
         
+        //the tags we got from the page
         let tags = []
 
         for (let i = 1; i <= tagCount; i++) {
+            //add each tag
             let link = document.getElementById("tag" + i.toString()).value
 
             console.log(i)
@@ -59,11 +61,12 @@
             tags.push(link)
         }
 
+        //sent it on over to the post queue
         fetch("http://localhost:3000/api/postQueue", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
-                "authorization": localStorage.getItem("sessionID")
+                "authorization": localStorage.getItem("sessionID") //sent authorization to the server so it knows we're logged in
             },
             body: JSON.stringify({
                 data: {
@@ -118,6 +121,9 @@
         secondButton.style.top = buttonSpacing2+"px";
         
     }
+    /**
+     * this function gets the auto correct result of the current tag input
+    */
     function getAutoCorrect(searchBar) {
         var dataList = document.getElementById("autoSuggest");
         dataList.innerHTML = ""
@@ -138,6 +144,7 @@
         });
     }
 </script>
+
 <body id = "body1">
     <div id="inputs">
         <!--User inputs the song's name here.-->
@@ -165,7 +172,7 @@
     </div>
 
     <div id = "buttons">
-        <!--Includes another option for another link when clicked. Calls addAnotherInput().-->
+        <!--Includes another option for another parent tag when clicked. Calls addAnotherInput().-->
         <button
             id = "firstButton"
             type = "button";
