@@ -18,7 +18,10 @@
         id = "searchBar"
         style = "top: 55px; font-size: 35px;"
         placeholder = 'Song Name "Tag Name"'
+        list="autoSuggest"
+        oninput="getAutoCorrect()"
     >
+    <datalist id="autoSuggest"></datalist>
 
     <button
         type = "button"
@@ -54,7 +57,12 @@
 </body>
 
 <script defer type = "text/javascript">
-    
+    const searchId = document.getElementById("searchBar");
+    searchId.onkeydown = function(event) {
+        if(event.keyCode == 13) {
+            search()
+        }
+    }
     /**
      * Goes to the search page with the stuff the user entered.
     **/
@@ -91,6 +99,67 @@
         document.getElementById("tagCreate").onclick = function () {
             location.href = "http://localhost:3000/tagCreate";
         };
+    }
+    /**
+     * Finds autocorrect suggestions.
+     * Sends them to the html datalist to be displayed.
+     */
+     function getAutoCorrect() {
+        var search = document.getElementById("searchBar").value;
+        var tagNames = [];
+        var reading = false;
+        var currentString = "";
+        var dataList = document.getElementById("autoSuggest");
+ 
+        var lastQuotation = -1
+ 
+        for (var i = 0; i < search.length; i++)
+        {
+            var searchChar = search.charAt(i);
+            if (searchChar == '"') {
+                reading = !reading;
+                if (!reading) {
+                    lastQuotation = -1
+                    currentString = "";
+                }
+                else
+                {
+                    lastQuotation = i
+                }
+            }
+            else if (reading)
+            {
+                currentString = currentString + searchChar;
+            }
+            console.log(currentString);
+        }
+ 
+        //Delete the current tag from the search rq
+        if(lastQuotation > -1)
+        {
+            search = search.slice(0, lastQuotation + 1)
+        }
+ 
+        dataList.innerHTML = "";
+        if(currentString != ""){
+            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+                for(var i=0; i<json.length; i++) {
+                    var newOption = document.createElement("option");
+                    newOption.value = search + json[i].tagName + '"';
+                    dataList.appendChild(newOption);
+                    console.log(json[i]);
+                }
+                document.getElementById("searchBar").focus();
+            });
+           
+        }
     }
     
 </script>
