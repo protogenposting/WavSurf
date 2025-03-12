@@ -14,6 +14,7 @@
 <script>
     //queue array that stores the queue data
     var queue = []
+    let popup = document.getElementById("popup");
 
     /**
      * Gets the information from the tagQueue and displayes it on the page.
@@ -29,6 +30,20 @@
             document.getElementById('p1').innerHTML = JSON.stringify(json[0]);
             console.log(json);
         });
+        
+        if (localStorage.getItem("username") == undefined) {
+            window.location.href = "http://localhost:3000/login"
+        }
+        fetch("http://localhost:3000/api/user/"+localStorage.getItem("username"))
+        .then(response => response.json())
+        .then(json => {
+            if (json.user.rank < 2) {
+                window.location.href = "http://localhost:3000/login"
+            }
+            console.log(json)
+            console.log(json.user.rank)
+        });
+
     }
 
     /**
@@ -75,6 +90,8 @@
 
     <!--When clicked runs the deny() function-->
     <button type = "button" onclick="deny()">Deny</button><br>
+
+    <label id ="popup"></label>
 
     <!--Displayes the first bit of tagQueue data on the page-->
     <p id = "p1">placeholder</p>
