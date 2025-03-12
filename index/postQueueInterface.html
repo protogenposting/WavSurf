@@ -32,13 +32,13 @@
         });
 
         if (localStorage.getItem("username") == undefined) {
-            window.location.href = "http://localhost:3000/login"
+            window.location.href = "http://localhost:3000/noAccess"
         }
         fetch("http://localhost:3000/api/user/"+localStorage.getItem("username"))
         .then(response => response.json())
         .then(json => {
             if (json.user.rank < 2) {
-                window.location.href = "http://localhost:3000/login"
+                window.location.href = "http://localhost:3000/noAccess"
             }
             console.log(json)
             console.log(json.user.rank)

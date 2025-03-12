@@ -378,6 +378,10 @@ app.get('/postEdit/:songID',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postEdit.html'))
 })
 
+app.get('/noAccess',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/noAccess.html'))
+})
+
 //#endregion
 
 //#region tag queue api calls
