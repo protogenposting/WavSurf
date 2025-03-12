@@ -21,6 +21,7 @@
         let password = document.getElementById("password").value
 
         let popup = document.getElementById("popup")
+        popup.style = "top: 65px; font-size: 20px;"
         
         //If username or password are null, warn user and prevent from entering.
         if (username.length === 0 || username === null && password.length === 0 || password === null) {
@@ -58,8 +59,8 @@
                 }
                 else
                 {
-                    popup.textContent = "account created"
-                    popup.style = "color : #000000; font-size: 20px"
+                    popup.textContent = "Account created!"
+                    popup.style = "color : #000000; top: 65px; font-size: 20px;"
                 }
             })
     }
@@ -87,12 +88,12 @@
 
     <!--Attempts to sign in when clicked. Calls trySignUp().-->
     <button
-        style = "height: 50px; width: 100px; font-size: 20px;"
+        style = "height: 50px; width: 100px; font-size: 20px; top: 100px;"
         type = "button"
         onclick = "trySignUp()">Sign Up</button>
     <br>
 
-    <!--For warning the user.-->
+    <!--For alerting the user.-->
     <popup id = "popup" style = "font-size: 20px;"> </popup>
 </body>
 

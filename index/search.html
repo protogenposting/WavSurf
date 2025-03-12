@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang = "en">
-
+ 
+<!--Head sets up viewport and css-->
 <head>
     <meta charset = "UTF-8">
     <meta
@@ -8,24 +9,179 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>WavSurf Search</title>
-    <link rel="stylesheet" href="style.css">
+
+    <!--For when the page is loaded WITHOUT a main page search, as URL won't have the extra slash.-->
+    <link rel = "stylesheet" href = "style.css">
 </head>
+ 
+<!--Body contains all the details and front end content of the page-->
+<body onload = "mainPageSearch()">
 
-<script>
-    var tags = []
+    <!--For when the user searches on the main page and goes to this page.-->
+    <link rel = "stylesheet" href = "/style.css">
 
-    fetch("http://localhost:3000/api/tags")
-    .then(response => response.json())
-    .then(json => {
-        tags = json;
-        document.getElementById('tags').innerHTML = JSON.stringify(json);
-        console.log(json);
-    });
+    <div id = "search">
+        <input
+            id = "searchBar"
+            style = "font-size: 20px; width: 700px; left: 400px"
+            type = "text"
+            placeholder = 'Song Name "Tag Name"'
+            list="autoSuggest"
+            oninput="getAutoCorrect()"
+        >
 
-</script>
+        <!--Data is present but datalist wont update
+        try adding data to a label or other type of content-->
+        <datalist id="autoSuggest">
+        </datalist>
+           
+    </div>
 
-<body>
-    <p id = "tags"></p>
+    <div id = "songs">
+ 
+    </div>
 </body>
+ 
+<!--Script for the search bar-->
+<script>
+ 
+    //Calls the searchMade method when enter key is pressed
+    const searchId = document.getElementById("searchBar");
+    searchId.onkeydown = function(event) {
+        if(event.keyCode == 13) {
+            searchMade();
+        }
+    }
 
+    /**
+     * Makes a search from the info at the end of the page's URL.
+     * Only called once. Doesn't go through if the URL doesn't have a search.
+     * @returns nothing
+    **/
+    function mainPageSearch() {
+
+        const URL = window.location.href
+
+        if (URL == "http://localhost:3000/search" || URL == "http://localhost:3000/search/"){
+            return
+        }
+
+        const endPoint = URL.lastIndexOf("/")
+
+        let mainSearch = window.location.href.slice(endPoint + 1, window.location.href.length)
+
+        const quotationReplacer = new RegExp("%22", 'g')
+        const spaceReplacer = new RegExp("%20", 'g')
+
+        mainSearch = mainSearch.replace(quotationReplacer, '"')
+        mainSearch = mainSearch.replace(spaceReplacer, ' ')
+
+        document.getElementById("searchBar").value = mainSearch
+        searchMade()
+    }
+
+
+    /**
+     * Makes the search.
+     * Searches for the song name if it is provided and tags if they are provided.
+     * If the search is a tag it must be contained in quotations "".
+     * This method will search for tags if they are provided in quotations.
+     * After everything is searched, they will be displayed on the page as links to their songView page.
+     */
+    function searchMade () {
+        fetch("http://localhost:3000/api/postSearch", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                search : document.getElementById("searchBar").value,
+            })
+        })
+        .then(response => response.json())
+        .then(json => {
+            let songs = document.getElementById("songs")
+            let linkSpacing = 50;
+            songs.innerHTML = ""
+            for(var i = 0; i < json.length; i++)
+            {
+                let lineBreak = document.createElement("br")
+                let hyperLink = document.createElement('a')
+ 
+                linkSpacing += 50;
+ 
+                hyperLink.textContent = json[i].songName
+ 
+                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].songID)
+                hyperLink.textContent = json[i].songName
+                hyperLink.style = "left: 75%; font-size: 30px; text-align: center; width: 700px; top:"+linkSpacing+"px";
+ 
+                songs.appendChild(hyperLink)
+                songs.appendChild(lineBreak)
+            }
+        });
+    }
+   
+    /**
+     * Finds autocorrect suggestions.
+     * Sends them to the html datalist to be displayed.
+     */
+    function getAutoCorrect() {
+        var search = document.getElementById("searchBar").value;
+        var tagNames = [];
+        var reading = false;
+        var currentString = "";
+        var dataList = document.getElementById("autoSuggest");
+ 
+        var lastQuotation = -1
+ 
+        for (var i = 0; i < search.length; i++)
+        {
+            var searchChar = search.charAt(i);
+            if (searchChar == '"') {
+                reading = !reading;
+                if (!reading) {
+                    lastQuotation = -1
+                    currentString = "";
+                }
+                else
+                {
+                    lastQuotation = i
+                }
+            }
+            else if (reading)
+            {
+                currentString = currentString + searchChar;
+            }
+            console.log(currentString);
+        }
+ 
+        //Delete the current tag from the search rq
+        if(lastQuotation > -1)
+        {
+            search = search.slice(0, lastQuotation + 1)
+        }
+ 
+        dataList.innerHTML = "";
+        if(currentString != ""){
+            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+                for(var i=0; i<json.length; i++) {
+                    var newOption = document.createElement("option");
+                    newOption.value = search + json[i].tagName + '"';
+                    dataList.appendChild(newOption);
+                    console.log(json[i]);
+                }
+                document.getElementById("searchBar").focus();
+            });
+           
+        }
+    }
+</script>
 </html>

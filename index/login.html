@@ -21,6 +21,7 @@
         let password = document.getElementById("password").value
 
         let popup = document.getElementById("popup")
+        popup.style = "top: 65px; font-size: 20px;"
         
         //If username or password are null, warn user and prevent from entering.
         if (username.length === 0 || username === null && password.length === 0 || password === null) {
@@ -40,7 +41,7 @@
         fetch("http://localhost:3000/api/login", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
                 body: JSON.stringify({
                     username: username,
@@ -57,6 +58,7 @@
                 else
                 {
                     popup.textContent = "Logged in!"
+                    popup.style = "top: 65px; color: black; font-size: 20px;"
 
                     localStorage.setItem("sessionID", json.sessionID);
 
@@ -73,40 +75,45 @@
 
 <body>
 
-    <label style = "font-size: 20px; left: 550px;">Username: </label>
+    <div id="inputs">
+        <label style = "font-size: 20px; left: 550px;">Username: </label>
+    
+        <!--User inputs username here.-->
+        <input
+            id = "username"
+            style = "font-size: 20px;"
+            type = "text">
+        <br>
 
-    <!--User inputs username here.-->
-    <input
-        id = "username"
-        style = "font-size: 20px;"
-        type = "text">
-    <br>
+        <label style = "font-size: 20px; top : 30px; left: 550px;">Password: </label>
 
-    <label style = "font-size: 20px; top : 30px; left: 550px;">Password: </label>
+        <!--User inputs password here. Text inputted is hidden in browser.-->
+        <input 
+            id = "password"
+            style = "font-size: 20px; top: 30px;"
+            type = "password">
+        <br>
+    </div>
 
-    <!--User inputs password here. Text inputted is hidden in browser.-->
-    <input 
-        id = "password"
-        style = "font-size: 20px; top: 30px;"
-        type = "password">
-    <br>
+    <div id="buttons">
+        <!--Attempts to login when clicked. Calls tryLogin().-->
+        <button
+            style = "height: 50px; width: 100px; font-size: 20px; top: 90px;"
+            type = "button"
+            onclick = "tryLogin()">Login</button>
+        <br>
 
-    <!--Attempts to login when clicked. Calls tryLogin().-->
-    <button
-        style = "height: 50px; width: 100px; font-size: 20px;"
-        type = "button"
-        onclick = "tryLogin()">Login</button>
-    <br>
-
-    <!--Attempts to login when clicked. Calls tryLogin().-->
-    <button
-        style = "height: 50px; width: 100px; font-size: 20px;"
-        type = "button"
-        onclick = "logout()">Log Out</button>
-    <br>
-
-    <!--For warning the user.-->
-    <popup id = "popup" style = "font-size: 20px;"> </popup>
+        <!--Attempts to login when clicked. Calls tryLogin().-->
+        <button
+            style = "height: 50px; width: 100px; font-size: 20px; top: 150px;"
+            type = "button"
+            onclick = "logout()">Log Out</button>
+        <br>
+    </div>
+    <div id="popups">
+        <!--For warning the user.-->
+        <popup id = "popup" style = "font-size: 20px;"> </popup>
+    </div>
 </body>
 
 </html>
