@@ -11,11 +11,17 @@
 </head>
 
 <style>
-    table, th, td {
-        border:1px solid black;
-    }
+    body {background-color: gray;}
+    
+    table, th, td, caption {border:1px solid black; background-color: white;}
 
-    tr:hover {background-color: #D6EEEE;}
+    th {width: 30%;}
+
+    td:hover {background-color: #D6EEEE;}
+
+    label {font-size: 25px;}
+    input {font-size: 25px;}
+    ul {font-size: 20px;}
 </style>
 
 <!--
@@ -39,11 +45,109 @@ On the right, shows examples of how it works
         return URL.slice(endPoint + 1, URL.length)
     }
 
+
+    function loadPostData(songID){
+        fetch("http://localhost:3000/api/post/" + songID)
+        .then(response => response.json())
+        .then(json => {
+            songData = json
+            console.log(songData)
+
+            const songName = document.createTextNode(songData.songName)
+            const link = document.createTextNode(songData.link)
+
+            document.getElementById("currentSongName").append(songName)
+            document.getElementById("currentYoutubeID").append(link)
+        });
+    }
+
+
+    function loadTag(tagID){
+
+        fetch("http://localhost:3000/api/tags/" + tagID)
+        .then(response => response.json())
+        .then(json => {
+
+            const tagName = json.tagName
+
+            let type
+
+            switch(json.type) {
+                case 0:
+                    type = "artistTags"
+                    break
+                case 1:
+                    type = "genreTags"
+                    break
+                case 2:
+                    type = "miscTags"
+                    break
+                default:
+                    type = "miscTags"
+            }
+
+            console.log("appending...")
+
+            createTagTableRow(type, tagName, false)
+        })
+
+    }
+
+
+    function createTagTableRow(type, tagName, isNewTag){
+        const table = document.getElementById(type)
+            const tableRow = document.createElement("tr")
+            const currentTag = document.createElement("td")
+            const oldTag = document.createElement("td")
+
+            const text = document.createTextNode(tagName)
+            const text2 = document.createTextNode(tagName)
+            const empty = document.createTextNode("")
+
+            if (isNewTag) {
+                oldTag.append(empty)
+                currentTag.append(empty)
+            }
+            else {
+                oldTag.append(text)
+                currentTag.append(text2)
+            }
+
+            tableRow.append(oldTag, currentTag)
+
+            console.log(tableRow)
+            table.append(tableRow)
+    }
+
+
+    function loadPage(){
+
+        const songID = getPostID()
+
+        loadPostData(songID)
+
+        fetch("http://localhost:3000/api/postTags/" + songID)
+        .then(response => response.json())
+        .then(json => {
+
+            let tagIDs = new Array()
+
+            for (let i = 0; i < json.length; i++){
+                tagIDs.push(json[i].tagID)
+            }
+
+            for (let i = 0; i < tagIDs.length; i++){
+                loadTag(tagIDs[i])
+            }
+        })
+        
+    }
+
 </script>
 
-<body style = "background-color: gray;">
+<body onload = "loadPage()">
 
-    <table style = "font-size: 25px; width: 30%; background-color: white;">
+    <table style = "font-size: 25px; width: 60%;">
         <tr>
             <th> </th> <!--Don't delete. It is needed for the formatting.-->
             <th>Current Data</th>
@@ -60,37 +164,53 @@ On the right, shows examples of how it works
             <td id = "newYoutubeID"></td>
         </tr>
     </table>
+    <br>
 
     <!--Make a scrollable list containing all of three versions of the tags.-->
 
-    <div id = "info">
-        <label id = "artistTags" style = "font-size: 25px;">Artist Tag(s): </label>
-        <br>
-        <label id = "genreTags" style = "font-size: 25px;">Genre Tag(s): </label>
-        <br>
-        <label id = "miscTags" style = "font-size: 25px;">Misc Tag(s): </label>
-        <br>
-    </div>
+    <div style = "display: flex;">
 
-    <div id = "newInfo">
-        <input
-            type = "text"
-            style = "font-size: 25px;">
-        </input>
-        <br>
+        <div style = "width: 32%;">
 
-        <input
-            type = "text"
-            style = "font-size: 25px;">
-        </input>
-        <br>
+            <table id = "artistTags" style = "font-size: 20px;">
+                <caption>ARTIST TAGS</caption>
+                <tr>
+                    <th>Current Data</th>
+                    <th>New Data</th>
+                </tr>
+            </table>
 
-        <input
-            type = "text"
-            style = "font-size: 25px;">
-        </input>
-        <br>
-    </div>
+            <br>
+
+            <button onclick = "createTagTableRow(0, 'NO_DATA', true)">Add Tag</button>
+
+        </div>
+
+        <div style = "width: 32%;">
+
+            <table id = "genreTags" style = "font-size: 20px;">
+                <caption>GENRE TAGS</caption>
+                <tr>
+                    <th>Current Data</th>
+                    <th>New Data</th>
+                </tr>
+            </table>
+
+        </div>
+
+        <div style = "width: 32%;">
+
+            <table id = "miscTags" style = "font-size: 20px;">
+                <caption>MISC TAGS</caption>
+                <tr>
+                    <th>Current Data</th>
+                    <th>New Data</th>
+                </tr>
+            </table>
+
+        </div>
+
+    </div> 
 
     <div id = "properties">
     </div>
