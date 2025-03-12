@@ -7,7 +7,7 @@
         name = "viewport"
         content = "width = device-width, initial-scale = 1"
     >
-    <title>WavSurf Post Queue Interface</title>
+    <title>Post Queue Interface</title>
 </head>
 
 <script defer>
@@ -23,9 +23,12 @@
         fetch("http://localhost:3000/api/postQueue")
         .then(response => response.json())
         .then(json => {
+
+            console.log(json)
+
             queue = json;
             document.getElementById('p1').innerHTML = JSON.stringify(json[0]);
-            console.log(json);
+            
         });
 
         if (localStorage.getItem("username") == undefined) {

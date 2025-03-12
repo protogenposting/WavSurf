@@ -366,12 +366,16 @@ app.get('/postQueueInterface',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/postQueueInterface.html'))
 })
 
-app.get('/main',(req, res) => {
+app.get('/',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/main.html'))
 })
 
 app.get('/moderation',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/moderation.html'))
+})
+
+app.get('/postEdit/:songID',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/postEdit.html'))
 })
 
 //#endregion
