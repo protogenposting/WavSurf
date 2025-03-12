@@ -39,11 +39,16 @@
             }
             //thanks for the code tiger :3 // np
             let lineBreak = document.createElement("br")
+            let hyperLink = document.createElement("a")
             let newButton = document.createElement("button")
+
+            hyperLink.href = "http://localhost:3000/search/" + '"' + json.tagName + '"'
 
             newButton.textContent = json.tagName
 
-            console.log(json.type)
+            hyperLink.style.width = "999px"
+
+            hyperLink.appendChild(newButton)
 
             //newButton.setAttribute("onclick", goToTagPage)
             //newButton.setAttribute("style", "font-size: 20px; margin-top: "+offsets[json.type]+"px;")
@@ -65,7 +70,7 @@
             }
 
             let body = document.getElementById(type)
-            body.appendChild(newButton)
+            body.appendChild(hyperLink)
             body.appendChild(lineBreak)
 
             //body.style.position = "absolute"

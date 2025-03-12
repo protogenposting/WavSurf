@@ -141,7 +141,8 @@ const query = `
     CREATE TABLE IF NOT EXISTS tagChildren (
         id INTEGER PRIMARY KEY UNIQUE,
         tagID INTEGER NOT NULL,
-        childID INTEGER NOT NULL
+        childID INTEGER NOT NULL,
+        layer INTEGER NOT NULL
     );
 `;
 
@@ -158,7 +159,9 @@ function addUser(name, username, password, rank) {
 function addTag(tagName, type, parents) {
     const addData = db.prepare("INSERT INTO tags (tagName, type) VALUES (?,?)")
     let result = addData.run(tagName, type);
-    
+
+    let parentLength = parents.length
+
     for(var i = 0; i < parents.length; i++)
     {
         let parentParents = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(parents[i]);
@@ -171,8 +174,15 @@ function addTag(tagName, type, parents) {
             }
         }
 
-        const addData = db.prepare("INSERT INTO tagChildren (tagID, childID) VALUES (?,?)")
-        addData.run(parents[i],result.lastInsertRowid);
+        let directChild = 0
+
+        if(i < parentLength)
+        {
+            directChild = 1
+        }
+
+        const addData = db.prepare("INSERT INTO tagChildren (tagID, childID, layer) VALUES (?,?,?)")
+        addData.run(parents[i],result.lastInsertRowid,directChild); 
     }
 }
 
@@ -284,6 +294,44 @@ function populate() {
     addTag('Dirty Androids', 0, []);
     //id = 37
     addTag('Orchestral', 1, []);
+    //id = 38
+    addTag('Extratonal', 1, [35]);
+    //id = 39
+    addTag('Nerdcore', 1, []);
+    //id = 40
+    addTag('Future Funk', 1, [11]);
+    //id = 41
+    addTag('Game Soundtrack', 2, []);
+    //id = 42
+    addTag('Beatmania IIDX', 2, [41]);
+    //id = 43
+    addTag('Wacca', 2, [41]);
+    //id = 44
+    addTag('Dancerush Stardom', 2, [41]);
+    //id = 45
+    addTag('Vivid/Stasis', 2, [41]);
+    //id = 46
+    addTag("Friday Night Funkin'", 2, [41]);
+    //id = 47
+    addTag("Celeste", 2, [41]);
+    //id = 48
+    addTag("Celeste Strawberry Jam", 2, [47]);
+    //id = 49
+    addTag("BeanJammin", 0, []);
+    //id = 50
+    addTag('Chiptune', 1, [9]);
+    //id = 51
+    addTag("KAERRA", 0, []);
+    //id = 52
+    addTag('Techno', 1, [9]);
+    //id = 53
+    addTag("Matt Sexton", 0, []);
+    //id = 54
+    addTag("Original Kyle", 0, []);
+    //id = 55
+    addTag("Aidan", 0, []);
+    //id = 56
+    addTag("Lena Raine", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -300,19 +348,30 @@ function populate() {
     addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
     addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23]);
     addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
-    addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27]);
+    addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27,43]);
     addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28,37]);
-    addPost('Pyromania', '89v7_lyItwk',[26,29]);
-    addPost('Donkey Donk', 'rnisur_Ejck',[30]);
+    addPost('Pyromania', '89v7_lyItwk',[26,29,45]);
+    addPost('Donkey Donk', 'rnisur_Ejck',[30,42]);
     addPost('Garakuta Doll Play', 'V70SUqD6n14',[32,25,33]);
     addPost('BIKE', '6v98TpTscaw',[16,33]);
-    addPost('めでてえ', 'ilzoLbT-yoc',[35,34]);
-    addPost('Fiery Stallion', 'Xn9ZF8BtQu8',[12,1,36]);
-    addPost('Meltdown', '06nVFlRZ1B0',[7]);
+    addPost('めでてえ', 'ilzoLbT-yoc',[35,34,42]);
+    addPost('Fiery Stallion', 'Xn9ZF8BtQu8',[12,1,36,42]);
+    addPost('Meltdown', '06nVFlRZ1B0',[7,44]);
     addPost('Pipe Dream', 'HmoUSSVSV7I',[9,28,37]);
     addPost('Drum Machine', '0bPU4bdMlqM',[9,28,37]);
     addPost('Acoustic Curves', 'i_6Z1VouytE',[9,28,37]);
     addPost('HYPER4ID', 'xYLkpQRe40I',[26,27]);
+    addPost('CUE CUE RESCUE', '12ZnJtZJfAM',[42,26,34]);
+    addPost('Passionfruit Pantheon (Apotheosis Mix)', 'd3_n5DB3wTs',[25,48,37,9,49]);
+    addPost('Cyberstrider Madeline', 'rnbXze7uvjw',[48,12]);
+    addPost('Puffed Out', '2eq93dyayy8',[48,9]);
+    addPost('Heart of the Problem', 'GCfz9OYKtxE',[48,50]);
+    addPost('Out of Time', '_Ta4cjgqd7c',[48,51,35]);
+    addPost('kevintechnospam.wav', 'tlFlnAJogXs',[48,53,52]);
+    addPost('Limitless', 'd3_n5DB3wTs',[37,35,48,54]);
+    addPost('Shatter the Pantheon!', 'U4u3aCEAMks',[25,48,37,9,55]);
+    addPost('Shattersong', 'J7SzMayyPvs',[48,37,9,55]);
+    addPost('Resurrections', '1rwAvUvvQzQ',[47,37,9,56]);
 }
 
 populate()
@@ -613,6 +672,14 @@ app.get(apiPath+'tagsOrdered',(req,res) => {
     res.json(tags)
 })
 
+app.get(apiPath+'tagParents',(req,res) => {
+    const tags = db.prepare('SELECT tags.tagID, tags.tagName FROM tags LEFT JOIN tagChildren ON tags.tagID = tagChildren.childID WHERE tagChildren.childID IS NULL').all();
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
 //?
 app.get(apiPath+'tags/:id',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags WHERE tagID = ?').get(req.params.id);
@@ -632,13 +699,12 @@ app.get(apiPath+'tagSimilar/:name',(req,res) => {
 })
 
 app.get(apiPath+'tagChildren/:id',(req,res) => {
-    const tags = db.prepare('SELECT childID FROM tagChildren WHERE tagID = ?').all(req.params.id);
+    const tags = db.prepare('SELECT tags.tagID, tags.tagName FROM tags LEFT JOIN tagChildren ON tags.tagID = tagChildren.childID WHERE tagChildren.tagID IS ? AND tagChildren.layer IS ?').all(req.params.id,1);
 
     console.log(tags);
 
     res.json(tags)
 })
-
 
 //#endregion
 
@@ -720,8 +786,6 @@ app.post(apiPath+'postSearch',(req,res) => {
     {
         songQuery = songQuery + " GROUP BY posts.songName"
     }
-
-    console.log(songQuery)
         
     console.log(songQuery)
 
