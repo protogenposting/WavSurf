@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+<head>
+    <meta charset = "UTF-8">
+    <meta
+        name = "viewport"
+        content = "width = device-width, initial-scale = 1"
+    >
+    <title>Post Edit</title>
+</head>
+
+<style>
+    table, th, td {
+        border:1px solid black;
+    }
+
+    tr:hover {background-color: #D6EEEE;}
+</style>
+
+<!--
+Called from songView.
+
+Should be accessible to moderators only.
+
+Displays the post's information on the left and then inputs for changing the information on the the middle
+On the right, shows examples of how it works
+-->
+
+<script defer>
+
+    /**
+     * Gets the Song ID (AKA Post ID) from the end of the page's URL and returns it.
+    **/
+    function getPostID() {
+        const URL = window.location.href
+        const endPoint = URL.lastIndexOf("/")
+
+        return URL.slice(endPoint + 1, URL.length)
+    }
+
+</script>
+
+<body style = "background-color: gray;">
+
+    <table style = "font-size: 25px; width: 30%; background-color: white;">
+        <tr>
+            <th> </th> <!--Don't delete. It is needed for the formatting.-->
+            <th>Current Data</th>
+            <th>New Data</th>
+        </tr>
+        <tr>
+            <th>Song Name</th>
+            <td id = "currentSongName"></td>
+            <td id = "newSongName"></td>
+        </tr>
+        <tr>
+            <th>Youtube ID / Link</th>
+            <td id = "currentYoutubeID"></td>
+            <td id = "newYoutubeID"></td>
+        </tr>
+    </table>
+
+    <!--Make a scrollable list containing all of three versions of the tags.-->
+
+    <div id = "info">
+        <label id = "artistTags" style = "font-size: 25px;">Artist Tag(s): </label>
+        <br>
+        <label id = "genreTags" style = "font-size: 25px;">Genre Tag(s): </label>
+        <br>
+        <label id = "miscTags" style = "font-size: 25px;">Misc Tag(s): </label>
+        <br>
+    </div>
+
+    <div id = "newInfo">
+        <input
+            type = "text"
+            style = "font-size: 25px;">
+        </input>
+        <br>
+
+        <input
+            type = "text"
+            style = "font-size: 25px;">
+        </input>
+        <br>
+
+        <input
+            type = "text"
+            style = "font-size: 25px;">
+        </input>
+        <br>
+    </div>
+
+    <div id = "properties">
+    </div>
+
+</body>
+

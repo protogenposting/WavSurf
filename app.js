@@ -433,6 +433,10 @@ app.get('/moderation',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/moderation.html'))
 })
 
+app.get('/postEdit/:songID',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/postEdit.html'))
+})
+
 //#endregion
 
 //#region tag queue api calls
