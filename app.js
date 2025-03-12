@@ -698,7 +698,6 @@ app.get(apiPath+'tagChildren/:id',(req,res) => {
     res.json(tags)
 })
 
-
 //#endregion
 
 //#region post api calls
@@ -779,8 +778,6 @@ app.post(apiPath+'postSearch',(req,res) => {
     {
         songQuery = songQuery + " GROUP BY posts.songName"
     }
-
-    console.log(songQuery)
         
     console.log(songQuery)
 
