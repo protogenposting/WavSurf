@@ -16,6 +16,8 @@
 
     /**
      * Gets all of the posts currently in postQueue.
+     * If the user is not a high enough rank or is not logged in
+     * they get redirected to the login page.
     **/
     function getInfo() {
         fetch("http://localhost:3000/api/postQueue")
