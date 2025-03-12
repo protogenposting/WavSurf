@@ -458,6 +458,8 @@ app.post(apiPath+'tagQueue',(req,res) => {
         let result = request.run(JSON.stringify(req.body.data))
 
         res.json(result)
+    }else {
+        res.sendStatus(401);
     }
 })
 
@@ -532,6 +534,8 @@ app.post(apiPath+'postQueue',(req,res) => {
         console.log(req.body.data)
 
         res.json(result)
+    }else {
+        res.sendStatus(401);
     }
 })
 
