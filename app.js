@@ -568,8 +568,6 @@ app.post(apiPath+'newUser',(req,res) => {
 //create a login session
 app.post(apiPath+'login',(req,res) => {
     console.log(req.body)
-    
-    //verifySessionKey(req.headers.authorization)
 
     const user = db.prepare(`
         SELECT * FROM users WHERE username = ? AND password = ?
