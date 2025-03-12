@@ -330,6 +330,8 @@ function populate() {
     addTag("Original Kyle", 0, []);
     //id = 55
     addTag("Aidan", 0, []);
+    //id = 56
+    addTag("Lena Raine", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -368,6 +370,8 @@ function populate() {
     addPost('kevintechnospam.wav', 'tlFlnAJogXs',[48,53,52]);
     addPost('Limitless', 'd3_n5DB3wTs',[37,35,48,54]);
     addPost('Shatter the Pantheon!', 'U4u3aCEAMks',[25,48,37,9,55]);
+    addPost('Shattersong', 'J7SzMayyPvs',[48,37,9,55]);
+    addPost('Resurrections', '1rwAvUvvQzQ',[47,37,9,56]);
 }
 
 populate()
