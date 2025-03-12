@@ -11,29 +11,19 @@
 </head>
 
 <script defer>
-
-    /* These three arrays should have the same length, especially "tagNames" and "checksIfTagIsChild".
-       That way, they can act as pairs for addTagToPage().
-       "tagNames" does not need the same length until displayTags() is called. */
-
-    let tagsToCheck = []
-    let currentTag = 0
+    let tagsToCheck = [] //the tags to use in nextTag
+    let currentTag = 0  //the current tag we're checking and adding to the list
 
     /**
-     * Gets all tags' IDs from the database.
-     * Stores the information in the tagsToBeDisplayed array.
-     * Calls getTagsToBeDisplayed() and getNames().
-     * @returns nothing
-    **/
-    function getIDs() {
+     * Gets the ids of all parent tags, aka tags with no parents of their own
+     */
+    function getParents() {
         fetch("http://localhost:3000/api/tagParents")
         .then(response => response.json())
         .then(json => {
             const tags = json
 
-            // Adds a tag's ID for each one in the database. "tags" is sorted alphabetically.
             for (let i = 0; i < tags.length; i++){
-                // Always add the next tag.
                 tags[i].layer = 0
                 tags[i].depth = 0
                 tagsToCheck.push(tags[i])
@@ -45,35 +35,33 @@
     }
 
     /**
-     * Gets all of the tags that need to be displayed to the page; includes tags and their children.
-     * @param tagID is the tag the function gets tagChildren from.
-     * @returns nothing.
-    **/
+     * Adds the children of the next tag and adds a button for it to the list
+     */
     function nextTag(){
         let tag = tagsToCheck[currentTag]
 
-        console.log(tagsToCheck)
-        console.log(tag)
-
+        let hyperLink = document.createElement("a")
         let newButton = document.createElement("button")
         let lineBreak = document.createElement("br")
 
+        hyperLink.href = "http://localhost:3000/search/" + '"' + tag.tagName + '"'
+
         newButton.innerText = tag.tagName
         const childText = document.createTextNode(" - " + tag.tagName)
-        newButton.setAttribute("style","font-size: 20px; position:relative; left: " + 25 * tag.layer + "px")
+        newButton.setAttribute("style","font-size: 20px; position:relative; left: " + 25 * tag.depth + "px")
 
-        // Sends the user to the search page with the tag they clicked on.
-        newButton.addEventListener('click', function(){
-            location.href = "http://localhost:3000/search/" + '"' + tag.tagName + '"'
-        })
+        "http://localhost:3000/search/" + '"' + tag.tagName + '"'
         let body = document.getElementById("body")
-        body.appendChild(newButton)
+
+        hyperLink.appendChild(newButton)
+        hyperLink.style.width = "999px"
+
+        body.appendChild(hyperLink)
         body.appendChild(lineBreak)
 
         fetch("http://localhost:3000/api/tagChildren/" + tag.tagID)
         .then(response => response.json())
         .then(json => {
-            // If the tag has no children, no need to proceed further.
             if (json.length == 0){
                 currentTag++
                 nextTag()
@@ -82,11 +70,11 @@
 
             const tagChildren = json
 
-            // Adds all of the tag's children to tagsToBeDisplayed.
             for (let i = 0; i < tagChildren.length; i++){
                 tagChildren[i].depth = tagsToCheck[currentTag].depth + 1
                 tagsToCheck.splice(currentTag + 1, 0, tagChildren[i])
                 tagsToCheck.join()
+                console.log(tagChildren)
             }
             currentTag++
             nextTag()
@@ -94,7 +82,7 @@
     }
 </script>
 
-<body id = "body" onload = "getIDs()" style = "position:relative; top: 50px; left: 100px; background-color: gray;">
+<body id = "body" onload = "getParents()" style = "position:relative; top: 50px; left: 100px; background-color: gray;">
     <label style = "font-size: 30px;">Tags</label>
     <br>
 </body>
