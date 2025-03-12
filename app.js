@@ -229,7 +229,7 @@ function populate() {
     //id = 4
     addTag('HipHop', 1, []);
     //id = 5
-    addTag('IndieRock', 1, [1]);
+    addTag('IndieRock', 1, [1,14]);
     //id = 6
     addTag('AlternativeRock', 1, [1]);
     //id = 7
@@ -332,6 +332,8 @@ function populate() {
     addTag("Aidan", 0, []);
     //id = 56
     addTag("Lena Raine", 0, []);
+    //id = 57
+    addTag("Grandaddy", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -372,6 +374,8 @@ function populate() {
     addPost('Shatter the Pantheon!', 'U4u3aCEAMks',[25,48,37,9,55]);
     addPost('Shattersong', 'J7SzMayyPvs',[48,37,9,55]);
     addPost('Resurrections', '1rwAvUvvQzQ',[47,37,9,56]);
+    addPost('A.M. 180', 'pBQDfOpWfBI',[57,9,22,5]);
+    
 }
 
 populate()
