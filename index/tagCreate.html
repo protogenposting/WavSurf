@@ -28,6 +28,7 @@
     {
         let popup = document.getElementById("popup")
         let parents = []
+        let type = -1
 
         for (let i = 1; i <= tagCount; i++) {
             let info = document.getElementById("tag" + i.toString()).value
@@ -35,6 +36,19 @@
             console.log(i)
 
             parents.push(info)
+        }
+
+        switch(document.getElementById("type").value)
+        {
+            case "Artist": 
+                type = 0 
+                break;
+            case "Genre": 
+                type = 1 
+                break;
+            case "Misc": 
+                type = 2
+                break;
         }
 
         fetch("http://localhost:3000/api/tagQueue", {
@@ -48,7 +62,7 @@
                     name: document.getElementById("name").value,
                     //parents: JSON.parse(document.getElementById("parents").value),
                     parents: parents,
-                    type: parseInt(document.getElementById("type").value),
+                    type: type
                 }
             })
         }).then((response) => {
@@ -121,8 +135,13 @@
         <label style = "font-size: 20px; left: 570px;">Tag name:</label>
         <input type="text" id="name" name="name" style="font-size: 20px;"><br>
 
-        <label style = "font-size: 20px; left: 570px; top: 30px;">Tag Type:</label>
-        <input type="text" id="type" name="type" style="font-size: 20px; top: 30px;"><br>
+        <label style = "font-size: 20px; left: 480px; top: 30px;">Tag Type (Artist, Genre, Etc.):</label>
+        <input type="text" id="type" name="type" style="font-size: 20px; top: 30px;" list = "types"><br>
+        <datalist id = "types">
+            <option>Artist</option>
+            <option>Genre</option>
+            <option>Misc</option>
+        </datalist>
         <label style="font-size: 20px; left: 570px; top: 60px;">Tag Parents:</label>
         <!--
         <label for="parents">Tag parents (JSON Array with the ids of each tag, change this to something else later)</label><br>
