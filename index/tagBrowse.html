@@ -16,9 +16,8 @@
        That way, they can act as pairs for addTagToPage().
        "tagNames" does not need the same length until displayTags() is called. */
 
-    let tagsToBeDisplayed = new Array()
-    let tagNames = new Array()
-    let checksIfTagIsChild = new Array()
+    let tagsToCheck = []
+    let currentTag = 0
 
     /**
      * Gets all tags' IDs from the database.
@@ -27,18 +26,20 @@
      * @returns nothing
     **/
     function getIDs() {
-        fetch("http://localhost:3000/api/tagsOrdered")
+        fetch("http://localhost:3000/api/tagParents")
         .then(response => response.json())
         .then(json => {
             const tags = json
 
             // Adds a tag's ID for each one in the database. "tags" is sorted alphabetically.
             for (let i = 0; i < tags.length; i++){
-                
-                getTagsToBeDisplayed(tags[i].tagID)
+                // Always add the next tag.
+                tags[i].layer = 0
+                tags[i].depth = 0
+                tagsToCheck.push(tags[i])
             }
 
-            getNames()
+            nextTag()
 
         });
     }
@@ -48,17 +49,34 @@
      * @param tagID is the tag the function gets tagChildren from.
      * @returns nothing.
     **/
-    function getTagsToBeDisplayed(tagID){
-        fetch("http://localhost:3000/api/tagChildren/" + tagID)
+    function nextTag(){
+        let tag = tagsToCheck[currentTag]
+
+        console.log(tagsToCheck)
+        console.log(tag)
+
+        let newButton = document.createElement("button")
+        let lineBreak = document.createElement("br")
+
+        newButton.innerText = tag.tagName
+        const childText = document.createTextNode(" - " + tag.tagName)
+        newButton.setAttribute("style","font-size: 20px; position:relative; left: " + 25 * tag.layer + "px")
+
+        // Sends the user to the search page with the tag they clicked on.
+        newButton.addEventListener('click', function(){
+            location.href = "http://localhost:3000/search/" + '"' + tag.tagName + '"'
+        })
+        let body = document.getElementById("body")
+        body.appendChild(newButton)
+        body.appendChild(lineBreak)
+
+        fetch("http://localhost:3000/api/tagChildren/" + tag.tagID)
         .then(response => response.json())
         .then(json => {
-
-            // Always add the next tag.
-            tagsToBeDisplayed.push(tagID)
-            checksIfTagIsChild.push(false)
-
             // If the tag has no children, no need to proceed further.
             if (json.length == 0){
+                currentTag++
+                nextTag()
                 return
             }
 
@@ -66,99 +84,14 @@
 
             // Adds all of the tag's children to tagsToBeDisplayed.
             for (let i = 0; i < tagChildren.length; i++){
-
-                tagsToBeDisplayed.push(tagChildren[i].childID)
-                checksIfTagIsChild.push(true)
-
+                tagChildren[i].depth = tagsToCheck[currentTag].depth + 1
+                tagsToCheck.splice(currentTag + 1, 0, tagChildren[i])
+                tagsToCheck.join()
             }
+            currentTag++
+            nextTag()
         })
     }
-
-    /**
-     * Gets all of the tags' names from tagsToBeDisplayed's IDs and inserts them into tagNames.
-     * Needs tagsToBeDisplayed to be initialized before called.
-     * Calls displayTags().
-     * @returns nothing.
-    **/
-    function getNames(){
-        fetch("http://localhost:3000/api/tagsOrdered")
-        .then(response => response.json())
-        .then(json => {
-
-            tags = json
-
-            // !!! IMPORTANT !!!
-            // Later on, add code so that it only displays 20-50 new tags each time it's called.
-            // That way, it's more performance efficient and also loads the webpage faster in general.
-
-            for (let i = 0; i < tagsToBeDisplayed.length; i++){
-
-                // Check for any tag with tagsToBeDisplayed[i]'s current tagID.
-                // Once found, add its name to tagNames.
-
-                for (let o = 0; o < tags.length; o++){
-
-                    if (tags[o].tagID == tagsToBeDisplayed[i]){
-                        tagNames.push(tags[o].tagName)
-                    }
-                }
-            }
-
-            displayTags()
-        })
-    }
-
-    /**
-     * Displays all of the tags onto the page.
-     * Needs "tagNames" and "checksIfTagIsChild" to be initialized before being called.
-     * @returns nothing.
-    **/
-    function displayTags(){
-
-        for (let i = 0; i < tagNames.length; i++){
-            addTagToPage(tagNames[i], checksIfTagIsChild[i])
-        }
-    }
-
-    /**
-     * Adds a tag to the page.
-     * LATER, EACH TAG SHOULD BE CLICKABLE AND TAKE USER TO SEARCH BAR WITH THE TAG THEY CLICKED ON.
-     * 
-     * @param tagName is the name of the tag that will show up on the page.
-     * @param isChild indents and puts a "-" before the tagName if true. Otherwise, it does nothing.
-     * @returns nothing.
-    **/
-    function addTagToPage(tagName, isChild){
-
-        searchTag = tagName
-
-        /* Line break needed so the input buttons stay in a column.
-           Button is needed so that the user can go to its page. */
-        let lineBreak = document.createElement("br")
-        let newButton = document.createElement("button")
-
-        const text = document.createTextNode(tagName)
-        const childText = document.createTextNode(" - " + tagName)
-
-        // Sends the user to the search page with the tag they clicked on.
-        newButton.addEventListener('click', function(){
-            location.href = "http://localhost:3000/search/" + '"' + tagName + '"'
-        })
-
-        if (isChild) {
-            newButton.appendChild(childText)
-            newButton.setAttribute("style", "font-size: 20px; position:relative; left: 25px;")
-        }
-        else {
-            newButton.appendChild(text)
-            newButton.setAttribute("style", "font-size: 20px;")
-        }
-
-        let body = document.getElementById("body")
-        body.appendChild(newButton)
-        body.appendChild(lineBreak)
-    }
-
 </script>
 
 <body id = "body" onload = "getIDs()" style = "position:relative; top: 50px; left: 100px; background-color: gray;">

@@ -141,7 +141,8 @@ const query = `
     CREATE TABLE IF NOT EXISTS tagChildren (
         id INTEGER PRIMARY KEY UNIQUE,
         tagID INTEGER NOT NULL,
-        childID INTEGER NOT NULL
+        childID INTEGER NOT NULL,
+        layer INTEGER NOT NULL
     );
 `;
 
@@ -158,7 +159,9 @@ function addUser(name, username, password, rank) {
 function addTag(tagName, type, parents) {
     const addData = db.prepare("INSERT INTO tags (tagName, type) VALUES (?,?)")
     let result = addData.run(tagName, type);
-    
+
+    let parentLength = parents.length
+
     for(var i = 0; i < parents.length; i++)
     {
         let parentParents = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(parents[i]);
@@ -171,8 +174,15 @@ function addTag(tagName, type, parents) {
             }
         }
 
-        const addData = db.prepare("INSERT INTO tagChildren (tagID, childID) VALUES (?,?)")
-        addData.run(parents[i],result.lastInsertRowid);
+        let directChild = 0
+
+        if(i < parentLength)
+        {
+            directChild = 1
+        }
+
+        const addData = db.prepare("INSERT INTO tagChildren (tagID, childID, layer) VALUES (?,?,?)")
+        addData.run(parents[i],result.lastInsertRowid,directChild); 
     }
 }
 
@@ -603,6 +613,14 @@ app.get(apiPath+'tagsOrdered',(req,res) => {
     res.json(tags)
 })
 
+app.get(apiPath+'tagParents',(req,res) => {
+    const tags = db.prepare('SELECT tags.tagID, tags.tagName FROM tags LEFT JOIN tagChildren ON tags.tagID = tagChildren.childID WHERE tagChildren.childID IS NULL').all();
+
+    console.log(tags);
+
+    res.json(tags)
+})
+
 //?
 app.get(apiPath+'tags/:id',(req,res) => {
     const tags = db.prepare('SELECT * FROM tags WHERE tagID = ?').get(req.params.id);
@@ -622,7 +640,7 @@ app.get(apiPath+'tagSimilar/:name',(req,res) => {
 })
 
 app.get(apiPath+'tagChildren/:id',(req,res) => {
-    const tags = db.prepare('SELECT childID FROM tagChildren WHERE tagID = ?').all(req.params.id);
+    const tags = db.prepare('SELECT tags.tagID, tags.tagName, tagChildren.layer FROM tags LEFT JOIN tagChildren ON tags.tagID = tagChildren.childID WHERE tagChildren.tagID IS ? AND tagChildren.layer IS ?').all(req.params.id,1);
 
     console.log(tags);
 
