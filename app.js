@@ -441,6 +441,14 @@ app.get('/noAccess',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/noAccess.html'))
 })
 
+app.get('/navbarScript',(req, res) => {
+    res.sendFile(path.join(__dirname, 'index/navbarScript.js'))
+})
+
+app.get('/navbar',(req, res) => {
+    res.sendFile(path.join(__dirname, '/index/navbar.html'))
+})
+
 //#endregion
 
 //#region tag queue api calls
