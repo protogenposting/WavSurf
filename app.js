@@ -412,7 +412,7 @@ populate()
 
 //this is ran at the start of every request
 app.use((req, res,next) => {
-    ips.push(new IPEntry(req.ip,5))
+    ips.push(new IPEntry(req.ip,2))
     console.log(ips)
     if(IpAmount(req.ip) < 1000)
     {
