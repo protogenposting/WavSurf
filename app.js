@@ -372,6 +372,8 @@ function populate() {
     addTag("32ki", 0, []);
     //id = 61
     addTag("JamieP", 0, []);
+    //id = 62
+    addTag("Alisticious", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -401,11 +403,11 @@ function populate() {
     addPost('Drum Machine', '0bPU4bdMlqM',[9,28,37]);
     addPost('Acoustic Curves', 'i_6Z1VouytE',[9,28,37]);
     addPost('HYPER4ID', 'xYLkpQRe40I',[26,27]);
-    addPost('CUE CUE RESCUE', '12ZnJtZJfAM',[42,26,34]);
+    addPost('CUE CUE RESCUE', '12ZnJtZJfAM',[42,26,34,22]);
     addPost('Passionfruit Pantheon (Apotheosis Mix)', 'd3_n5DB3wTs',[25,48,37,9,49]);
     addPost('Cyberstrider Madeline', 'rnbXze7uvjw',[48,12]);
     addPost('Puffed Out', '2eq93dyayy8',[48,9]);
-    addPost('Heart of the Problem', 'GCfz9OYKtxE',[48,50]);
+    addPost('Heart of the Problem', 'GCfz9OYKtxE',[48,50,62]);
     addPost('Out of Time', '_Ta4cjgqd7c',[48,51,35]);
     addPost('kevintechnospam.wav', 'tlFlnAJogXs',[48,53,52]);
     addPost('Limitless', 'd3_n5DB3wTs',[37,35,48,54]);
@@ -420,6 +422,7 @@ function populate() {
     addPost('CIRCUS PANIC!!!', '6kiQuUJWHuE',[60,23,32]);
     addPost('You’re Telling Me A SHRIMP Fried This Rice?!', 's742C0v5SFI',[9,23,61,3]);
     addPost('Cadmium Colors', '1U6qefKcOrg',[9,23,61,3]);
+    addPost('Get Set Mind', 'hBYBKR9e6hs',[42,50,34,3]);
 }
 
 populate()
