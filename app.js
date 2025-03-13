@@ -366,6 +366,12 @@ function populate() {
     addTag("Grandaddy", 0, []);
     //id = 58
     addTag("Kobaryo", 0, []);
+    //id = 59
+    addTag("LamazeP", 0, []);
+    //id = 60
+    addTag("32ki", 0, []);
+    //id = 61
+    addTag("JamieP", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -380,7 +386,7 @@ function populate() {
     addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9,22]);
     addPost('Disco Panzer', 'uRSAatLI2QY',[20,22]);
     addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
-    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23]);
+    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23,61]);
     addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
     addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27,43]);
     addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28,37]);
@@ -408,6 +414,12 @@ function populate() {
     addPost('Resurrections', '1rwAvUvvQzQ',[47,37,9,56]);
     addPost('A.M. 180', 'pBQDfOpWfBI',[57,9,22,5]);
     addPost('HAL 30000', 'BC3VhlNGs64',[58,38]);
+    addPost('Triple Baka', 'duPJqfKiA78',[59,23,3,1,9]);
+    addPost('Mesmerizer', '19y8YTbvri8',[60,23,3,26]);
+    addPost('Obsolete Meat', 'L2hzsXOT0Nc',[60,23,3,26]);
+    addPost('CIRCUS PANIC!!!', '6kiQuUJWHuE',[60,23,32]);
+    addPost('You’re Telling Me A SHRIMP Fried This Rice?!', 's742C0v5SFI',[9,23,61,3]);
+    addPost('Cadmium Colors', '1U6qefKcOrg',[9,23,61,3]);
 }
 
 populate()
