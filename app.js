@@ -364,6 +364,8 @@ function populate() {
     addTag("Lena Raine", 0, []);
     //id = 57
     addTag("Grandaddy", 0, []);
+    //id = 58
+    addTag("Kobaryo", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -405,7 +407,7 @@ function populate() {
     addPost('Shattersong', 'J7SzMayyPvs',[48,37,9,55]);
     addPost('Resurrections', '1rwAvUvvQzQ',[47,37,9,56]);
     addPost('A.M. 180', 'pBQDfOpWfBI',[57,9,22,5]);
-    
+    addPost('HAL 30000', 'BC3VhlNGs64',[58,38]);
 }
 
 populate()
