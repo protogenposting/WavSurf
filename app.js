@@ -799,6 +799,20 @@ app.post(apiPath+'postSearch',(req,res) => {
 
     res.send(receivedSongs);
 })
+
+//edit the values of a post
+app.post(apiPath+'updatePost/:id',(req,res) => {
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const request = db.prepare("UPDATE postQueue SET * WHERE id=?");
+        
+        let result = request.run(JSON.stringify(req.body.data))
+
+        console.log(req.body.data)
+
+        res.json(result)
+    }
+})
 //#endregion
 
 //this starts the server on the port

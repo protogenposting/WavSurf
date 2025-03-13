@@ -62,6 +62,8 @@
             tags.push(link)
         }
 
+        console.log(tags)
+
         //sent it on over to the post queue
         fetch("http://localhost:3000/api/postQueue", {
             method: "POST",

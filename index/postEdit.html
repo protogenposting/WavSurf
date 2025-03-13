@@ -13,15 +13,18 @@
 <style>
     body {background-color: gray;}
     
-    table, th, td, caption {border:1px solid black; background-color: white;}
+    table, th, td, caption {border:1px solid black; background-color: white; font-size: 20px;}
+
+    .newInfo {background-color: rgb(127, 255, 127);}
+
+    .tableInput {font-size: 20px;}
 
     th {width: 30%;}
 
-    td:hover {background-color: #D6EEEE;}
+    .tableInput:hover {background-color: #D6EEEE;}
 
-    label {font-size: 25px;}
-    input {font-size: 25px;}
-    ul {font-size: 20px;}
+    label, input {font-size: 25px;}
+    button, ul {font-size: 20px;}
 </style>
 
 <!--
@@ -35,6 +38,9 @@ On the right, shows examples of how it works
 
 <script defer>
 
+    let tagNames = new Array()
+    let songID
+
     /**
      * Gets the Song ID (AKA Post ID) from the end of the page's URL and returns it.
     **/
@@ -46,18 +52,32 @@ On the right, shows examples of how it works
     }
 
 
-    function loadPostData(songID){
+    function loadPostData(){
         fetch("http://localhost:3000/api/post/" + songID)
         .then(response => response.json())
         .then(json => {
             songData = json
-            console.log(songData)
 
             const songName = document.createTextNode(songData.songName)
             const link = document.createTextNode(songData.link)
 
+            const input = document.createElement("input")
+
+            input.className = "tableInput"
+
+            const input2 = input.cloneNode()
+
+            input.value = songData.songName
+            input2.value = songData.link
+
+            input.id = "SongNameInput"
+            input2.id = "YoutubeIDInput"
+
             document.getElementById("currentSongName").append(songName)
+            document.getElementById("newSongName").append(input)
+
             document.getElementById("currentYoutubeID").append(link)
+            document.getElementById("newYoutubeID").append(input2)
         });
     }
 
@@ -86,8 +106,6 @@ On the right, shows examples of how it works
                     type = "miscTags"
             }
 
-            console.log("appending...")
-
             createTagTableRow(type, tagName, false)
         })
 
@@ -95,34 +113,38 @@ On the right, shows examples of how it works
 
 
     function createTagTableRow(type, tagName, isNewTag){
+
         const table = document.getElementById(type)
-            const tableRow = document.createElement("tr")
-            const currentTag = document.createElement("td")
-            const oldTag = document.createElement("td")
+        const tableRow = document.createElement("tr")
+        const currentTag = document.createElement("td")
+        const oldTag = document.createElement("td")
 
-            const text = document.createTextNode(tagName)
-            const text2 = document.createTextNode(tagName)
-            const empty = document.createTextNode("")
+        const text = document.createTextNode(tagName)
+        const empty = document.createTextNode(" ")
 
-            if (isNewTag) {
-                oldTag.append(empty)
-                currentTag.append(empty)
-            }
-            else {
-                oldTag.append(text)
-                currentTag.append(text2)
-            }
+        const input = document.createElement("input")
 
-            tableRow.append(oldTag, currentTag)
+        input.className = "tableInput"
+        input.name = "newTag"
 
-            console.log(tableRow)
-            table.append(tableRow)
+        oldTag.append(text)
+
+        if (isNewTag) {
+            input.value = ""
+        }
+        else {
+            input.value = tagName
+        }
+
+        currentTag.append(input)
+        tableRow.append(oldTag, currentTag)
+        table.append(tableRow)                    
     }
 
 
     function loadPage(){
 
-        const songID = getPostID()
+        songID = getPostID()
 
         loadPostData(songID)
 
@@ -143,11 +165,44 @@ On the right, shows examples of how it works
         
     }
 
+
+    function submit(){
+        const songName = document.getElementById("SongNameInput").value
+        const link = document.getElementById("YoutubeIDInput").value
+        const newTags = document.getElementsByName("newTag")
+
+        for (let i = 0; i < newTags.length; i++) {
+            if(newTags[i].value != ""){
+                tagNames.push(newTags[i].value)
+            }
+        }
+
+        console.log(songName)
+        console.log(link)
+        console.log(tagNames)
+
+        fetch("http://localhost:3000/api/updatePost" + songID, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": localStorage.getItem("sessionID") //sent authorization to the server so it knows we're logged in
+            },
+            body: JSON.stringify({
+                data: {
+                    songName: songName,
+                    tags: tagNames,
+                    link: link
+                }
+            })
+        })
+    }
+
 </script>
 
 <body onload = "loadPage()">
 
-    <table style = "font-size: 25px; width: 60%;">
+    <table style = "font-size: 20px; width: 45%;">
+        <caption>SONG INFORMATION</caption>
         <tr>
             <th> </th> <!--Don't delete. It is needed for the formatting.-->
             <th>Current Data</th>
@@ -178,11 +233,9 @@ On the right, shows examples of how it works
                     <th>Current Data</th>
                     <th>New Data</th>
                 </tr>
-            </table>
+            </table> <br>
 
-            <br>
-
-            <button onclick = "createTagTableRow(0, 'NO_DATA', true)">Add Tag</button>
+            <button onclick = "createTagTableRow('artistTags', 'NO DATA', true)">Add Artist Tag</button>
 
         </div>
 
@@ -194,7 +247,9 @@ On the right, shows examples of how it works
                     <th>Current Data</th>
                     <th>New Data</th>
                 </tr>
-            </table>
+            </table> <br>
+
+            <button onclick = "createTagTableRow('genreTags', 'NO DATA', true)">Add Genre Tag</button>
 
         </div>
 
@@ -206,14 +261,15 @@ On the right, shows examples of how it works
                     <th>Current Data</th>
                     <th>New Data</th>
                 </tr>
-            </table>
+            </table> <br>
+
+            <button onclick = "createTagTableRow('miscTags', 'NO DATA', true)">Add Misc Tag</button>
 
         </div>
 
     </div> 
 
-    <div id = "properties">
-    </div>
+    <button onclick = "submit()">Submit</button>
 
 </body>
 
