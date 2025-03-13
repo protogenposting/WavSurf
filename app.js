@@ -8,6 +8,15 @@ class Session
     }
 }
 
+class IPEntry
+{ 
+    constructor(_ip,_timeUntilReset)
+    {
+        this.ip = _ip
+        this.timeUntilReset = _timeUntilReset
+    }
+}
+
 /**
  * verify if the session token exists
  * @param {*} _token 
@@ -68,6 +77,22 @@ function generateSessionKey(length) {
     return result;
 }
 
+/**
+ * Finds the amount in the last 5 minutes an ip has sent requests
+ * @param {*} _ip hthe ip to check
+ * @returns the session key
+ */
+function IpAmount(_ip) {
+    let result = 0;
+    ips.forEach(element => {
+        if(_ip.match(element.ip))
+        {
+            result++
+        }
+    });
+    return result;
+}
+
 const databaseName='app.db'
 
 //load fs, the file system library
@@ -92,6 +117,11 @@ const path = require('path');
 const currentSessions = [
 
 ]
+
+const ips = [
+
+]
+
 
 //activate express
 const app = express();
@@ -379,6 +409,30 @@ function populate() {
 }
 
 populate()
+
+//this is ran at the start of every request
+app.use((req, res,next) => {
+    ips.push(new IPEntry(req.ip,5))
+    console.log(ips)
+    if(IpAmount(req.ip) < 1000)
+    {
+        next()
+    }
+});
+
+const schedule = require('node-schedule');
+
+// Schedule a job to run every minute
+schedule.scheduleJob('* * * * *', () => {
+    for(var i = 0; i < ips.length; i++) {
+        ips[i].timeUntilReset--
+        if(ips[i].timeUntilReset <= 0)
+        {
+            ips.splice(i, 1)
+            i--
+        }
+    }
+});
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
