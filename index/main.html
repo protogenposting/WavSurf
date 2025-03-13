@@ -18,7 +18,10 @@
         id = "searchBar"
         style = "top: 55px; font-size: 35px;"
         placeholder = 'Song Name "Tag Name"'
+        list="autoSuggest"
+        oninput="getAutoCorrect()"
     >
+    <datalist id="autoSuggest"></datalist>
 
     <button
         type = "button"
@@ -27,34 +30,45 @@
         style = "top: 120px; font-size: 30px;">Search
     </button>
 
-    <button
-        type = "button"
-        id = "login"
-        style = "top: 180px; font-size: 30px;">Login
-    </button>
-
-    <button
-        type = "button"
-        id = "signUp"
-        style = "top: 240px; font-size: 30px;">Sign Up
-    </button>
-
-    <button
-        type = "button"
-        id = "postCreate"
-        style = "top: 300px; font-size: 30px;">Create Post
-    </button>
-
-    <button
+    <a href="http://localhost:3000/tagbrowse" style = "width : 999px;"><button
         type = "button"
         id = "tagCreate"
-        style = "top: 360px; font-size: 30px;">Create Tag
-    </button>
+        style = "top: 180px; font-size: 30px;">Tag Browse
+    </button></a>
+
+    <a href="http://localhost:3000/login" style = "width : 999px;"><button
+        type = "button"
+        id = "login"
+        style = "top: 240px; font-size: 30px;">Login
+    </button></a>
+
+    <a href="http://localhost:3000/signUp" style = "width : 999px;"><button
+        type = "button"
+        id = "signUp"
+        style = "top: 300px; font-size: 30px;">Sign Up
+    </button></a>
+
+    <a href="http://localhost:3000/postCreate" style = "width : 999px;"><button
+        type = "button"
+        id = "postCreate"
+        style = "top: 360px; font-size: 30px;">Create Post
+    </button></a>
+
+    <a href="http://localhost:3000/tagCreate" style = "width : 999px;"><button
+        type = "button"
+        id = "tagCreate"
+        style = "top: 420px; font-size: 30px;">Create Tag
+    </button></a>
 
 </body>
 
 <script defer type = "text/javascript">
-    
+    const searchId = document.getElementById("searchBar");
+    searchId.onkeydown = function(event) {
+        if(event.keyCode == 13) {
+            search()
+        }
+    }
     /**
      * Goes to the search page with the stuff the user entered.
     **/
@@ -76,21 +90,68 @@
      * Put in a function because inlining it looks kinda ugly
     **/
     function load(){
-        document.getElementById("login").onclick = function () {
-            location.href = "http://localhost:3000/login";
-        };
-
-        document.getElementById("signUp").onclick = function () {
-            location.href = "http://localhost:3000/signUp";
-        };
-
-        document.getElementById("postCreate").onclick = function () {
-            location.href = "http://localhost:3000/postCreate";
-        };
-
-        document.getElementById("tagCreate").onclick = function () {
-            location.href = "http://localhost:3000/tagCreate";
-        };
+        console.log("HIII")
+    }
+    /**
+     * Finds autocorrect suggestions.
+     * Sends them to the html datalist to be displayed.
+     */
+     function getAutoCorrect() {
+        var search = document.getElementById("searchBar").value;
+        var tagNames = [];
+        var reading = false;
+        var currentString = "";
+        var dataList = document.getElementById("autoSuggest");
+ 
+        var lastQuotation = -1
+ 
+        for (var i = 0; i < search.length; i++)
+        {
+            var searchChar = search.charAt(i);
+            if (searchChar == '"') {
+                reading = !reading;
+                if (!reading) {
+                    lastQuotation = -1
+                    currentString = "";
+                }
+                else
+                {
+                    lastQuotation = i
+                }
+            }
+            else if (reading)
+            {
+                currentString = currentString + searchChar;
+            }
+            console.log(currentString);
+        }
+ 
+        //Delete the current tag from the search rq
+        if(lastQuotation > -1)
+        {
+            search = search.slice(0, lastQuotation + 1)
+        }
+ 
+        dataList.innerHTML = "";
+        if(currentString != ""){
+            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+                for(var i=0; i<json.length; i++) {
+                    var newOption = document.createElement("option");
+                    newOption.value = search + json[i].tagName + '"';
+                    dataList.appendChild(newOption);
+                    console.log(json[i]);
+                }
+                document.getElementById("searchBar").focus();
+            });
+           
+        }
     }
     
 </script>

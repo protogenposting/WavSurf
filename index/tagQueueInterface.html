@@ -14,12 +14,13 @@
 <script>
     //queue array that stores the queue data
     var queue = []
+    let popup = document.getElementById("popup");
 
     /**
      * Gets the information from the tagQueue and displayes it on the page.
      * Stores the information in the queue array.
-     * @param none
-     * @returns nothing
+     * If the user is not a high enough rank or is not logged in
+     * they get redirected to the login page.
     **/
     function getInfo() {
         fetch("http://localhost:3000/api/tagQueue")
@@ -29,13 +30,25 @@
             document.getElementById('p1').innerHTML = JSON.stringify(json[0]);
             console.log(json);
         });
+        
+        if (localStorage.getItem("username") == undefined) {
+            window.location.href = "http://localhost:3000/login"
+        }
+        fetch("http://localhost:3000/api/user/"+localStorage.getItem("username"))
+        .then(response => response.json())
+        .then(json => {
+            if (json.user.rank < 2) {
+                window.location.href = "http://localhost:3000/login"
+            }
+            console.log(json)
+            console.log(json.user.rank)
+        });
+
     }
 
     /**
      * When called it accepts the first bit of data in the queue array to be moved on into the main table.
      * Then deletes it from the tagQueue.
-     * @param none
-     * @returns nothing
     **/
     function accept() {
         fetch("http://localhost:3000/api/acceptTag/" + queue[0].id, {
@@ -51,8 +64,6 @@
 
     /**
      * When called it denies the first bit of data in the queue array and deletes it from the tagQueue.
-     * @param none
-     * @returns nothing
     **/
     function deny() {
         fetch("http://localhost:3000/api/denyTag/" + queue[0].id, {
@@ -75,6 +86,8 @@
 
     <!--When clicked runs the deny() function-->
     <button type = "button" onclick="deny()">Deny</button><br>
+
+    <label id ="popup"></label>
 
     <!--Displayes the first bit of tagQueue data on the page-->
     <p id = "p1">placeholder</p>

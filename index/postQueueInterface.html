@@ -16,6 +16,8 @@
 
     /**
      * Gets all of the posts currently in postQueue.
+     * If the user is not a high enough rank or is not logged in
+     * they get redirected to the login page.
     **/
     function getInfo() {
         fetch("http://localhost:3000/api/postQueue")
@@ -27,6 +29,19 @@
             queue = json;
             document.getElementById('p1').innerHTML = JSON.stringify(json[0]);
             
+        });
+
+        if (localStorage.getItem("username") == undefined) {
+            window.location.href = "http://localhost:3000/login"
+        }
+        fetch("http://localhost:3000/api/user/"+localStorage.getItem("username"))
+        .then(response => response.json())
+        .then(json => {
+            if (json.user.rank < 2) {
+                window.location.href = "http://localhost:3000/login"
+            }
+            console.log(json)
+            console.log(json.user.rank)
         });
     }
 
