@@ -464,10 +464,6 @@ app.get('/search/:search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
-app.get('/postSearch',(req,res) => {
-    res.sendFile(path.join(__dirname, '/index/postSearch.html'))
-})
-
 app.get('/tagCreate',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
 })
