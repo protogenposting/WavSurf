@@ -61,6 +61,33 @@
                 {
                     popup.textContent = "Account created!"
                     popup.style = "color : #000000; top: 65px; font-size: 20px;"
+                    fetch("http://localhost:3000/api/login", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify({
+                            username: username,
+                            password: password
+                        })
+                    })
+                    .then(response => response.json())
+                    .then(json => {
+                        console.log(json)
+                        if(json.sessionID == "0")
+                        {
+                            popup.textContent = "Your username or password is incorrect, please try again"
+                        }
+                        else
+                        {
+                            popup.textContent = "Logged in!"
+                            popup.style = "top: 65px; color: black; font-size: 20px;"
+
+                            localStorage.setItem("sessionID", json.sessionID);
+
+                            localStorage.setItem("username", username);
+                        }
+                    });
                 }
             })
     }

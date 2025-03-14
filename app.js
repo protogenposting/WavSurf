@@ -8,6 +8,15 @@ class Session
     }
 }
 
+class IPEntry
+{ 
+    constructor(_ip,_timeUntilReset)
+    {
+        this.ip = _ip
+        this.timeUntilReset = _timeUntilReset
+    }
+}
+
 /**
  * verify if the session token exists
  * @param {*} _token 
@@ -68,6 +77,22 @@ function generateSessionKey(length) {
     return result;
 }
 
+/**
+ * Finds the amount in the last 5 minutes an ip has sent requests
+ * @param {*} _ip hthe ip to check
+ * @returns the session key
+ */
+function IpAmount(_ip) {
+    let result = 0;
+    ips.forEach(element => {
+        if(_ip.match(element.ip))
+        {
+            result++
+        }
+    });
+    return result;
+}
+
 const databaseName='app.db'
 
 //load fs, the file system library
@@ -92,6 +117,11 @@ const path = require('path');
 const currentSessions = [
 
 ]
+
+const ips = [
+
+]
+
 
 //activate express
 const app = express();
@@ -229,7 +259,7 @@ function populate() {
     //id = 4
     addTag('HipHop', 1, []);
     //id = 5
-    addTag('IndieRock', 1, [1]);
+    addTag('IndieRock', 1, [1,14]);
     //id = 6
     addTag('AlternativeRock', 1, [1]);
     //id = 7
@@ -332,6 +362,18 @@ function populate() {
     addTag("Aidan", 0, []);
     //id = 56
     addTag("Lena Raine", 0, []);
+    //id = 57
+    addTag("Grandaddy", 0, []);
+    //id = 58
+    addTag("Kobaryo", 0, []);
+    //id = 59
+    addTag("LamazeP", 0, []);
+    //id = 60
+    addTag("32ki", 0, []);
+    //id = 61
+    addTag("JamieP", 0, []);
+    //id = 62
+    addTag("Alisticious", 0, []);
 
     addPost('Ghosts n Stuff', 'pb-EwykPTv8',[7,17,18,22]);
     addPost('My Heart', 'jK2aIUmmdP4',[16]);
@@ -346,7 +388,7 @@ function populate() {
     addPost('宇宙ステーションのレベル7', 'QB4uxDo4FXQ',[3,9,22]);
     addPost('Disco Panzer', 'uRSAatLI2QY',[20,22]);
     addPost('WFLYTD', 'uYkjSw3zb2M',[21,9,22]);
-    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23]);
+    addPost('ROT FOR CLOUT', '_AjJZEcMdww',[9,23,61]);
     addPost('Tatu Paradox', 'rzm4njnXJFE',[24,25,22]);
     addPost('T+ VS SHARK', '1v0hP5DuAZ8',[26,27,43]);
     addPost('More Bells And Wistles', 'qSdR4gFumps',[9,28,37]);
@@ -361,20 +403,53 @@ function populate() {
     addPost('Drum Machine', '0bPU4bdMlqM',[9,28,37]);
     addPost('Acoustic Curves', 'i_6Z1VouytE',[9,28,37]);
     addPost('HYPER4ID', 'xYLkpQRe40I',[26,27]);
-    addPost('CUE CUE RESCUE', '12ZnJtZJfAM',[42,26,34]);
+    addPost('CUE CUE RESCUE', '12ZnJtZJfAM',[42,26,34,22]);
     addPost('Passionfruit Pantheon (Apotheosis Mix)', 'd3_n5DB3wTs',[25,48,37,9,49]);
     addPost('Cyberstrider Madeline', 'rnbXze7uvjw',[48,12]);
     addPost('Puffed Out', '2eq93dyayy8',[48,9]);
-    addPost('Heart of the Problem', 'GCfz9OYKtxE',[48,50]);
+    addPost('Heart of the Problem', 'GCfz9OYKtxE',[48,50,62]);
     addPost('Out of Time', '_Ta4cjgqd7c',[48,51,35]);
     addPost('kevintechnospam.wav', 'tlFlnAJogXs',[48,53,52]);
     addPost('Limitless', 'd3_n5DB3wTs',[37,35,48,54]);
     addPost('Shatter the Pantheon!', 'U4u3aCEAMks',[25,48,37,9,55]);
     addPost('Shattersong', 'J7SzMayyPvs',[48,37,9,55]);
     addPost('Resurrections', '1rwAvUvvQzQ',[47,37,9,56]);
+    addPost('A.M. 180', 'pBQDfOpWfBI',[57,9,22,5]);
+    addPost('HAL 30000', 'BC3VhlNGs64',[58,38]);
+    addPost('Triple Baka', 'duPJqfKiA78',[59,23,3,1,9]);
+    addPost('Mesmerizer', '19y8YTbvri8',[60,23,3,26]);
+    addPost('Obsolete Meat', 'L2hzsXOT0Nc',[60,23,3,26]);
+    addPost('CIRCUS PANIC!!!', '6kiQuUJWHuE',[60,23,32]);
+    addPost('You’re Telling Me A SHRIMP Fried This Rice?!', 's742C0v5SFI',[9,23,61,3]);
+    addPost('Cadmium Colors', '1U6qefKcOrg',[9,23,61,3]);
+    addPost('Get Set Mind', 'hBYBKR9e6hs',[42,50,34,3]);
 }
 
 populate()
+
+//this is ran at the start of every request
+app.use((req, res,next) => {
+    ips.push(new IPEntry(req.ip,2))
+    console.log(ips)
+    if(IpAmount(req.ip) < 1000)
+    {
+        next()
+    }
+});
+
+const schedule = require('node-schedule');
+
+// Schedule a job to run every minute
+schedule.scheduleJob('* * * * *', () => {
+    for(var i = 0; i < ips.length; i++) {
+        ips[i].timeUntilReset--
+        if(ips[i].timeUntilReset <= 0)
+        {
+            ips.splice(i, 1)
+            i--
+        }
+    }
+});
 
 //#region front end page requests
 app.get('/style.css',(req,res) => {
