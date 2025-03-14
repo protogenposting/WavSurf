@@ -133,17 +133,17 @@
     <script src="/navbarScript.js"></script>
     <div id="inputs">
         <!--Instructions and inputs for the user.-->
-        <label style = "font-size: 20px; left: 570px; top: 70px;">Tag name:</label>
-        <input type="text" id="name" name="name" style="font-size: 20px;top: 70px;"><br>
+        <label style = "font-size: 20px; left: 570px;">Tag name:</label>
+        <input type="text" id="name" name="name" style="font-size: 20px;"><br>
 
-        <label style = "font-size: 20px; left: 480px; top: 100px;">Tag Type (Artist, Genre, Etc.):</label>
-        <input type="text" id="type" name="type" style="font-size: 20px; top: 100px;" list = "types"><br>
+        <label style = "font-size: 20px; left: 480px; top: 30px;">Tag Type (Artist, Genre, Etc.):</label>
+        <input type="text" id="type" name="type" style="font-size: 20px; top: 30px;" list = "types"><br>
         <datalist id = "types">
             <option>Artist</option>
             <option>Genre</option>
             <option>Misc</option>
         </datalist>
-        <label style="font-size: 20px; left: 570px; top: 130px;">Tag Parents:</label>
+        <label style="font-size: 20px; left: 570px; top: 60px;">Tag Parents:</label>
         <!--
         <label for="parents">Tag parents (JSON Array with the ids of each tag, change this to something else later)</label><br>
         <input type="text" id="parents" name="parents"><br>
@@ -152,10 +152,10 @@
         </datalist>
     </div>
     <div id="buttons">
-        <button id="addParent" type="button" style="top: 190px; height: 75px; width: 150px; font-size: 20px;" onclick="addAnotherInput()">Add Parent</button>
+        <button id="addParent" type="button" style="top: 120px; height: 75px; width: 150px; font-size: 20px;" onclick="addAnotherInput()">Add Parent</button>
 
         <!--Submits the information and attempts to send the tag to tagQueue when clicked.-->
-        <button id="submitBtn" type="button" style = "top: 270px; height: 75px; width: 150px; font-size: 20px;" onclick="submit()">Submit</button>
+        <button id="submitBtn" type="button" style = "top: 200px; height: 75px; width: 150px; font-size: 20px;" onclick="submit()">Submit</button>
     </div>
     
     <a href="http://localhost:3000/login" style="font-size: 20px; width : 999px; "><label id="popup" style = "text-decoration-line: underline;" ></label></a>
