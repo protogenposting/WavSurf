@@ -177,11 +177,11 @@ On the right, shows examples of how it works
             }
         }
 
-        console.log(songName)
-        console.log(link)
-        console.log(tagNames)
+        console.log("song name: ", songName, ", link: ", link, ", new tags: ", tagNames)
 
-        fetch("http://localhost:3000/api/updatePost" + songID, {
+        console.log(songID)
+
+        fetch("http://localhost:3000/api/updatePost/" + songID, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -190,17 +190,33 @@ On the right, shows examples of how it works
             body: JSON.stringify({
                 data: {
                     songName: songName,
-                    tags: tagNames,
                     link: link
                 }
             })
         })
+
+        fetch("http://localhost:3000/api/deletePostTags", {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": localStorage.getItem("sessionID") //sent authorization to the server so it knows we're logged in
+            }
+        })
+
+        for (let i = 0; i < tagNames.length; i++){
+            addNewTag(tagNames[i])
+        }
+    }
+
+    function addNewTag(tagName){
+        
     }
 
 </script>
 
 <body onload = "loadPage()">
 
+    <br>
     <table style = "font-size: 20px; width: 45%;">
         <caption>SONG INFORMATION</caption>
         <tr>

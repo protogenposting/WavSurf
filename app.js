@@ -802,16 +802,53 @@ app.post(apiPath+'postSearch',(req,res) => {
 
 //edit the values of a post
 app.post(apiPath+'updatePost/:id',(req,res) => {
+
+    console.log(req.body.data)
+    console.log("verifying...")
+
     if(verifyRank(req.headers.authorization,2))
     {
-        const request = db.prepare("UPDATE postQueue SET * WHERE id=?");
-        
-        let result = request.run(JSON.stringify(req.body.data))
+        console.log("rank was verified")
 
-        console.log(req.body.data)
+        const request = db.prepare("UPDATE posts SET songName = ?, link = ? WHERE songID = ?");
+        
+        let result = request.run(req.body.data.songName, req.body.data.link, req.params.id)
 
         res.json(result)
     }
+})
+
+//edit post tags
+app.post(apiPath+'updatePostTags/:songID',(req,res) => {
+
+    console.log(req.body.data)
+
+    //postData.tags[i] = db.prepare("SELECT * FROM tags WHERE tagName = ?").get(postData.tags[i]).tagID;
+
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
+        addData.run(req.body.data);
+    }
+})
+
+//delete all of the post tags so that post can update cleanly
+app.delete(apiPath+'deletePostTags/:id',(req,res) => {
+
+    console.log(req.body.data)
+
+    if(verifyRank(req.headers.authorization,2))
+    {
+        const deleteData = db.prepare("DELETE FROM songTags WHERE songID = ?");
+
+        let result = deleteData.run(req.params.id)
+    }
+
+    /**
+     * const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
+        
+        var result = insertData.run(req.params.id)
+     */
 })
 //#endregion
 
