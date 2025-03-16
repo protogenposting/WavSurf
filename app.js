@@ -464,10 +464,6 @@ app.get('/search/:search',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/search.html'))
 })
 
-app.get('/postSearch',(req,res) => {
-    res.sendFile(path.join(__dirname, '/index/postSearch.html'))
-})
-
 app.get('/tagCreate',(req,res) => {
     res.sendFile(path.join(__dirname, '/index/tagCreate.html'))
 })
@@ -516,12 +512,13 @@ app.get('/noAccess',(req, res) => {
     res.sendFile(path.join(__dirname, '/index/noAccess.html'))
 })
 
-app.get('/navbarScript',(req, res) => {
-    res.sendFile(path.join(__dirname, 'index/navbarScript.js'))
+app.get('/navbarScript.js',(req, res) => {
+    res.setHeader("Content-Type","text/javascript")
+    res.sendFile(path.join(__dirname, 'index/navbar/navbarScript.js'))
 })
 
 app.get('/navbar',(req, res) => {
-    res.sendFile(path.join(__dirname, '/index/navbar.html'))
+    res.sendFile(path.join(__dirname, '/index/navbar/navbar.html'))
 })
 
 //#endregion

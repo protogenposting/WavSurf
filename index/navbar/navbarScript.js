@@ -1,4 +1,5 @@
-const nav = document.querySelector('.navbar')
+const nav = document.createElement("nav")
+
 fetch('http://localhost:3000/navbar', {
     method: "GET",
     headers: {
@@ -8,4 +9,7 @@ fetch('http://localhost:3000/navbar', {
 .then(res=>res.text())
 .then(data=>{
     nav.innerHTML=data
+    nav.setAttribute("style","top: 0px;")
+    nav.setAttribute("class","navbar")
+    document.body.appendChild(nav)
 })
