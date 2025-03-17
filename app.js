@@ -827,29 +827,49 @@ app.post(apiPath+'updatePostTags/:songID',(req,res) => {
 
     if(verifyRank(req.headers.authorization,2))
     {
-        const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
-        addData.run(req.body.data);
+        const tagNames = req.body.data.tags
+
+        let tags = new Array()
+
+        for(let i = 0; i < tagNames.length; i++){
+
+            const tag = db.prepare("SELECT * FROM tags WHERE tagName = ?")
+            const newTag = tag.get(tagNames[i]).tagID
+
+            tags.push(newTag)
+        }
+
+        console.log(req.params.id)
+
+        for(let i = 0; i < tags.length; i ++){
+            let addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?, ?)")
+            let result = addData.run(tags[i], req.params.id);
+        }
+
+
+        //const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
+        //addData.run(req.body.data);
+
+        /*
+        const postData = JSON.parse(post.postData);
+        for(var i = 0; i < postData.tags.length; i++)
+        {
+            postData.tags[i] = db.prepare("SELECT * FROM tags WHERE tagName = ?").get(postData.tags[i]).tagID;
+        }
+        */
     }
 })
 
 //delete all of the post tags so that post can update cleanly
 app.delete(apiPath+'deletePostTags/:id',(req,res) => {
 
-    console.log(req.body.data)
-
     if(verifyRank(req.headers.authorization,2))
     {
         const deleteData = db.prepare("DELETE FROM songTags WHERE songID = ?");
-
-        let result = deleteData.run(req.params.id)
+        deleteData.run(req.params.id)
     }
-
-    /**
-     * const insertData = db.prepare("DELETE FROM tagQueue WHERE id=?");
-        
-        var result = insertData.run(req.params.id)
-     */
 })
+
 //#endregion
 
 //this starts the server on the port

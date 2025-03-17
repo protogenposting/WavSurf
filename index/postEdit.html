@@ -8,6 +8,7 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>Post Edit</title>
+    <link rel="stylesheey" href="style.css">
 </head>
 
 <style>
@@ -195,21 +196,37 @@ On the right, shows examples of how it works
             })
         })
 
-        fetch("http://localhost:3000/api/deletePostTags", {
+        fetch("http://localhost:3000/api/deletePostTags/" + songID, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
                 "authorization": localStorage.getItem("sessionID") //sent authorization to the server so it knows we're logged in
-            }
+            },
         })
 
-        for (let i = 0; i < tagNames.length; i++){
-            addNewTag(tagNames[i])
-        }
+        fetch("http://localhost:3000/api/updatePostTags/" + songID, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "authorization": localStorage.getItem("sessionID") //sent authorization to the server so it knows we're logged in
+            },
+            body: JSON.stringify({
+                data: {
+                    tags : tagNames
+                }
+            })
+        })
+
+        tagNames = []
     }
 
-    function addNewTag(tagName){
-        
+
+    function printCurrentData(){
+        fetch("http://localhost:3000/api/postTags/" + songID)
+        .then(response => response.json())
+        .then(json => {
+            console.log(json)
+        })
     }
 
 </script>
@@ -283,9 +300,12 @@ On the right, shows examples of how it works
 
         </div>
 
-    </div> 
+    </div>
+
+    <label>(To delete a tag, make its new data empty.)</label><br>
 
     <button onclick = "submit()">Submit</button>
+    <button onclick = "printCurrentData()">Print Current Data</button>
 
 </body>
 
