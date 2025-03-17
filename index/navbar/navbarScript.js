@@ -10,11 +10,15 @@ fetch('http://localhost:3000/navbar', {
         "Content-Type": "application/json",
     }
 })
-.then(res=>res.text())
-.then(data=>{
-    //add the navbar to the page
-    nav.innerHTML=data
-    nav.setAttribute("style","top: 0px;")
-    nav.setAttribute("class","navbar")
-    document.body.appendChild(nav)
-})
+.then(
+        res=>res.text() //load the result as text
+    )
+.then(
+    data=>{
+        //add the navbar to the page
+        nav.innerHTML=data
+        nav.setAttribute("style","top: 0px;")
+        nav.setAttribute("class","navbar")
+        document.body.appendChild(nav)
+    }
+)
