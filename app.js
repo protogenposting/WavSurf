@@ -818,8 +818,7 @@ app.post(apiPath+'updatePostTags/:songID',(req,res) => {
 
     console.log("Updating Tags!")
 
-    if(verifyRank(req.headers.authorization,2))
-    {
+    if(verifyRank(req.headers.authorization,2)) {
 
         const deleteData = db.prepare("DELETE FROM songTags WHERE songID = ?");
         deleteData.run(req.params.songID)
@@ -836,9 +835,18 @@ app.post(apiPath+'updatePostTags/:songID',(req,res) => {
             tags.push(newTag)
         }
 
-        for(let i = 0; i < tags.length; i ++){
-            const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?, ?)")
-            const result = addData.run(tags[i], req.params.songID);
+        for(let i = 0; i < tags.length; i++) {
+            const parentTags = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(tags[i]);
+            
+            for(let o = 0; o < parentTags.length; o++) {
+
+                if(tags.indexOf(parentTags[o].tagID) <= -1) {
+                    tags.push(parentTags[o].tagID)
+                }
+            }
+        
+            const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
+            addData.run(tags[i], req.params.songID);
         }
     }
 })
