@@ -97,6 +97,7 @@
         .then(response => response.json())
         .then(json => {
             songData = json
+            document.getElementById("songName").innerText = songData.songName
             embed.src = "https://www.youtube.com/embed/" + songData.link
         });
 
@@ -113,8 +114,8 @@
 </script>
 
 <body onload = "load()" id = "body">
-
-    
+    <script src="/navbarScript.js"></script>
+    <label id="songName" style = "font-size: 40px;">adasds</label>
     <div class = "container">
 
         <!--The embed for the song's Youtube video. "src" and "title" are initialized during load().-->
