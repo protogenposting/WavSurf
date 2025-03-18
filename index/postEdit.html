@@ -42,6 +42,7 @@ On the right, shows examples of how it works
     let oldTags = new Array()
     let tagNames = new Array()
     let songID
+    let numberOfTagInputs = 0
 
     /**
      * Gets the Song ID (AKA Post ID) from the end of the page's URL and returns it.
@@ -127,6 +128,8 @@ On the right, shows examples of how it works
 
         const input = document.createElement("input")
 
+        input.setAttribute("list", "autoSuggest")
+        input.setAttribute('oninput', 'getAutoCorrect(this)')
         input.className = "tableInput"
         input.name = "newTag"
 
@@ -242,6 +245,30 @@ On the right, shows examples of how it works
         })
     }
 
+    /**
+     * Finds autocorrect suggestions.
+     * Sends them to the html datalist to be displayed.
+    */
+    function getAutoCorrect(searchBar) {
+        let dataList = document.getElementById("autoSuggest");
+        dataList.innerHTML = ""
+        fetch("http://localhost:3000/api/tagSimilar/" + searchBar.value, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            }
+        })
+        .then(response => response.json())
+        .then(json => {
+            for(let i = 0; i < json.length; i++) {
+                let newOption = document.createElement("option");
+                newOption.value = json[i].tagName;
+                dataList.appendChild(newOption);
+            }
+            searchBar.focus();
+        });
+    }
+
 </script>
 
 <body onload = "loadPage()">
@@ -321,5 +348,7 @@ On the right, shows examples of how it works
     <label>(To delete a tag, make its new data empty.)</label><br>
     <label>(Additionally, the tag type doesn't actually matter. It's just there for visuals.)</label><br>
 
+    <datalist id = "autoSuggest">
+    </datalist>
 </body>
 

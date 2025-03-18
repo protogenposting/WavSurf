@@ -189,11 +189,11 @@ function addTag(tagName, type, parents) {
 function addPost(songName, link, tags) {
     const addData = db.prepare("INSERT INTO posts (songName, link) VALUES (?, ?)");
     let result = addData.run(songName, link);
-    for(var i = 0; i < tags.length; i++)
+    for(let i = 0; i < tags.length; i++)
     {
         let parentTags = db.prepare('SELECT * FROM tagChildren WHERE childID = ?').all(tags[i]);
 
-        for(var o = 0; o < parentTags.length; o++)
+        for(let o = 0; o < parentTags.length; o++)
         {
             if(tags.indexOf(parentTags[o].tagID) <= -1)
             {
