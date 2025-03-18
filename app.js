@@ -803,16 +803,11 @@ app.post(apiPath+'postSearch',(req,res) => {
 //edit the values of a post
 app.post(apiPath+'updatePost/:id',(req,res) => {
 
-    console.log(req.body.data)
-    console.log("verifying...")
-
     if(verifyRank(req.headers.authorization,2))
     {
-        console.log("rank was verified")
-
         const request = db.prepare("UPDATE posts SET songName = ?, link = ? WHERE songID = ?");
         
-        let result = request.run(req.body.data.songName, req.body.data.link, req.params.id)
+        const result = request.run(req.body.data.songName, req.body.data.link, req.params.id)
 
         res.json(result)
     }
@@ -821,12 +816,14 @@ app.post(apiPath+'updatePost/:id',(req,res) => {
 //edit post tags
 app.post(apiPath+'updatePostTags/:songID',(req,res) => {
 
-    console.log(req.body.data)
-
-    //postData.tags[i] = db.prepare("SELECT * FROM tags WHERE tagName = ?").get(postData.tags[i]).tagID;
+    console.log("Updating Tags!")
 
     if(verifyRank(req.headers.authorization,2))
     {
+
+        const deleteData = db.prepare("DELETE FROM songTags WHERE songID = ?");
+        deleteData.run(req.params.songID)
+
         const tagNames = req.body.data.tags
 
         let tags = new Array()
@@ -839,34 +836,10 @@ app.post(apiPath+'updatePostTags/:songID',(req,res) => {
             tags.push(newTag)
         }
 
-        console.log(req.params.id)
-
         for(let i = 0; i < tags.length; i ++){
-            let addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?, ?)")
-            let result = addData.run(tags[i], req.params.id);
+            const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?, ?)")
+            const result = addData.run(tags[i], req.params.songID);
         }
-
-
-        //const addData = db.prepare("INSERT INTO songTags (tagID, songID) VALUES (?,?)")
-        //addData.run(req.body.data);
-
-        /*
-        const postData = JSON.parse(post.postData);
-        for(var i = 0; i < postData.tags.length; i++)
-        {
-            postData.tags[i] = db.prepare("SELECT * FROM tags WHERE tagName = ?").get(postData.tags[i]).tagID;
-        }
-        */
-    }
-})
-
-//delete all of the post tags so that post can update cleanly
-app.delete(apiPath+'deletePostTags/:id',(req,res) => {
-
-    if(verifyRank(req.headers.authorization,2))
-    {
-        const deleteData = db.prepare("DELETE FROM songTags WHERE songID = ?");
-        deleteData.run(req.params.id)
     }
 })
 

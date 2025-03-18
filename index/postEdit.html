@@ -8,7 +8,7 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>Post Edit</title>
-    <link rel="stylesheey" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <style>
@@ -39,6 +39,7 @@ On the right, shows examples of how it works
 
 <script defer>
 
+    let oldTags = new Array()
     let tagNames = new Array()
     let songID
 
@@ -90,6 +91,7 @@ On the right, shows examples of how it works
         .then(json => {
 
             const tagName = json.tagName
+            oldTags.push(tagName)
 
             let type
 
@@ -178,10 +180,7 @@ On the right, shows examples of how it works
             }
         }
 
-        console.log("song name: ", songName, ", link: ", link, ", new tags: ", tagNames)
-
-        console.log(songID)
-
+        // Updates the song and link
         fetch("http://localhost:3000/api/updatePost/" + songID, {
             method: "POST",
             headers: {
@@ -196,13 +195,10 @@ On the right, shows examples of how it works
             })
         })
 
-        fetch("http://localhost:3000/api/deletePostTags/" + songID, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "authorization": localStorage.getItem("sessionID") //sent authorization to the server so it knows we're logged in
-            },
-        })
+        if (tagsHaventChanged(tagNames)) {
+            tagNames = []
+            return
+        }
 
         fetch("http://localhost:3000/api/updatePostTags/" + songID, {
             method: "POST",
@@ -221,6 +217,23 @@ On the right, shows examples of how it works
     }
 
 
+    function tagsHaventChanged(tagNames){
+        if (oldTags.length != tagNames.length){
+            return false
+        }
+
+        for(let i = 0; i < oldTags.length; i++){
+            if (oldTags[i] != tagNames[i]){
+                return false
+            }
+        }
+
+        return true
+    }
+
+    /*
+      For debugging purposes. Doesn't need to actually exist.
+    */
     function printCurrentData(){
         fetch("http://localhost:3000/api/postTags/" + songID)
         .then(response => response.json())
@@ -302,10 +315,11 @@ On the right, shows examples of how it works
 
     </div>
 
-    <label>(To delete a tag, make its new data empty.)</label><br>
-
     <button onclick = "submit()">Submit</button>
     <button onclick = "printCurrentData()">Print Current Data</button>
+    <br><br>
+    <label>(To delete a tag, make its new data empty.)</label><br>
+    <label>(Additionally, the tag type doesn't actually matter. It's just there for visuals.)</label><br>
 
 </body>
 
