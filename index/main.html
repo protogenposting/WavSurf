@@ -31,31 +31,31 @@
         style = "top: 120px; font-size: 30px;">Search
     </button>
 
-    <a href="http://localhost:3000/tagbrowse" style = "width : 999px;"><button
+    <a href="http://wavsurf.org/tagbrowse" style = "width : 999px;"><button
         type = "button"
         id = "tagCreate"
         style = "top: 180px; font-size: 30px;">Tag Browse
     </button></a>
 
-    <a href="http://localhost:3000/login" style = "width : 999px;"><button
+    <a href="http://wavsurf.org/login" style = "width : 999px;"><button
         type = "button"
         id = "login"
         style = "top: 240px; font-size: 30px;">Login
     </button></a>
 
-    <a href="http://localhost:3000/signUp" style = "width : 999px;"><button
+    <a href="http://wavsurf.org/signUp" style = "width : 999px;"><button
         type = "button"
         id = "signUp"
         style = "top: 300px; font-size: 30px;">Sign Up
     </button></a>
 
-    <a href="http://localhost:3000/postCreate" style = "width : 999px;"><button
+    <a href="http://wavsurf.org/postCreate" style = "width : 999px;"><button
         type = "button"
         id = "postCreate"
         style = "top: 360px; font-size: 30px;">Create Post
     </button></a>
 
-    <a href="http://localhost:3000/tagCreate" style = "width : 999px;"><button
+    <a href="http://wavsurf.org/tagCreate" style = "width : 999px;"><button
         type = "button"
         id = "tagCreate"
         style = "top: 420px; font-size: 30px;">Create Tag
@@ -77,7 +77,7 @@
 
         const searchText = document.getElementById("searchBar").value
 
-        let URL = "http://localhost:3000/search"
+        let URL = "http://wavsurf.org/search"
 
         if (!(searchText == "")){
             URL += "/"
@@ -135,7 +135,7 @@
  
         dataList.innerHTML = "";
         if(currentString != ""){
-            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+            fetch("http://wavsurf.org/api/tagSimilar/"+currentString, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

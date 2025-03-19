@@ -61,7 +61,7 @@
 
         const URL = window.location.href
 
-        if (URL == "http://localhost:3000/search" || URL == "http://localhost:3000/search/"){
+        if (URL == "http://wavsurf.org/search" || URL == "http://wavsurf.org/search/"){
             return
         }
 
@@ -88,7 +88,7 @@
      * After everything is searched, they will be displayed on the page as links to their songView page.
      */
     function searchMade () {
-        fetch("http://localhost:3000/api/postSearch", {
+        fetch("http://wavsurf.org/api/postSearch", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -111,7 +111,7 @@
  
                 hyperLink.textContent = json[i].songName
 
-                hyperLink.setAttribute('href', "http://localHost:3000/songView/" + json[i].songID)
+                hyperLink.setAttribute('href', "http://wavsurf.org/songView/" + json[i].songID)
                 hyperLink.textContent = json[i].songName
                 hyperLink.style = "left: 75%; font-size: 30px; text-align: center; width: 700px; top:"+linkSpacing+"px";
  
@@ -163,7 +163,7 @@
  
         dataList.innerHTML = "";
         if(currentString != ""){
-            fetch("http://localhost:3000/api/tagSimilar/"+currentString, {
+            fetch("http://wavsurf.org/api/tagSimilar/"+currentString, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

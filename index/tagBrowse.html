@@ -20,7 +20,7 @@
      * Gets the ids of all parent tags, aka tags with no parents of their own
      */
     function getParents() {
-        fetch("http://localhost:3000/api/tagParents")
+        fetch("http://wavsurf.org/api/tagParents")
         .then(response => response.json())
         .then(json => {
             const tags = json
@@ -47,13 +47,13 @@
         let newButton = document.createElement("button")
         let lineBreak = document.createElement("br")
 
-        hyperLink.href = "http://localhost:3000/search/" + '"' + tag.tagName + '"'
+        hyperLink.href = "http://wavsurf.org/search/" + '"' + tag.tagName + '"'
 
         newButton.innerText = tag.tagName
         const childText = document.createTextNode(" - " + tag.tagName)
         newButton.setAttribute("style","font-size: 20px; transform: translate(0px); position: absolute; left: " + 25 * tag.depth + "px;" + "top: " + buttonSpacing + "px")
 
-        "http://localhost:3000/search/" + '"' + tag.tagName + '"'
+        "http://wavsurf.org/search/" + '"' + tag.tagName + '"'
         let body = document.getElementById("body")
 
         hyperLink.appendChild(newButton)
@@ -62,7 +62,7 @@
         body.appendChild(hyperLink)
         body.appendChild(lineBreak)
 
-        fetch("http://localhost:3000/api/tagChildren/" + tag.tagID)
+        fetch("http://wavsurf.org/api/tagChildren/" + tag.tagID)
         .then(response => response.json())
         .then(json => {
             if (json.length == 0){
