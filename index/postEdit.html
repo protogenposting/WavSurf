@@ -54,7 +54,10 @@ On the right, shows examples of how it works
         return URL.slice(endPoint + 1, URL.length)
     }
 
-
+    /**
+     * Gets the post's songName and Youtube ID (or link) and puts it into a table.
+     * It then creates a column that allows the user to edit them accordingly.
+    **/
     function loadPostData(){
         fetch("http://localhost:3000/api/post/" + songID)
         .then(response => response.json())
@@ -68,7 +71,7 @@ On the right, shows examples of how it works
 
             input.className = "tableInput"
 
-            const input2 = input.cloneNode()
+            const input2 = input.cloneNode() //They're essentially the same thing, so it's easier to just do this.
 
             input.value = songData.songName
             input2.value = songData.link
@@ -84,7 +87,10 @@ On the right, shows examples of how it works
         });
     }
 
-
+    /**
+     * Gets a tag from the original post and puts its name into oldTags.
+     * Gets its type as well (artist, genre, misc) and puts it in the correct tag table accordingly.
+    **/
     function loadTag(tagID){
 
         fetch("http://localhost:3000/api/tags/" + tagID)
@@ -92,10 +98,11 @@ On the right, shows examples of how it works
         .then(json => {
 
             const tagName = json.tagName
-            oldTags.push(tagName)
+            oldTags.push(tagName) //For submit().
 
             let type
 
+            // Converts the type in the json to its string equivalent.
             switch(json.type) {
                 case 0:
                     type = "artistTags"
@@ -115,7 +122,14 @@ On the right, shows examples of how it works
 
     }
 
-
+    /**
+     * Creates a table row for a tag.
+     * Also creates a column for the user to edit the tag.
+     * 
+     * @param type: the tag's type (artist, genre, misc)
+     * @param tagName: the tag's name
+     * @param isNewTag: whether or not this row is for a tag from the original post
+    **/
     function createTagTableRow(type, tagName, isNewTag){
 
         const table = document.getElementById(type)
@@ -147,7 +161,10 @@ On the right, shows examples of how it works
         table.append(tableRow)                    
     }
 
-
+    /**
+     * Loads all of the song's data onto the page.
+     * There has to be a songID in the URL for this to work.
+    **/
     function loadPage(){
 
         songID = getPostID()
@@ -171,7 +188,10 @@ On the right, shows examples of how it works
         
     }
 
-
+    /**
+     * Attempts to submit the changes the user made. 
+     * Updates the songName and YoutubeID. Deletes songTags and re-adds them.
+    **/
     function submit(){
         const songName = document.getElementById("SongNameInput").value
         const link = document.getElementById("YoutubeIDInput").value
@@ -219,7 +239,11 @@ On the right, shows examples of how it works
         tagNames = []
     }
 
-
+    /**
+     * Checks if the user has changed any of the post's tags while editing the post.
+     * If it hasn't, then return true. Otherwise, return false.
+     * @params tagNames is an array containing the current tags on the page.
+    */
     function tagsHaventChanged(tagNames){
         if (oldTags.length != tagNames.length){
             return false
@@ -235,7 +259,8 @@ On the right, shows examples of how it works
     }
 
     /*
-      For debugging purposes. Doesn't need to actually exist.
+      For debugging purposes.
+      Prints all of the tags the post currently has.
     */
     function printCurrentData(){
         fetch("http://localhost:3000/api/postTags/" + songID)
@@ -252,6 +277,7 @@ On the right, shows examples of how it works
     function getAutoCorrect(searchBar) {
         let dataList = document.getElementById("autoSuggest");
         dataList.innerHTML = ""
+
         fetch("http://localhost:3000/api/tagSimilar/" + searchBar.value, {
             method: "GET",
             headers: {
@@ -277,7 +303,7 @@ On the right, shows examples of how it works
     <table style = "font-size: 20px; width: 45%;">
         <caption>SONG INFORMATION</caption>
         <tr>
-            <th> </th> <!--Don't delete. It is needed for the formatting.-->
+            <th> </th> <!--Don't delete. This empty element is needed for the formatting.-->
             <th>Current Data</th>
             <th>New Data</th>
         </tr>
@@ -294,7 +320,7 @@ On the right, shows examples of how it works
     </table>
     <br>
 
-    <!--Make a scrollable list containing all of three versions of the tags.-->
+    <!--Makes 3 tables side by side that show all of the tags under their tag types respectively.-->
 
     <div style = "display: flex;">
 
@@ -342,6 +368,7 @@ On the right, shows examples of how it works
 
     </div>
 
+    <!--Rest of the buttons for the moderator to use-->
     <button onclick = "submit()">Submit</button>
     <button onclick = "printCurrentData()">Print Current Data</button>
     <br><br>
