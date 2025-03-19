@@ -100,7 +100,7 @@ const fs = require('fs');
 
 //deletes database on load, delete this line later
 if(fs.existsSync(databaseName)) {
-    fs.unlinkSync(databaseName);
+    //fs.unlinkSync(databaseName);
 }
 
 
@@ -237,19 +237,6 @@ function addPost(songName, link, tags) {
 }
 
 function populate() {
-    addUser('Oli', 'Oliver', 'ownerLol', 3);
-    addUser('Tiger', 'Tiger', 'ownerLol', 3);
-    addUser('Carson', 'Carson', 'ownerLol', 3);
-    addUser('Bob', 'BobRoss', 'bestpainter', 1);
-    addUser('God', 'RealGod123', 'password', 2);
-    addUser('AlanWalker', 'AlanWalker', 'TheSpectre', 1);
-    addUser('PeterGriffin', 'PeterGriffinFromFamilyGuy', 'simposnssucks', 1);
-    addUser('HomerSimpson', 'HomerSimpsonReal', 'familyguysucks', 1);
-    addUser('RandomMod', 'RandomMod', 'modmod', 2);
-    addUser('randomUSER', 'RandomUser', 'guyyes', 1);
-    addUser('personyes', 'personperson', 'yeyaye', 1);
-    addUser('justamod', 'justamod', 'modyesyes', 2);
-
     // id = 1
     addTag('Rock', 1, []);
     // id = 2
@@ -424,8 +411,6 @@ function populate() {
     addPost('Cadmium Colors', '1U6qefKcOrg',[9,23,61,3]);
     addPost('Get Set Mind', 'hBYBKR9e6hs',[42,50,34,3]);
 }
-
-populate()
 
 //this is ran at the start of every request
 app.use((req, res,next) => {
