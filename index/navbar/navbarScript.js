@@ -4,7 +4,7 @@
 const nav = document.createElement("nav")
 
 //load the navbar
-fetch('http://localhost:3000/navbar', {
+fetch('http://wavsurf.org/navbar', {
     method: "GET",
     headers: {
         "Content-Type": "application/json",

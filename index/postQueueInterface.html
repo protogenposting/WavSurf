@@ -20,7 +20,7 @@
      * they get redirected to the login page.
     **/
     function getInfo() {
-        fetch("http://localhost:3000/api/postQueue")
+        fetch("http://wavsurf.org/api/postQueue")
         .then(response => response.json())
         .then(json => {
 
@@ -32,14 +32,14 @@
         });
 
         if (localStorage.getItem("username") == undefined) {
-            window.location.href = "http://localhost:3000/noAccess"
+            window.location.href = "http://wavsurf.org/noAccess"
             document.body.innerHTML = ""
         }
-        fetch("http://localhost:3000/api/user/"+localStorage.getItem("username"))
+        fetch("http://wavsurf.org/api/user/"+localStorage.getItem("username"))
         .then(response => response.json())
         .then(json => {
             if (json.user.rank < 2) {
-                window.location.href = "http://localhost:3000/noAccess"
+                window.location.href = "http://wavsurf.org/noAccess"
                 document.body.innerHTML = ""
             }
             console.log(json)
@@ -51,7 +51,7 @@
      * "Accepts" a post by adding it to the posts database.
     **/
     function accept() {
-        fetch("http://localhost:3000/api/acceptPost/" + queue[0].id, {
+        fetch("http://wavsurf.org/api/acceptPost/" + queue[0].id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -66,7 +66,7 @@
      * "Denies" a post by removing it from postQueue permanently.
     **/
     function deny() {
-        fetch("http://localhost:3000/api/denyPost/" + queue[0].id, {
+        fetch("http://wavsurf.org/api/denyPost/" + queue[0].id, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

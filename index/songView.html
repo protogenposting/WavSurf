@@ -30,7 +30,7 @@
      * The tag button is sorted and placed into the "Artist", "Genre", and "Misc" areas respectively.
     **/
     function createTagButton(tagID){
-        fetch("http://localhost:3000/api/tags/" + tagID)
+        fetch("http://wavsurf.org/api/tags/" + tagID)
         .then(response => response.json())
         .then(json => {
             if(json.tagName == undefined)
@@ -42,7 +42,7 @@
             let hyperLink = document.createElement("a")
             let newButton = document.createElement("button")
 
-            hyperLink.href = "http://localhost:3000/search/" + '"' + json.tagName + '"'
+            hyperLink.href = "http://wavsurf.org/search/" + '"' + json.tagName + '"'
 
             newButton.textContent = json.tagName
 
@@ -93,7 +93,7 @@
 
         let songData = {}
 
-        fetch("http://localhost:3000/api/post/"+songId)
+        fetch("http://wavsurf.org/api/post/"+songId)
         .then(response => response.json())
         .then(json => {
             songData = json
@@ -101,7 +101,7 @@
             embed.src = "https://www.youtube.com/embed/" + songData.link
         });
 
-        fetch("http://localhost:3000/api/postTags/"+songId)
+        fetch("http://wavsurf.org/api/postTags/"+songId)
         .then(response => response.json())
         .then(json => {
             console.log(json)

@@ -51,7 +51,7 @@
                 break;
         }
 
-        fetch("http://localhost:3000/api/tagQueue", {
+        fetch("http://wavsurf.org/api/tagQueue", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -111,7 +111,7 @@
     function getAutoCorrect(searchBar) {
         var dataList = document.getElementById("autoSuggest");
         dataList.innerHTML = ""
-        fetch("http://localhost:3000/api/tagSimilar/"+searchBar.value, {
+        fetch("http://wavsurf.org/api/tagSimilar/"+searchBar.value, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -158,7 +158,7 @@
         <button id="submitBtn" type="button" style = "top: 200px; height: 75px; width: 150px; font-size: 20px;" onclick="submit()">Submit</button>
     </div>
     
-    <a href="http://localhost:3000/login" style="font-size: 20px; width : 999px; "><label id="popup" style = "text-decoration-line: underline;" ></label></a>
+    <a href="http://wavsurf.org/login" style="font-size: 20px; width : 999px; "><label id="popup" style = "text-decoration-line: underline;" ></label></a>
     
 </body>
 </html>
