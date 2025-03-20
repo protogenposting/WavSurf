@@ -79,6 +79,7 @@ On the right, shows examples of how it works
             input.id = "SongNameInput"
             input2.id = "YoutubeIDInput"
 
+            // Add all of the created HTML elements to the document.
             document.getElementById("currentSongName").append(songName)
             document.getElementById("newSongName").append(input)
 
@@ -90,6 +91,8 @@ On the right, shows examples of how it works
     /**
      * Gets a tag from the original post and puts its name into oldTags.
      * Gets its type as well (artist, genre, misc) and puts it in the correct tag table accordingly.
+     * 
+     * @param tagID: the ID of the tag being loaded
     **/
     function loadTag(tagID){
 
@@ -203,7 +206,7 @@ On the right, shows examples of how it works
             }
         }
 
-        // Updates the song and link
+        // Updates the song's name and link.
         fetch("http://localhost:3000/api/updatePost/" + songID, {
             method: "POST",
             headers: {
@@ -218,11 +221,14 @@ On the right, shows examples of how it works
             })
         })
 
+        // No reason to delete and re-add tags in database if they haven't been edited.
         if (tagsHaventChanged(tagNames)) {
             tagNames = []
             return
         }
 
+        /* Deletes and re-adds all of the new tags.
+           Does this instead of "updating" because the amount of tags can change. */
         fetch("http://localhost:3000/api/updatePostTags/" + songID, {
             method: "POST",
             headers: {
@@ -249,6 +255,7 @@ On the right, shows examples of how it works
             return false
         }
 
+        // The names in both arrays are put in the same order, so doing this works.
         for(let i = 0; i < oldTags.length; i++){
             if (oldTags[i] != tagNames[i]){
                 return false
@@ -286,6 +293,8 @@ On the right, shows examples of how it works
         })
         .then(response => response.json())
         .then(json => {
+
+            // Creates the drop down menu with autocorrect tags for the user.
             for(let i = 0; i < json.length; i++) {
                 let newOption = document.createElement("option");
                 newOption.value = json[i].tagName;
