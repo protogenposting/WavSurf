@@ -10,6 +10,7 @@ body {
     transform: translate(0px, 70px);
 }
 
+/*Sets the positioning of the navigation bar.*/
 nav {
     transform: translate(0px, -101px);
 }
