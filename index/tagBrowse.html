@@ -8,11 +8,13 @@
         content = "width = device-width, initial-scale = 1"
     >
     <title>WavSurf Tag Browsing Page</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <script defer>
     let tagsToCheck = [] //the tags to use in nextTag
     let currentTag = 0  //the current tag we're checking and adding to the list
+    let buttonSpacing = 10
 
     /**
      * Gets the ids of all parent tags, aka tags with no parents of their own
@@ -38,6 +40,7 @@
      * Adds the children of the next tag and adds a button for it to the list
      */
     function nextTag(){
+        buttonSpacing += 10;
         let tag = tagsToCheck[currentTag]
 
         let hyperLink = document.createElement("a")
@@ -48,7 +51,7 @@
 
         newButton.innerText = tag.tagName
         const childText = document.createTextNode(" - " + tag.tagName)
-        newButton.setAttribute("style","font-size: 20px; position:relative; left: " + 25 * tag.depth + "px")
+        newButton.setAttribute("style","font-size: 20px; transform: translate(0px); position: absolute; left: " + 25 * tag.depth + "px;" + "top: " + buttonSpacing + "px")
 
         "http://localhost:3000/search/" + '"' + tag.tagName + '"'
         let body = document.getElementById("body")
@@ -82,7 +85,8 @@
     }
 </script>
 
-<body id = "body" onload = "getParents()" style = "position:relative; top: 50px; left: 100px; background-color: gray;">
+<body id = "body" onload = "getParents()" style = "top: 0px;">
+    <script src="/navbarScript.js"></script>
     <label style = "font-size: 30px;">Tags</label>
     <br>
 </body>
