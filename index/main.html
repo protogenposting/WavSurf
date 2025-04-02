@@ -14,6 +14,9 @@
 
 <body onload = "load()">
     <script src="/navbarScript.js"></script>
+
+    <!--Extra search bar on the main page. Contains the same autocorrect as the normal search bar.
+    Whenever a search is made (even if it is empty) the user is redirected to the search bar page.-->
     <input
         type = "text"
         id = "searchBar"
@@ -24,6 +27,8 @@
     >
     <datalist id="autoSuggest"></datalist>
 
+    <!--Calls the search method, alternatively the user can just hit the enter key
+    while having the search bar selected.-->
     <button
         type = "button"
         id = "search"
@@ -31,30 +36,35 @@
         style = "top: 120px; font-size: 30px;">Search
     </button>
 
+    <!--Redirects the user to the Tag Browse page.-->
     <a href="http://localhost:3000/tagbrowse" style = "width : 999px;"><button
         type = "button"
         id = "tagCreate"
         style = "top: 180px; font-size: 30px;">Tag Browse
     </button></a>
 
+    <!--Redirects the user to the login page.-->
     <a href="http://localhost:3000/login" style = "width : 999px;"><button
         type = "button"
         id = "login"
         style = "top: 240px; font-size: 30px;">Login
     </button></a>
 
+    <!--Redirects the user to the Sign Up page.-->
     <a href="http://localhost:3000/signUp" style = "width : 999px;"><button
         type = "button"
         id = "signUp"
         style = "top: 300px; font-size: 30px;">Sign Up
     </button></a>
 
+    <!--Redirects the user to the Create Post page.-->
     <a href="http://localhost:3000/postCreate" style = "width : 999px;"><button
         type = "button"
         id = "postCreate"
         style = "top: 360px; font-size: 30px;">Create Post
     </button></a>
 
+    <!--Redirects the user to the Create Tage page.-->
     <a href="http://localhost:3000/tagCreate" style = "width : 999px;"><button
         type = "button"
         id = "tagCreate"
