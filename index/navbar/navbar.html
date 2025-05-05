@@ -2,35 +2,38 @@
     these are the links on the top the user can click
 -->
 <ul class="menu">
-    <li><a href="http://localhost:3000" style="left: 50px">Home</a></li>
-    <li><a href="http://localhost:3000/search"  style="left: 250px;">Search</a></li>
-    <li><a href="http://localhost:3000/login" style="left: 450px">Login</a></li>
-    <li><a href="http://localhost:3000/signUp" style="left: 650px">Sign Up</a></li>
-    <li><a href="http://localhost:3000/tagBrowse" style="left: 850px">Tag Browse</a></li>
-    <li><a href="http://localhost:3000/tagCreate" style="left: 1050px">Create Tag</a></li>
-    <li><a href="http://localhost:3000/postCreate" style="left: 1250px">Create Post</a></li>
+    <li><a href="http://localhost:3000" style="left: 5%">Home</a></li>
+    <li><a href="http://localhost:3000/search"  style="left: 17.5%;">Search</a></li>
+    <li><a href="http://localhost:3000/login" style="left: 30%">Login</a></li>
+    <li><a href="http://localhost:3000/signUp" style="left: 45%">Sign Up</a></li>
+    <li><a href="http://localhost:3000/tagBrowse" style="left: 60%">Tag Browse</a></li>
+    <li><a href="http://localhost:3000/tagCreate" style="left: 75%">Create Tag</a></li>
+    <li><a href="http://localhost:3000/postCreate" style="left: 90%">Create Post</a></li>
 </ul>
 
 <!--
     this is the style sheet for the navbar
 -->
 <style>
+    /*Main styling for the navigation bar*/
     .navbar {
         min-height: 5vh;
         display: flex;
         justify-content: space-between;
         border-bottom:solid 2 rgb(96, 180, 230);
         box-shadow: 2px 2px 35px 2px #2c2c2c;
-        padding: 12px 28px;
+        padding: 12px 0px;
         position: fixed;
         top: 0;
         width: 100%;
     }
 
+    /*Extra styling for the list*/
     .navbar ul{
         list-style: none;
     }
 
+    /*Styling for the menu of the navigation bar*/
     .navbar .menu a{
         margin-right:38px;
         text-decoration: none;

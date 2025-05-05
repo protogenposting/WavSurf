@@ -14,6 +14,9 @@
 
 <body onload = "load()">
     <script src="/navbarScript.js"></script>
+
+    <!--Extra search bar on the main page. Contains the same autocorrect as the normal search bar.
+    Whenever a search is made (even if it is empty) the user is redirected to the search bar page.-->
     <input
         type = "text"
         id = "searchBar"
@@ -24,6 +27,8 @@
     >
     <datalist id="autoSuggest"></datalist>
 
+    <!--Calls the search method, alternatively the user can just hit the enter key
+    while having the search bar selected.-->
     <button
         type = "button"
         id = "search"
