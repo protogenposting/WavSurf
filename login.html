@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang = "en">
+
+    <head>
+        <meta charset = "UTF-8">
+        <meta
+            name = "viewport"
+            content = "width = device-width, initial-scale = 1"
+        >
+        <title>WavSurf Login Page</title>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+<script defer>
+    /**
+     * Attempts to login if possible with given information.
+    **/
+    function tryLogin() {
+
+        let username = document.getElementById("username").value
+        let password = document.getElementById("password").value
+
+        let popup = document.getElementById("popup")
+        popup.style = "top: 65px; font-size: 20px;"
+        
+        //If username or password are null, warn user and prevent from entering.
+        if (username.length === 0 || username === null && password.length === 0 || password === null) {
+            popup.textContent = "Please enter a username and a password!"
+            return
+        }
+        else if (username.length === 0 || username === null) {
+            popup.textContent = "Please enter a username!"
+            return
+        }
+        else if (password.length === 0 || password === null) {
+            popup.textContent = "Please enter a password!"
+            return
+        }
+
+        //Sends information over to app.js, "Create a login session"
+        fetch("http://wavsurf.org/api/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username,
+                    password: password
+                })
+            })
+            .then(response => response.json())
+            .then(json => {
+                console.log(json)
+                if(json.sessionID == "0")
+                {
+                    popup.textContent = "Your username or password is incorrect, please try again"
+                }
+                else
+                {
+                    popup.textContent = "Logged in!"
+                    popup.style = "top: 65px; color: black; font-size: 20px;"
+
+                    localStorage.setItem("sessionID", json.sessionID);
+
+                    localStorage.setItem("username", username);
+                }
+            });
+    }
+    function logout() {
+        localStorage.removeItem("sessionID");
+
+        localStorage.removeItem("username");
+    }
+</script>
+
+<body>
+    <script src="/navbarScript.js"></script>
+    <div id="inputs">
+        <label style = "font-size: 20px; left: 550px;">Username: </label>
+    
+        <!--User inputs username here.-->
+        <input
+            id = "username"
+            style = "font-size: 20px;"
+            type = "text">
+        <br>
+
+        <label style = "font-size: 20px; top : 30px; left: 550px;">Password: </label>
+
+        <!--User inputs password here. Text inputted is hidden in browser.-->
+        <input 
+            id = "password"
+            style = "font-size: 20px; top: 30px;"
+            type = "password">
+        <br>
+    </div>
+
+    <div id="buttons">
+        <!--Attempts to login when clicked. Calls tryLogin().-->
+        <button
+            style = "height: 50px; width: 100px; font-size: 20px; top: 90px;"
+            type = "button"
+            onclick = "tryLogin()">Login</button>
+        <br>
+
+        <!--Attempts to login when clicked. Calls tryLogin().-->
+        <button
+            style = "height: 50px; width: 100px; font-size: 20px; top: 150px;"
+            type = "button"
+            onclick = "logout()">Log Out</button>
+        <br>
+        <a href="http://wavsurf.org/signUp" style = "top: 210px;"><button
+            type = "button"
+            id = "signUp"
+            style = "height: 50px; width: 100px; font-size: 20px;">Sign Up
+        </button></a>
+    </div>
+    <div id="popups">
+        <!--For warning the user.-->
+        <popup id = "popup" style = "font-size: 20px;"> </popup>
+    </div>
+</body>
+
+</html>
